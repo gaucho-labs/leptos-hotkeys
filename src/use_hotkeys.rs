@@ -1,5 +1,4 @@
 use crate::types::{Hotkey, KeyboardModifiers};
-use leptos::web_sys::KeyboardEvent;
 use leptos::*;
 use std::collections::HashSet;
 use crate::use_hotkeys_context;
@@ -16,7 +15,10 @@ fn parse_key(key_combination: &'static str) -> Hotkey {
             "alt" => modifiers.alt = true,
             "meta" => modifiers.meta = true,
             "shift" => modifiers.shift = true,
-            key => keys.push(key.to_lowercase().to_string()),
+            key => {
+                logging::log!("this is a key: {}", &key);
+                keys.push(key.to_lowercase().to_string());
+            },
         }
     }
 

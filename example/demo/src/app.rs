@@ -34,15 +34,13 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
-
     let hotkeys_context: HotkeysContext = use_hotkeys_context();
 
     let current_theme = use_theme();
     let (count, set_count) = create_signal(0);
 
-
     use_hotkeys(
-        "g",
+        "t",
         Callback::new(move |_| {
             if current_theme.get() == Theme::Light {
                 current_theme.set(Theme::Dark)
@@ -53,7 +51,7 @@ fn HomePage() -> impl IntoView {
     );
 
     use_hotkeys(
-        "ctrl+k",
+        "arrowup",
         Callback::new(move |_| {
             set_count.update(|count| {
                 *count += 1;
@@ -61,16 +59,70 @@ fn HomePage() -> impl IntoView {
         })
     );
 
+    use_hotkeys(
+        "arrowdown",
+        Callback::new(move |_| {
+            set_count.update(|count| {
+                *count -= 1;
+            })
+        })
+    );
+
+    use_hotkeys(
+        "Escape",
+        Callback::new(move |_| {
+            set_count.set(0);
+        })
+    );
+
+    const REPO: &'static str = "https://github.com/friendlymatthew/leptos_hotkeys#README";
+    const GORILLAS: &'static str = "https://www.youtube.com/watch?v=qavePUOut_c";
+
+    fn go_to_link(
+        key: &'static str,
+        link: String,
+    ) {
+        use_hotkeys(
+            key,
+            Callback::new(move |_| {
+                window().location().set_href(&link).expect("Failed to navigate");
+            })
+        );
+    }
+
+    go_to_link("G+control", format!("{}", GORILLAS));
+    go_to_link("R", format!("{}", REPO));
+
     view! {
-        <main class="dark:bg-[#1a1a1a] bg-white dark:text-white h-screen py-20 w-full space-y-8 font-robotomono absolute">
+        <main class="dark:bg-[#1a1a1a] bg-white dark:text-white h-screen py-20 w-full font-robotomono absolute">
             <div class="relative w-full flex justify-end right-4 z-10">
-                <p>Press G to toggle between themes</p>
+                <p>Press T to toggle between themes</p>
             </div>
+        <div class="h-full flex flex-col items-center justify-around">
             <div class="text-center space-y-2">
                 <p class="text-3xl">leptos-hotkeys</p>
                 <p>a declarative way of using keyboard shortcuts in Leptos</p>
+                <p>{"Press R to see how it works"}</p>
             </div>
-            <div class="text-center">{"Press CTRL+K: "} {move || count.get()}</div>
+            <div class="text-center">
+                <p class="text-3xl mb-4"> {move || count.get()} </p>
+                <p>{"Press up arrow to increment"}</p>
+                <p>{"down arrow to decrement "}</p>
+                <p>{"esc to reset"}</p>
+            </div>
+            <div>
+                <p>{"Press control+G to see gorillas avoiding the rain"}</p>
+            </div>
+            <div>
+                <a
+                    href=REPO
+                    target="_blank"
+                    rel="noreferrer"
+                >
+                    {"Press R to "} contribute
+                </a>
+            </div>
+        </div>
         </main>
     }
 }

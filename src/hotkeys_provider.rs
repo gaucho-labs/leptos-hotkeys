@@ -87,13 +87,13 @@ pub fn HotkeysProvider(
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
                 logging::log!("keydown: {}", event.key());
                 pressed_keys.update(|keys| {
-                    keys.insert(event.key());
+                    keys.insert(event.key().to_lowercase());
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
                 logging::log!("keyup: {}", event.key());
                 pressed_keys.update(|keys| {
-                    keys.remove(&event.key());
+                    keys.remove(&event.key().to_lowercase());
                 });
             }) as Box<dyn Fn(_)>);
             document()
