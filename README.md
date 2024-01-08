@@ -56,7 +56,7 @@ That's it!
 
 
 ## Contributing
-Omg really? that would be amazing.
+That would be tremendous.
 
 
 ## Todo!
