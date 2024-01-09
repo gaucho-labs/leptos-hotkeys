@@ -756,6 +756,7 @@ name = "leptos_hotkeys"
 version = "0.1.0"
 dependencies = [
  "leptos",
+ "log",
  "wasm-bindgen",
 ]
 
