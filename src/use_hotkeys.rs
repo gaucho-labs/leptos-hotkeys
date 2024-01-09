@@ -15,17 +15,14 @@ fn parse_key(key_combination: &'static str) -> Hotkey {
             "alt" => modifiers.alt = true,
             "meta" => modifiers.meta = true,
             "shift" => modifiers.shift = true,
-            key => {
-                logging::log!("this is a key: {}", &key);
-                keys.push(key.to_lowercase().to_string());
-            },
+            key => keys.push(key.to_lowercase().to_string()),
         }
     }
 
     Hotkey {
         modifiers,
         keys,
-        description: "".to_string(),
+        description: "".to_string(), // todo! when we introduce scopes, we'll add this feature in
     }
 }
 

@@ -94,7 +94,7 @@ fn HomePage() -> impl IntoView {
     go_to_link("R", format!("{}", REPO));
 
     view! {
-        <main class="dark:bg-[#1a1a1a] bg-white dark:text-white h-screen py-20 w-full font-robotomono absolute">
+        <main class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white h-screen py-20 w-full font-robotomono absolute">
             <div class="relative w-full flex justify-end right-4 z-10">
                 <p>Press T to toggle between themes</p>
             </div>

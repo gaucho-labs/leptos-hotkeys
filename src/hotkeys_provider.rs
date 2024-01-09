@@ -79,8 +79,8 @@ pub fn HotkeysProvider(
         remove_hotkey,
     });
 
-    logging::log!("logging outside of view in hotkeysprovider");
 
+    // I hate that I have to create a <div /> todo! look into fragment: <> </>
     div()
         .on_mount(move |_| {
             logging::log!("mounted");
