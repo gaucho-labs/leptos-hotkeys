@@ -19,7 +19,7 @@ pub fn App() -> impl IntoView {
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
-        <HotkeysProvider>
+        <HotkeysProvider initially_active_scopes={vec!["scope_a".to_string()]}>
             <ThemeProvider>
                 <Router>
                     <Routes>
@@ -90,6 +90,10 @@ fn HomePage() -> impl IntoView {
         );
     }
 
+    let toggle = hotkeys_context.toggle_scope;
+    let enable = hotkeys_context.enable_scope;
+    let disable = hotkeys_context.disable_scope;
+
     go_to_link("G+control", format!("{}", GORILLAS));
     go_to_link("R", format!("{}", REPO));
 
@@ -121,6 +125,13 @@ fn HomePage() -> impl IntoView {
                 >
                     {"Press R to "} contribute
                 </a>
+            </div>
+            <div class="relative w-full flex justify-end right-4 z-10">
+                <div class="h-full flex flex-col items-center justify-around">
+                    <button on:click=move |_| toggle("scope_a".to_string())>"Toggle scope"</button>
+                    <button on:click=move |_| enable("scope_a".to_string())>"Enable scope"</button>
+                    <button on:click=move |_| disable("scope_a".to_string())>"Disable scope"</button>
+                </div>
             </div>
         </div>
         </main>

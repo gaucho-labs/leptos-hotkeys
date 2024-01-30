@@ -38,6 +38,9 @@ pub fn HotkeysProvider(
 
     children: Children,
 ) -> impl IntoView {
+    let initially_active_scopes = initially_active_scopes
+        .into_iter()
+        .collect();
     let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::new());
     let active_scopes: RwSignal<Vec<String>> = RwSignal::new(initially_active_scopes);
 
