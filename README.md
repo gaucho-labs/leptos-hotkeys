@@ -3,10 +3,12 @@
 
 [Check out the demo!](https://leptos-hotkeys.vercel.app/)
 
-## Disclosure
-*this is still a work in progress*
-
-See todo for my plan: [todo](#todo)
+> [!WARNING]
+> This library is not production-ready yet. Once we get the following features done, we'll publish it.
+> - [x] add blur-event
+> - [x] add scoping
+> - [ ] focus trap
+> - [ ] more tests
 
 ## Installation 
 ```shell
