@@ -11,10 +11,10 @@ use wasm_bindgen::JsCast;
 pub struct HotkeysContext {
     pub(crate) pressed_keys: RwSignal<HashSet<String>>,
 
-    active_scopes: RwSignal<Vec<String>>,
-    enable_scope: Callback<String>,
-    disable_scope: Callback<String>,
-    toggle_scope: Callback<String>,
+    pub active_scopes: RwSignal<HashSet<String>>,
+    pub enable_scope: Callback<String>,
+    pub disable_scope: Callback<String>,
+    pub toggle_scope: Callback<String>,
 
     bound_hotkeys: RwSignal<Vec<Hotkey>>,
     add_hotkey: Callback<Hotkey>,
@@ -44,7 +44,7 @@ pub fn HotkeysProvider(
     let enable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
             if !scopes.contains(&scope) {
-                scopes.push(scope);
+                scopes.insert(scope);
             }
         })
     });
@@ -60,7 +60,7 @@ pub fn HotkeysProvider(
             if scopes.contains(&scope) {
                 scopes.retain(|s| *s != scope);
             } else {
-                scopes.push(scope);
+                scopes.insert(scope);
             }
         })
     });
