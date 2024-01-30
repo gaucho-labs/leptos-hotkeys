@@ -10,7 +10,8 @@ use leptos_hotkeys::{
     HotkeysProvider,
     use_hotkeys_context,
     HotkeysContext,
-    use_hotkeys
+    use_hotkeys,
+    use_hotkeys_scoped,
 };
 
 #[component]
@@ -50,22 +51,24 @@ fn HomePage() -> impl IntoView {
         })
     );
 
-    use_hotkeys(
+    use_hotkeys_scoped(
         "arrowup",
         Callback::new(move |_| {
             set_count.update(|count| {
                 *count += 1;
             });
-        })
+        }),
+        vec!["scope_a"]
     );
 
-    use_hotkeys(
+    use_hotkeys_scoped(
         "arrowdown",
         Callback::new(move |_| {
             set_count.update(|count| {
                 *count -= 1;
             })
-        })
+        }),
+        vec!["scope_a"]
     );
 
     use_hotkeys(

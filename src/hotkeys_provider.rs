@@ -54,14 +54,14 @@ pub fn HotkeysProvider(
 
     let disable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
-            scopes.remove();
+            scopes.remove(&scope);
         })
     });
 
     let toggle_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
             if scopes.contains(&scope) {
-                scopes.remove();
+                scopes.remove(&scope);
             } else {
                 scopes.insert(scope);
             }
