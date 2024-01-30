@@ -42,7 +42,7 @@ pub fn HotkeysProvider(
         .into_iter()
         .collect();
     let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::new());
-    let active_scopes: RwSignal<Vec<String>> = RwSignal::new(initially_active_scopes);
+    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
     let enable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
@@ -54,14 +54,14 @@ pub fn HotkeysProvider(
 
     let disable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
-            scopes.retain(|s| *s != scope);
+            scopes.remove();
         })
     });
 
     let toggle_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
             if scopes.contains(&scope) {
-                scopes.retain(|s| *s != scope);
+                scopes.remove();
             } else {
                 scopes.insert(scope);
             }
