@@ -11,10 +11,10 @@ use wasm_bindgen::JsCast;
 pub struct HotkeysContext {
     pub(crate) pressed_keys: RwSignal<HashSet<String>>,
 
-    active_scopes: RwSignal<Vec<String>>,
-    enable_scope: Callback<String>,
-    disable_scope: Callback<String>,
-    toggle_scope: Callback<String>,
+    pub active_scopes: RwSignal<HashSet<String>>,
+    pub enable_scope: Callback<String>,
+    pub disable_scope: Callback<String>,
+    pub toggle_scope: Callback<String>,
 
     bound_hotkeys: RwSignal<Vec<Hotkey>>,
     add_hotkey: Callback<Hotkey>,
@@ -34,33 +34,33 @@ pub fn HotkeysProvider(
     #[prop(default=false)] allow_blur_event: bool,
 
 
-    #[prop(default=vec!["*".to_string()])] initially_active_scopes: Vec<String>,
+    #[prop(default={HashSet::<String>::new()})] initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {
-    let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::new());
-    let active_scopes: RwSignal<Vec<String>> = RwSignal::new(initially_active_scopes);
+    let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::<String>::new());
+    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
     let enable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
             if !scopes.contains(&scope) {
-                scopes.push(scope);
+                scopes.insert(scope);
             }
         })
     });
 
     let disable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
-            scopes.retain(|s| *s != scope);
+            scopes.remove(&scope);
         })
     });
 
     let toggle_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
             if scopes.contains(&scope) {
-                scopes.retain(|s| *s != scope);
+                scopes.remove(&scope);
             } else {
-                scopes.push(scope);
+                scopes.insert(scope);
             }
         })
     });

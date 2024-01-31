@@ -53,6 +53,27 @@ fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &HashSet<String>) -> bool {
     modifiers_match && keys_match
 }
 
+pub fn use_hotkeys_scoped(key_combination: &'static str, on_triggered: Callback<()>, scopes: Vec<&'static str>) {
+    let hotkeys_context = use_hotkeys_context();
+
+    create_effect(move |_| {
+        let active_scopes = hotkeys_context.active_scopes.get();
+        
+        //intersection should be O(min(scopes, active_scopes))
+        let within_scope = &scopes
+            .iter()
+            .any(|scope| active_scopes.contains(*scope));
+
+        if *within_scope {
+            use_hotkeys(key_combination, on_triggered);
+            logging::log!("matched!");
+        } else {
+            logging::log!("out of scope!");
+        }
+    });
+
+}
+
 pub fn use_hotkeys(key_combination: &'static str, on_triggered: Callback<()>) {
     let parsed_keys: HashSet<Hotkey> = key_combination
         .split(',')
