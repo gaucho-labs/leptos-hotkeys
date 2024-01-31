@@ -34,14 +34,11 @@ pub fn HotkeysProvider(
     #[prop(default=false)] allow_blur_event: bool,
 
 
-    #[prop(default=vec!["*".to_string()])] initially_active_scopes: Vec<String>,
+    #[prop(default={HashSet::<String>::new()})] initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {
-    let initially_active_scopes = initially_active_scopes
-        .into_iter()
-        .collect();
-    let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::new());
+    let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::<String>::new());
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
     let enable_scope = Callback::new(move |scope: String| {

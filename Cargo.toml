@@ -10,3 +10,8 @@ authors=["Matthew Kim", "Robert Junkins"]
 leptos = { version = "0.5.4", features = ["csr", "nightly"] }
 wasm-bindgen = "0.2.89"
 log = "0.4.20"
+
+# needed for macro exports
+[lib]
+name = "leptos_hotkeys"
+path = "src/lib.rs"

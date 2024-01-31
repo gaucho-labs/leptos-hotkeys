@@ -7,12 +7,14 @@ use leptos_theme::{
     Theme
 };
 use leptos_hotkeys::{
+    scopes,
     HotkeysProvider,
     use_hotkeys_context,
     HotkeysContext,
     use_hotkeys,
     use_hotkeys_scoped,
 };
+use std::collections::HashSet;
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -20,7 +22,7 @@ pub fn App() -> impl IntoView {
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
-        <HotkeysProvider initially_active_scopes={vec!["scope_a".to_string()]}>
+        <HotkeysProvider initially_active_scopes=scopes!("scope_a")>
             <ThemeProvider>
                 <Router>
                     <Routes>
