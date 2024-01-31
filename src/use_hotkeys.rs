@@ -1,7 +1,13 @@
 use crate::types::{Hotkey, KeyboardModifiers};
-use leptos::*;
-use std::collections::HashSet;
+use leptos::{ev::{click, DOMEventResponder}, html::ElementDescriptor, *};
+use leptos_dom::NodeRef;
+use wasm_bindgen::closure::Closure;
+use web_sys::{KeyboardEvent, MouseEvent};
 use crate::use_hotkeys_context;
+
+use std::collections::HashSet;
+use std::sync::Arc;
+
 
 fn parse_key(key_combination: &'static str) -> Hotkey {
     let parts = key_combination.split('+').collect::<Vec<&str>>();
@@ -92,4 +98,44 @@ pub fn use_hotkeys(key_combination: &'static str, on_triggered: Callback<()>) {
         }
     });
 
+}
+
+
+pub fn use_hotkeys_ref<T>(
+    key_combination: &'static str,
+    on_triggered: Callback<()>,
+) -> NodeRef<T>
+where T: ElementDescriptor + 'static + Clone
+{
+    let node_ref = create_node_ref::<T>();
+    let parsed_keys: Arc<HashSet<Hotkey>> = Arc::new(
+        key_combination
+        .split(',')
+        .map(|key_combo| parse_key(key_combo))
+        .collect());
+
+
+    let hotkeys_context = Arc::new(use_hotkeys_context());
+    create_effect(move |_| {
+        if let Some(element) = node_ref.get() {
+            // arc should be a little cheaper plain clone
+            let pressed_keys = hotkeys_context.clone().pressed_keys;
+            let parsed_keys = parsed_keys.clone();
+
+            let keydown_closure = move |event: KeyboardEvent| {
+                let pressed_keyset = pressed_keys.get();
+
+                if parsed_keys
+                    .iter()
+                    .any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset))
+                {
+                    on_triggered.call(());
+                }
+            };
+
+            let _ = element.add(leptos::ev::keydown, keydown_closure);
+        }
+    });
+
+    node_ref
 }
