@@ -88,9 +88,10 @@ pub fn use_hotkeys_scoped(key_combination: String, on_triggered: Callback<()>, s
 
 }
 
-pub fn use_hotkeys_ref<T>(
-    key_combination: &'static str,
+pub fn use_hotkeys_ref_scoped<T>(
+    key_combination: String,
     on_triggered: Callback<()>,
+    scopes: Vec<String>
 ) -> NodeRef<T>
 where T: ElementDescriptor + 'static + Clone
 {
@@ -101,20 +102,29 @@ where T: ElementDescriptor + 'static + Clone
         .map(|key_combo| parse_key(key_combo))
         .collect());
 
-
     let hotkeys_context = Arc::new(use_hotkeys_context());
+
     create_effect(move |_| {
         if let Some(element) = node_ref.get() {
             // arc should be a little cheaper plain clone
-            let pressed_keys = hotkeys_context.clone().pressed_keys;
+            let pressed_keys = hotkeys_context.pressed_keys;
             let parsed_keys = parsed_keys.clone();
+            let scopes = scopes.clone();
+            let active_scopes = hotkeys_context.active_scopes;
 
             let keydown_closure = move |event: KeyboardEvent| {
+                let active_scopes = active_scopes.get();
                 let pressed_keyset = pressed_keys.get();
+                logging::log!("hit");
+        
+                let within_scope = &scopes
+                    .iter()
+                    .any(|scope| active_scopes.contains(scope));
 
                 if parsed_keys
                     .iter()
                     .any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset))
+                    && *within_scope
                 {
                     on_triggered.call(());
                 }
@@ -126,3 +136,4 @@ where T: ElementDescriptor + 'static + Clone
 
     node_ref
 }
+
