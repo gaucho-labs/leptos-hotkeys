@@ -1,10 +1,13 @@
 use crate::types::Hotkey;
+use crate::scopes;
+
 use leptos::html::div;
 use leptos::web_sys::KeyboardEvent;
 use leptos::*;
 use std::collections::HashSet;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
+
 
 // Defining a hotkey context structure
 #[derive(Clone)]
@@ -34,7 +37,9 @@ pub fn HotkeysProvider(
     #[prop(default=false)] allow_blur_event: bool,
 
 
-    #[prop(default={HashSet::<String>::new()})] initially_active_scopes: HashSet<String>,
+    #[prop(default={
+        scopes!()
+    })] initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {

@@ -1,15 +1,14 @@
 use crate::types::{Hotkey, KeyboardModifiers};
-use leptos::{ev::{click, DOMEventResponder}, html::ElementDescriptor, *};
+use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 use leptos_dom::NodeRef;
-use wasm_bindgen::closure::Closure;
-use web_sys::{KeyboardEvent, MouseEvent};
+use web_sys::KeyboardEvent;
 use crate::use_hotkeys_context;
 
 use std::collections::HashSet;
 use std::sync::Arc;
 
 
-fn parse_key(key_combination: &'static str) -> Hotkey {
+fn parse_key(key_combination: &str) -> Hotkey {
     let parts = key_combination.split('+').collect::<Vec<&str>>();
 
     let mut modifiers = KeyboardModifiers::default();
@@ -59,28 +58,7 @@ fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &HashSet<String>) -> bool {
     modifiers_match && keys_match
 }
 
-pub fn use_hotkeys_scoped(key_combination: &'static str, on_triggered: Callback<()>, scopes: Vec<&'static str>) {
-    let hotkeys_context = use_hotkeys_context();
-
-    create_effect(move |_| {
-        let active_scopes = hotkeys_context.active_scopes.get();
-        
-        //intersection should be O(min(scopes, active_scopes))
-        let within_scope = &scopes
-            .iter()
-            .any(|scope| active_scopes.contains(*scope));
-
-        if *within_scope {
-            use_hotkeys(key_combination, on_triggered);
-            logging::log!("matched!");
-        } else {
-            logging::log!("out of scope!");
-        }
-    });
-
-}
-
-pub fn use_hotkeys(key_combination: &'static str, on_triggered: Callback<()>) {
+pub fn use_hotkeys_scoped(key_combination: String, on_triggered: Callback<()>, scopes: Vec<String>) {
     let parsed_keys: HashSet<Hotkey> = key_combination
         .split(',')
         .map(|key_combo| parse_key(key_combo))
@@ -90,20 +68,30 @@ pub fn use_hotkeys(key_combination: &'static str, on_triggered: Callback<()>) {
     let pressed_keys = hotkeys_context.pressed_keys.clone();
 
     create_effect(move |_| {
-        let pressed_keyset = pressed_keys.get();
+        let active_scopes = hotkeys_context.active_scopes.get();
+        
+        //intersection should be O(min(scopes, active_scopes))
+        let within_scope = &scopes
+            .iter()
+            .any(|scope| active_scopes.contains(scope));
 
-        if parsed_keys.iter().any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset)) {
-            on_triggered.call(());
-            logging::log!("matched!");
+        if *within_scope {
+            let pressed_keyset = pressed_keys.get();
+            if parsed_keys.iter().any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset)) {
+                on_triggered.call(());
+                logging::log!("matched!");
+            }
+        } else {
+            logging::log!("out of scope!");
         }
     });
 
 }
 
-
-pub fn use_hotkeys_ref<T>(
-    key_combination: &'static str,
+pub fn use_hotkeys_ref_scoped<T>(
+    key_combination: String,
     on_triggered: Callback<()>,
+    scopes: Vec<String>
 ) -> NodeRef<T>
 where T: ElementDescriptor + 'static + Clone
 {
@@ -114,20 +102,29 @@ where T: ElementDescriptor + 'static + Clone
         .map(|key_combo| parse_key(key_combo))
         .collect());
 
-
     let hotkeys_context = Arc::new(use_hotkeys_context());
+
     create_effect(move |_| {
         if let Some(element) = node_ref.get() {
             // arc should be a little cheaper plain clone
-            let pressed_keys = hotkeys_context.clone().pressed_keys;
+            let pressed_keys = hotkeys_context.pressed_keys;
             let parsed_keys = parsed_keys.clone();
+            let scopes = scopes.clone();
+            let active_scopes = hotkeys_context.active_scopes;
 
             let keydown_closure = move |event: KeyboardEvent| {
+                let active_scopes = active_scopes.get();
                 let pressed_keyset = pressed_keys.get();
+                logging::log!("hit");
+        
+                let within_scope = &scopes
+                    .iter()
+                    .any(|scope| active_scopes.contains(scope));
 
                 if parsed_keys
                     .iter()
                     .any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset))
+                    && *within_scope
                 {
                     on_triggered.call(());
                 }
@@ -139,3 +136,4 @@ where T: ElementDescriptor + 'static + Clone
 
     node_ref
 }
+

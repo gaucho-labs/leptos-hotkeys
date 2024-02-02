@@ -11,10 +11,10 @@ use leptos_hotkeys::{
     HotkeysProvider,
     use_hotkeys_context,
     HotkeysContext,
-    use_hotkeys::{use_hotkeys, use_hotkeys_ref},
-    use_hotkeys_scoped,
+    use_hotkeys::{use_hotkeys_scoped, use_hotkeys_ref_scoped},
+    use_hotkeys_ref,
+    use_hotkeys
 };
-use web_sys::HtmlParagraphElement;
 use std::collections::HashSet;
 
 #[component]
@@ -43,43 +43,29 @@ fn HomePage() -> impl IntoView {
     let current_theme = use_theme();
     let (count, set_count) = create_signal(0);
 
-    use_hotkeys(
-        "t",
-        Callback::new(move |_| {
-            if current_theme.get() == Theme::Light {
-                current_theme.set(Theme::Dark)
-            } else {
-                current_theme.set(Theme::Light)
-            }
+    use_hotkeys!(("t") => move |_| {
+        if current_theme.get() == Theme::Light {
+            current_theme.set(Theme::Dark)
+        } else {
+            current_theme.set(Theme::Light)
+        }
+    });
+
+    use_hotkeys!(("arrowup", "scope_a") => move |_| {
+        set_count.update(|count| {
+            *count += 1;
         })
-    );
+    });
 
-    use_hotkeys_scoped(
-        "arrowup",
-        Callback::new(move |_| {
-            set_count.update(|count| {
-                *count += 1;
-            });
-        }),
-        vec!["scope_a"]
-    );
-
-    use_hotkeys_scoped(
-        "arrowdown",
-        Callback::new(move |_| {
-            set_count.update(|count| {
-                *count -= 1;
-            })
-        }),
-        vec!["scope_a"]
-    );
-
-    use_hotkeys(
-        "Escape",
-        Callback::new(move |_| {
-            set_count.set(0);
+    use_hotkeys!(("arrowdown", "scope_a") => move |_| {
+        set_count.update(|count| {
+            *count -= 1;
         })
-    );
+    });
+
+    use_hotkeys!(("Escape") => move |_| {
+        set_count.set(0);
+    });
 
     const REPO: &'static str = "https://github.com/friendlymatthew/leptos_hotkeys#README";
     const GORILLAS: &'static str = "https://www.youtube.com/watch?v=qavePUOut_c";
@@ -88,26 +74,30 @@ fn HomePage() -> impl IntoView {
         key: &'static str,
         link: String,
     ) {
-        use_hotkeys(
-            key,
-            Callback::new(move |_| {
-                window().location().set_href(&link).expect("Failed to navigate");
-            })
-        );
+        use_hotkeys!((*key) => move |_| {
+            window().location().set_href(&link).expect("Failed to navigate");
+        })
     }
 
     let toggle = hotkeys_context.toggle_scope;
     let enable = hotkeys_context.enable_scope;
     let disable = hotkeys_context.disable_scope;
 
-    let node_ref_disable = use_hotkeys_ref("k", Callback::new(move |_| {
+    let node_ref_disable = use_hotkeys_ref!(("k", "scope_a") => move |_| {
         //do nothing
-    }));
-    let node_ref = use_hotkeys_ref("k", Callback::new(move |_| {
+    });
+
+    let node_ref = use_hotkeys_ref!(("k") => move |_| {
         set_count.update(|count| {
             *count += 1;
         })
-    }));
+    });
+
+    let node_ref_scoped = use_hotkeys_ref!(("k", "scope_a") => move |_| {
+        set_count.update(|count| {
+            *count += 1;
+        })
+    });
 
     go_to_link("G+control", format!("{}", GORILLAS));
     go_to_link("R", format!("{}", REPO));
@@ -143,6 +133,7 @@ fn HomePage() -> impl IntoView {
             </div>
             <div class="relative w-full flex justify-end right-4 z-10">
                 <div class="h-full flex flex-col items-center justify-around">
+                    <button _ref=node_ref_scoped>"Click here to set k key with scope_a to inc"</button>
                     <button _ref=node_ref>"Click here to set k key to inc"</button>
                     <button _ref=node_ref_disable>"Click here to disable k key"</button>
                     <button on:click=move |_| toggle("scope_a".to_string())>"Toggle scope"</button>
