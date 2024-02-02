@@ -41,7 +41,7 @@ pub fn App() -> impl IntoView {
 fn HomePage() -> impl IntoView {
     // Demo related logic
     const SCOPE_BORDER: &'static str =
-        "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20";
+        "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20 h-full";
     let current_scope = create_rw_signal("scope_a");
     let current_theme = use_theme();
 
@@ -138,30 +138,44 @@ fn HomePage() -> impl IntoView {
                         <p>Current scope: {move || { current_scope.get() }}</p>
                     </div>
                     <div class="flex-1 grid grid-col-1 lg:grid-cols-2">
-                        <div id="scope_a" class=format!("{}", SCOPE_BORDER)>
-                            <p>scope_a</p>
-                            <div class="space-y-8">
-                                <p class="text-lg">Current count: {count}</p>
-                                <div class="space-y-2">
-                                    <p>"press 'Arrow Up' to increase the count"</p>
-                                    <p>"press 'Arrow Down' to decrease the count"</p>
-                                    <p>"press 'Escape' to reset the count"</p>
+                        <div
+                            id="scope_a"
+                            class:active=move || current_scope.get() == "scope_a"
+                            class:not-active=move || current_scope.get() != "scope_a"
+                        >
+                            <div class=format!("{}", SCOPE_BORDER)>
+                                <p>scope_a</p>
+                                <div class="space-y-8">
+                                    <p class="text-lg">Current count: {count}</p>
+                                    <div class="space-y-2">
+                                        <p>"press 'Arrow Up' to increase the count"</p>
+                                        <p>"press 'Arrow Down' to decrease the count"</p>
+                                        <p>"press 'Escape' to reset the count"</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <div id="scope_b" class=format!("{}", SCOPE_BORDER)>
-                            <p>scope_b</p>
-                            <div class="space-y-2">
-                                <p>press 'T' to switch themes</p>
-                                <p>press 'G' to see gorillas avoiding the rain</p>
-                                <p>"press 'Arrow Down' to hear Norm tell a story about his friend Drake"</p>
-                                <p>
-                                    "press 'L+O+W' to listen to Pavarotti's rendition of Flo Rida's 'Low'"
-                                </p>
-                                <p>
-                                    "press 'A' to watch a man brave the Alaskan winter without a tent"
-                                </p>
-                                <p>"press 'Arrow Up' for a nice gator roll"</p>
+                        <div
+                            id="scope_b"
+                            class:active=move || current_scope.get() == "scope_b"
+                            class:not-active=move || current_scope.get() != "scope_b"
+                        >
+                            <div class=format!("{}", SCOPE_BORDER)>
+                                <p>scope_b</p>
+                                <div class="space-y-2">
+                                    <p>press 'T' to switch themes</p>
+                                    <p>press 'G' to see gorillas avoiding the rain</p>
+                                    <p>
+                                        "press 'Arrow Down' to hear Norm tell a story about his friend Drake"
+                                    </p>
+                                    <p>
+                                        "press 'L+O+W' to listen to Pavarotti's rendition of Flo Rida's 'Low'"
+                                    </p>
+                                    <p>
+                                        "press 'A' to watch a man brave the Alaskan winter without a tent"
+                                    </p>
+                                    <p>"press 'Arrow Up' for a nice gator roll"</p>
+                                </div>
                             </div>
                         </div>
                     </div>
