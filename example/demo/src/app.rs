@@ -43,6 +43,7 @@ fn HomePage() -> impl IntoView {
     const SCOPE_BORDER: &'static str =
         "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20 h-full";
     let current_scope = create_rw_signal("scope_a");
+    let current_ref = create_rw_signal("None");
     let current_theme = use_theme();
 
     // leptos_hotkey specific logic
@@ -104,6 +105,19 @@ fn HomePage() -> impl IntoView {
         }
     });
 
+    let a_ref = use_hotkeys_ref!(("k", "scope_a") => move |_| {
+        current_ref.set("ref_a");
+        set_count.update(|count| {
+            *count += 1;
+        })
+    });
+
+    let b_ref = use_hotkeys_ref!(("k", "scope_b") => move |_| {
+        current_ref.set("ref_b");
+        set_count.update(|count| {
+            *count -= 1;
+        })
+    });
     // youtube links for scope_b lol
     const GORILLAS: &'static str = "https://www.youtube.com/watch?v=qavePUOut_c";
     const DOGLICKEDTHEOLE: &'static str = "https://www.youtube.com/watch?v=4arBraMyp0Q";
@@ -134,17 +148,29 @@ fn HomePage() -> impl IntoView {
                 </div>
                 <div class="flex-1 flex flex-col space-y-20">
                     <div>
+                        <ul>
+                            <li>scope_a + ref_a => counter++ </li>
+                            <li>scope_b + ref_a => does nothing </li>
+                            <li>scope_b + ref_b => counter-- </li>
+                            <li>scope_a + ref_b => does nothing </li>
+                        </ul>
+                    </div>
+                    <div>
                         <p>Press 's' to toggle between scopes a and b</p>
+                        <p>Click on either div to toggle between ref a and b</p>
                         <p>Current scope: {move || { current_scope.get() }}</p>
+                        <p>Current ref(ONLY CHANGES IF TRIGGERED): {move || { current_ref.get() }}</p>
                     </div>
                     <div class="flex-1 grid grid-col-1 lg:grid-cols-2">
                         <div
                             id="scope_a"
                             class:active=move || current_scope.get() == "scope_a"
                             class:not-active=move || current_scope.get() != "scope_a"
+                            _ref={a_ref} 
+                            tabIndex={-1}
                         >
                             <div class=format!("{}", SCOPE_BORDER)>
-                                <p>scope_a</p>
+                                <p>scope_a & ref_a</p>
                                 <div class="space-y-8">
                                     <p class="text-lg">Current count: {count}</p>
                                     <div class="space-y-2">
@@ -159,9 +185,11 @@ fn HomePage() -> impl IntoView {
                             id="scope_b"
                             class:active=move || current_scope.get() == "scope_b"
                             class:not-active=move || current_scope.get() != "scope_b"
+                            _ref={b_ref} 
+                            tabIndex={-1}
                         >
                             <div class=format!("{}", SCOPE_BORDER)>
-                                <p>scope_b</p>
+                                <p>scope_b & ref_b</p>
                                 <div class="space-y-2">
                                     <p>press 'T' to switch themes</p>
                                     <p>press 'G' to see gorillas avoiding the rain</p>

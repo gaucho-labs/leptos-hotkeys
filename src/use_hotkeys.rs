@@ -1,8 +1,8 @@
 use crate::types::{Hotkey, KeyboardModifiers};
 use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 use leptos_dom::NodeRef;
-use web_sys::KeyboardEvent;
-use crate::use_hotkeys_context;
+use web_sys::{KeyboardEvent, MouseEvent};
+use crate::{use_hotkeys, use_hotkeys_context};
 
 use std::collections::HashSet;
 use std::sync::Arc;
@@ -96,41 +96,30 @@ pub fn use_hotkeys_ref_scoped<T>(
 where T: ElementDescriptor + 'static + Clone
 {
     let node_ref = create_node_ref::<T>();
-    let parsed_keys: Arc<HashSet<Hotkey>> = Arc::new(
-        key_combination
-        .split(',')
-        .map(|key_combo| parse_key(key_combo))
-        .collect());
-
-    let hotkeys_context = Arc::new(use_hotkeys_context());
 
     create_effect(move |_| {
+        let parsed_keys: HashSet<Hotkey> = key_combination
+            .split(',')
+            .map(|key_combo| parse_key(key_combo))
+            .collect();
+        let scopes = scopes.clone();
         if let Some(element) = node_ref.get() {
-            // arc should be a little cheaper plain clone
-            let pressed_keys = hotkeys_context.pressed_keys;
-            let parsed_keys = parsed_keys.clone();
-            let scopes = scopes.clone();
-            let active_scopes = hotkeys_context.active_scopes;
-
             let keydown_closure = move |event: KeyboardEvent| {
-                let active_scopes = active_scopes.get();
-                let pressed_keyset = pressed_keys.get();
-                logging::log!("hit");
-        
-                let within_scope = &scopes
+                let hotkeys_context = use_hotkeys_context(); 
+                let active_scopes = hotkeys_context.active_scopes.get();
+                let pressed_keys = hotkeys_context.pressed_keys.get();
+                let within_scope = scopes
                     .iter()
                     .any(|scope| active_scopes.contains(scope));
 
-                if parsed_keys
-                    .iter()
-                    .any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset))
-                    && *within_scope
-                {
-                    on_triggered.call(());
+                if within_scope {
+                    if parsed_keys.iter().any(|hotkey| is_hotkey_match(hotkey, &pressed_keys)) {
+                        on_triggered.call(());
+                    }
                 }
             };
 
-            let _ = element.add(leptos::ev::keydown, keydown_closure);
+            let _ = element.add(leptos::ev::keypress, keydown_closure);
         }
     });
 
