@@ -1,21 +1,22 @@
 use leptos::*;
+use leptos_hotkeys::{
+    scopes, use_hotkeys,
+    use_hotkeys::{use_hotkeys_ref_scoped, use_hotkeys_scoped},
+    use_hotkeys_context, use_hotkeys_ref, HotkeysContext, HotkeysProvider,
+};
 use leptos_meta::*;
 use leptos_router::*;
-use leptos_theme::{
-    ThemeProvider,
-    use_theme,
-    Theme
-};
-use leptos_hotkeys::{
-    scopes,
-    HotkeysProvider,
-    use_hotkeys_context,
-    HotkeysContext,
-    use_hotkeys::{use_hotkeys_scoped, use_hotkeys_ref_scoped},
-    use_hotkeys_ref,
-    use_hotkeys
-};
+use leptos_theme::{use_theme, Theme, ThemeProvider};
 use std::collections::HashSet;
+
+#[component]
+pub fn Button(href: &'static str, children: Children) -> impl IntoView {
+    view! {
+        <a href=href target="_blank">
+            {children()}
+        </a>
+    }
+}
 
 #[component]
 pub fn App() -> impl IntoView {
@@ -38,19 +39,46 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
+    // Demo related logic
+    const SCOPE_BORDER: &'static str =
+        "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20";
+    let current_scope = create_rw_signal("scope_a");
+    let current_theme = use_theme();
+
+    // leptos_hotkey specific logic
     let hotkeys_context: HotkeysContext = use_hotkeys_context();
 
-    let current_theme = use_theme();
+    fn go_to_link(key: &'static str, link: String, scope: &'static str) {
+        use_hotkeys!((*key, scope) => move |_| {
+            window().location().set_href(&link).expect("Failed to navigate");
+        })
+    }
+
     let (count, set_count) = create_signal(0);
 
-    use_hotkeys!(("t") => move |_| {
-        if current_theme.get() == Theme::Light {
-            current_theme.set(Theme::Dark)
+    let toggle = hotkeys_context.toggle_scope;
+    let enable = hotkeys_context.enable_scope;
+    let disable = hotkeys_context.disable_scope;
+
+    // global hotkeys
+    use_hotkeys!(("s") => move |_| {
+        toggle("scope_a".to_string());
+        toggle("scope_b".to_string());
+
+        if current_scope.get() == "scope_a" {
+            current_scope.set("scope_b")
         } else {
-            current_theme.set(Theme::Light)
+            current_scope.set("scope_a")
         }
     });
 
+    go_to_link(
+        "control+R",
+        "https://github.com/friendlymatthew/leptos_hotkeys".to_string(),
+        "*",
+    );
+
+    // scope_a related hotkeys
     use_hotkeys!(("arrowup", "scope_a") => move |_| {
         set_count.update(|count| {
             *count += 1;
@@ -63,85 +91,94 @@ fn HomePage() -> impl IntoView {
         })
     });
 
-    use_hotkeys!(("Escape") => move |_| {
+    use_hotkeys!(("escape", "scope_a") => move |_| {
         set_count.set(0);
     });
 
-    const REPO: &'static str = "https://github.com/friendlymatthew/leptos_hotkeys#README";
+    // scope_b related hotkeys
+    use_hotkeys!(("t", "scope_b") => move |_| {
+        if current_theme.get() == Theme::Light {
+            current_theme.set(Theme::Dark)
+        } else {
+            current_theme.set(Theme::Light)
+        }
+    });
+
+    // youtube links for scope_b lol
     const GORILLAS: &'static str = "https://www.youtube.com/watch?v=qavePUOut_c";
+    const DOGLICKEDTHEOLE: &'static str = "https://www.youtube.com/watch?v=4arBraMyp0Q";
+    const LOW: &'static str = "https://www.youtube.com/watch?v=YIZz2PMnEDM";
+    const ALASKA: &'static str = "https://www.youtube.com/watch?v=qRODjitiKP8";
+    const TAINAN: &'static str = "https://www.youtube.com/watch?v=pWOFFlPmVdk";
+    const NORM: &'static str = "https://www.youtube.com/watch?v=ELoXiuDA_sQ";
 
-    fn go_to_link(
-        key: &'static str,
-        link: String,
-    ) {
-        use_hotkeys!((*key) => move |_| {
-            window().location().set_href(&link).expect("Failed to navigate");
-        })
-    }
-
-    let toggle = hotkeys_context.toggle_scope;
-    let enable = hotkeys_context.enable_scope;
-    let disable = hotkeys_context.disable_scope;
-
-    let node_ref_disable = use_hotkeys_ref!(("k", "scope_a") => move |_| {
-        //do nothing
-    });
-
-    let node_ref = use_hotkeys_ref!(("k") => move |_| {
-        set_count.update(|count| {
-            *count += 1;
-        })
-    });
-
-    let node_ref_scoped = use_hotkeys_ref!(("k", "scope_a") => move |_| {
-        set_count.update(|count| {
-            *count += 1;
-        })
-    });
-
-    go_to_link("G+control", format!("{}", GORILLAS));
-    go_to_link("R", format!("{}", REPO));
+    go_to_link("G", format!("{}", GORILLAS), "scope_b");
+    go_to_link("D", format!("{}", DOGLICKEDTHEOLE), "scope_b");
+    go_to_link("L+O+W", format!("{}", LOW), "scope_b");
+    go_to_link("A", format!("{}", ALASKA), "scope_b");
+    go_to_link("arrowUp", format!("{}", TAINAN), "scope_b");
+    go_to_link("arrowDown", format!("{}", NORM), "scope_b");
 
     view! {
-        <main class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white h-screen py-20 w-full font-robotomono absolute">
-            <div class="relative w-full flex justify-end right-4 z-10">
-                <p>Press T to toggle between themes</p>
-            </div>
-        <div class="h-full flex flex-col items-center justify-around">
-            <div class="text-center space-y-2">
-                <p class="text-3xl">leptos-hotkeys</p>
-                <p>a declarative way of using keyboard shortcuts in Leptos</p>
-                <p>{"Press R to see how it works"}</p>
-            </div>
-            <div class="text-center">
-                <p class="text-3xl mb-4"> {move || count.get()} </p>
-                <p>{"Press up arrow to increment"}</p>
-                <p>{"down arrow to decrement "}</p>
-                <p>{"esc to reset"}</p>
-            </div>
-            <div>
-                <p>{"Press control+G to see gorillas avoiding the rain"}</p>
-            </div>
-            <div>
-                <a
-                    href=REPO
-                    target="_blank"
-                    rel="noreferrer"
-                >
-                    {"Press R to "} contribute
-                </a>
-            </div>
-            <div class="relative w-full flex justify-end right-4 z-10">
-                <div class="h-full flex flex-col items-center justify-around">
-                    <button _ref=node_ref_scoped>"Click here to set k key with scope_a to inc"</button>
-                    <button _ref=node_ref>"Click here to set k key to inc"</button>
-                    <button _ref=node_ref_disable>"Click here to disable k key"</button>
-                    <button on:click=move |_| toggle("scope_a".to_string())>"Toggle scope"</button>
-                    <button on:click=move |_| enable("scope_a".to_string())>"Enable scope"</button>
-                    <button on:click=move |_| disable("scope_a".to_string())>"Disable scope"</button>
+        <main class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
+
+            <div class="w-10/12 h-full flex flex-col space-y-20">
+                <div class="space-y-2 text-lg">
+                    <div class="flex space-x-8 flex items-end">
+                        <Button href="https://github.com/friendlymatthew/leptos-hotkeys">
+                            <p class="text-2xl">leptos_hotkeys</p>
+                        </Button>
+                        <p class="text-sm">press ctrl+R to go to repository</p>
+                    </div>
+                    <p>a library designed to declaratively pair your keybindings with callbacks.</p>
                 </div>
+                <div class="flex-1 flex flex-col space-y-20">
+                    <div>
+                        <p>Press 's' to toggle between scopes a and b</p>
+                        <p>Current scope: {move || { current_scope.get() }}</p>
+                    </div>
+                    <div class="flex-1 grid grid-col-1 lg:grid-cols-2">
+                        <div id="scope_a" class=format!("{}", SCOPE_BORDER)>
+                            <p>scope_a</p>
+                            <div class="space-y-8">
+                                <p class="text-lg">Current count: {count}</p>
+                                <div class="space-y-2">
+                                    <p>"press 'Arrow Up' to increase the count"</p>
+                                    <p>"press 'Arrow Down' to decrease the count"</p>
+                                    <p>"press 'Escape' to reset the count"</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="scope_b" class=format!("{}", SCOPE_BORDER)>
+                            <p>scope_b</p>
+                            <div class="space-y-2">
+                                <p>press 'T' to switch themes</p>
+                                <p>press 'G' to see gorillas avoiding the rain</p>
+                                <p>"press 'Arrow Down' to hear Norm tell a story about his friend Drake"</p>
+                                <p>
+                                    "press 'L+O+W' to listen to Pavarotti's rendition of Flo Rida's 'Low'"
+                                </p>
+                                <p>
+                                    "press 'A' to watch a man brave the Alaskan winter without a tent"
+                                </p>
+                                <p>"press 'Arrow Up' for a nice gator roll"</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex space-x-8">
+                    <Button href="https://github.com/friendlymatthew/leptos-hotkeys">
+                        <p>Source code</p>
+                    </Button>
+                    <Button href="https://github.com/friendlymatthew/leptos-hotkeys?tab=readme-ov-file#quick-start">
+                        <p>Quick start</p>
+                    </Button>
+                    <Button href="https://crates.io/crate/leptos_hotkeys">
+                        <p>Crate</p>
+                    </Button>
+                </div>
+
             </div>
-        </div>
         </main>
     }
 }
