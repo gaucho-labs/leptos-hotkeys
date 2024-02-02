@@ -14,24 +14,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 
     <style>
-        .not-active {
-            background-color: #1a1a1a;
-            color: #fdfdfd
-        }
-
         .active {
-            background-color: #fdfdfd;
-            color: #1a1a1a;
-        }
-
-        .dark.not-active {
-            background-color: #fdfdfd;
-            color: #1a1a1a;
-        }
-
-        .dark.active {
             background-color: #1a1a1a;
             color: #fdfdfd
+        }
+
+        .not-active {
+            background-color: #fdfdfd;
+            color: #1a1a1a;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            .active {
+                background-color: #fdfdfd;
+                color: #1a1a1a;
+            }
+
+            .not-active {
+                background-color: #1a1a1a;
+                color: #fdfdfd
+            }
         }
     </style>
         </head>
