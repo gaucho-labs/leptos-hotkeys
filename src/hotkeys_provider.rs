@@ -4,6 +4,7 @@ use crate::scopes;
 use leptos::html::div;
 use leptos::web_sys::KeyboardEvent;
 use leptos::*;
+use web_sys::EventTarget;
 use std::collections::HashSet;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
@@ -14,6 +15,8 @@ use wasm_bindgen::JsCast;
 pub struct HotkeysContext {
     pub(crate) pressed_keys: RwSignal<HashSet<String>>,
 
+    pub active_ref_target: RwSignal<Option<EventTarget>>,
+    pub set_ref_target: Callback<Option<EventTarget>>,
     pub active_scopes: RwSignal<HashSet<String>>,
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
@@ -43,6 +46,11 @@ pub fn HotkeysProvider(
 
     children: Children,
 ) -> impl IntoView {
+    let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
+    let set_ref_target= Callback::new(move |target: Option<EventTarget>| {
+        active_ref_target.set(target);
+    });
+
     let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::<String>::new());
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -82,6 +90,8 @@ pub fn HotkeysProvider(
 
     provide_context(HotkeysContext {
         pressed_keys,
+        active_ref_target,
+        set_ref_target,
         active_scopes,
         enable_scope,
         disable_scope,
