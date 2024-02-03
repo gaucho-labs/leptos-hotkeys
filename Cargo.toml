@@ -2,7 +2,13 @@
 name = "leptos_hotkeys"
 version = "0.1.0"
 edition = "2021"
+description= "A library that declaratively pairs keybindings with callbacks for Leptos applications."
+license = "MIT"
+repository = "http://github.com/friendlymatthew/leptos-hotkeys"
+readme = "README.md"
 authors=["Matthew Kim", "Robert Junkins"]
+
+keywords=["leptos", "hotkeys", "wasm"]
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
