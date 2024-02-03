@@ -105,7 +105,7 @@ fn HomePage() -> impl IntoView {
         }
     });
 
-    let a_ref = use_hotkeys_ref!(("k", "scope_a") => move |_| {
+    let a_ref = use_hotkeys_ref!(("6", "scope_a") => move |_| {
         if is_green.get() {
             is_green.set(false)
         } else {
@@ -154,7 +154,6 @@ fn HomePage() -> impl IntoView {
                             id="scope_a"
                             class:active=move || current_scope.get() == "scope_a"
                             class:not-active=move || current_scope.get() != "scope_a"
-                            tabIndex=-1
                         >
                             <div class=format!("{}", SCOPE_BORDER)>
                                 <p>scope_a</p>
@@ -168,10 +167,11 @@ fn HomePage() -> impl IntoView {
                                 </div>
                                 <div
                                     _ref=a_ref
+                                    tabIndex=-1
                                     class:green=move || is_green.get() == true
                                     class:yellow=move || is_green.get() == false
                                 >
-                                    <p>click on me and press spacebar</p>
+                                    <p>click on me and press 6</p>
                                 </div>
                             </div>
                         </div>
