@@ -23,8 +23,6 @@ impl Default for KeyboardModifiers {
 pub struct Hotkey {
     pub(crate) modifiers: KeyboardModifiers,
     pub(crate) keys: Keys,
-    // scopes: Scopes,
-    pub(crate) description: String,
 }
 
 pub type RefType<T> = Option<T>;

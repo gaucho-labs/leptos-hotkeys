@@ -1,9 +1,5 @@
 use leptos::*;
-use leptos_hotkeys::{
-    scopes, use_hotkeys,
-    use_hotkeys::{use_hotkeys_ref_scoped, use_hotkeys_scoped},
-    use_hotkeys_context, use_hotkeys_ref, HotkeysContext, HotkeysProvider,
-};
+use leptos_hotkeys::prelude::*;
 use leptos_meta::*;
 use leptos_router::*;
 use leptos_theme::{use_theme, Theme, ThemeProvider};
@@ -39,7 +35,6 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
-    // Demo related logic
     const SCOPE_BORDER: &'static str =
         "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20 h-full";
     let current_scope = create_rw_signal("scope_a");
@@ -47,7 +42,6 @@ fn HomePage() -> impl IntoView {
     let current_theme = use_theme();
 
     // leptos_hotkey specific logic
-
     fn go_to_link(key: &'static str, link: String, scope: &'static str) {
         use_hotkeys!((*key, scope) => move |_| {
             window().location().set_href(&link).expect("Failed to navigate");

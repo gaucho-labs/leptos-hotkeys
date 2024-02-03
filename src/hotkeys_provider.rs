@@ -1,14 +1,13 @@
-use crate::types::Hotkey;
 use crate::scopes;
+use crate::types::Hotkey;
 
 use leptos::html::div;
 use leptos::web_sys::KeyboardEvent;
 use leptos::*;
-use web_sys::EventTarget;
 use std::collections::HashSet;
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
-
+use web_sys::EventTarget;
 
 // Defining a hotkey context structure
 #[derive(Clone)]
@@ -33,21 +32,21 @@ pub fn use_hotkeys_context() -> HotkeysContext {
 
 #[component]
 pub fn HotkeysProvider(
-
     /// when a blur event occurs, the pressed_keys reset, defaults to `false`
     ///
     /// https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event
-    #[prop(default=false)] allow_blur_event: bool,
-
+    #[prop(default = false)]
+    allow_blur_event: bool,
 
     #[prop(default={
         scopes!()
-    })] initially_active_scopes: HashSet<String>,
+    })]
+    initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {
     let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
-    let set_ref_target= Callback::new(move |target: Option<EventTarget>| {
+    let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
         active_ref_target.set(target);
     });
 
@@ -101,11 +100,9 @@ pub fn HotkeysProvider(
         remove_hotkey,
     });
 
-
-    // I hate that I have to create a <div /> todo! look into fragment: <> </>
     div()
         .on_mount(move |_| {
-            logging::log!("mounted");
+            //logging::log!("mounted");
 
             let blur_listener = Closure::wrap(Box::new(move || {
                 logging::log!("Window lost focus");
@@ -113,13 +110,13 @@ pub fn HotkeysProvider(
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                logging::log!("keydown: {}", event.key());
+                // logging::log!("keydown: {}", event.key());
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase());
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                logging::log!("keyup: {}", event.key());
+                // logging::log!("keyup: {}", event.key());
                 pressed_keys.update(|keys| {
                     keys.remove(&event.key().to_lowercase());
                 });
@@ -127,7 +124,10 @@ pub fn HotkeysProvider(
 
             if !allow_blur_event {
                 window()
-                    .add_event_listener_with_callback("blur", blur_listener.as_ref().unchecked_ref())
+                    .add_event_listener_with_callback(
+                        "blur",
+                        blur_listener.as_ref().unchecked_ref(),
+                    )
                     .expect("Failed to add blur event listener");
             }
 
@@ -143,9 +143,12 @@ pub fn HotkeysProvider(
             on_cleanup(move || {
                 if !allow_blur_event {
                     window()
-                        .remove_event_listener_with_callback("blur", blur_listener.as_ref().unchecked_ref())
+                        .remove_event_listener_with_callback(
+                            "blur",
+                            blur_listener.as_ref().unchecked_ref(),
+                        )
                         .expect("Failed to remove blur event listener");
-                        blur_listener.forget();
+                    blur_listener.forget();
                 }
 
                 document()
