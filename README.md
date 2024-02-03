@@ -120,7 +120,6 @@ If you prefer writing out your callbacks the leptos way, we also non-macro hotke
 >       </p> 
 >   }
 > }
->
 > ```
 
 ## Quick Start
