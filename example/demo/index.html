@@ -24,6 +24,27 @@
             color: #1a1a1a;
         }
 
+        .green, .yellow {
+            padding: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .green {
+            background-color: #39ff14; /* Neon green; adjust as needed */
+        }
+
+        .yellow {
+            background-color: yellow; /* Standard yellow */
+        }
+
+        .green:focus, .yellow:focus {
+            outline: none; /* Remove default focus outline */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.6); /* Shadow for focus */
+            border-color: #000; /* Black border on focus */
+        }
+
+
         @media (prefers-color-scheme: dark) {
             .active {
                 background-color: #fdfdfd;

@@ -2,10 +2,10 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>demo</title>
-    <script type="module">import init from '/demo-c45cb07a1d9ffa81.js';init('/demo-c45cb07a1d9ffa81_bg.wasm');</script>
+    <script type="module">import init from '/demo-5655f9a59a531380.js';init('/demo-5655f9a59a531380_bg.wasm');</script>
 
     
-    <link rel="stylesheet" href="/output-95022b20aca7530b.css">
+    <link rel="stylesheet" href="/output-fe8d4c1600dfc7ef.css">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -22,6 +22,27 @@
             color: #1a1a1a;
         }
 
+        .green, .yellow {
+            padding: 12px;
+            border: 2px solid transparent;
+            cursor: pointer;
+        }
+
+        .green {
+            background-color: #39ff14; /* Neon green; adjust as needed */
+        }
+
+        .yellow {
+            background-color: yellow; /* Standard yellow */
+        }
+
+        .green:focus, .yellow:focus {
+            outline: none; /* Remove default focus outline */
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.6); /* Shadow for focus */
+            border-color: #000; /* Black border on focus */
+        }
+
+
         @media (prefers-color-scheme: dark) {
             .active {
                 background-color: #fdfdfd;
@@ -35,8 +56,8 @@
         }
     </style>
         
-<link rel="preload" href="/demo-c45cb07a1d9ffa81_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
-<link rel="modulepreload" href="/demo-c45cb07a1d9ffa81.js"></head>
+<link rel="preload" href="/demo-5655f9a59a531380_bg.wasm" as="fetch" type="application/wasm" crossorigin="">
+<link rel="modulepreload" href="/demo-5655f9a59a531380.js"></head>
 <body>
 
 
