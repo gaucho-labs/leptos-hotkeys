@@ -136,7 +136,6 @@ fn HomePage() -> impl IntoView {
 
                         <div>
                             <p>Press 's' to toggle between scopes a and b</p>
-                            <p>Click on either div to toggle between ref a and b</p>
                             <p>Current scope: {move || { current_scope.get() }}</p>
                         </div>
                     </div>
