@@ -47,7 +47,6 @@ fn HomePage() -> impl IntoView {
     let current_theme = use_theme();
 
     // leptos_hotkey specific logic
-    let hotkeys_context: HotkeysContext = use_hotkeys_context();
 
     fn go_to_link(key: &'static str, link: String, scope: &'static str) {
         use_hotkeys!((*key, scope) => move |_| {
@@ -57,14 +56,12 @@ fn HomePage() -> impl IntoView {
 
     let (count, set_count) = create_signal(0);
 
-    let toggle = hotkeys_context.toggle_scope;
-    let enable = hotkeys_context.enable_scope;
-    let disable = hotkeys_context.disable_scope;
+    let HotkeysContext { toggle_scope, .. } = use_hotkeys_context();
 
     // global hotkeys
     use_hotkeys!(("s") => move |_| {
-        toggle("scope_a".to_string());
-        toggle("scope_b".to_string());
+        toggle_scope("scope_a".to_string());
+        toggle_scope("scope_b".to_string());
 
         if current_scope.get() == "scope_a" {
             current_scope.set("scope_b")
@@ -166,7 +163,7 @@ fn HomePage() -> impl IntoView {
                             id="scope_a"
                             class:active=move || current_scope.get() == "scope_a"
                             class:not-active=move || current_scope.get() != "scope_a"
-                            _ref={a_ref} 
+                            _ref={a_ref}
                             tabIndex={-1}
                         >
                             <div class=format!("{}", SCOPE_BORDER)>
@@ -185,7 +182,7 @@ fn HomePage() -> impl IntoView {
                             id="scope_b"
                             class:active=move || current_scope.get() == "scope_b"
                             class:not-active=move || current_scope.get() != "scope_b"
-                            _ref={b_ref} 
+                            _ref={b_ref}
                             tabIndex={-1}
                         >
                             <div class=format!("{}", SCOPE_BORDER)>

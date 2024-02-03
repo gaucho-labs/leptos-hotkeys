@@ -1,10 +1,10 @@
-<br />
-
 <h1>
     <a href="https://github.com/friendlymatthew/leptos-hotkeys">
     <em>leptos-hotkeys</em>    
 </a>
 </h1>
+
+Declaratively create and pair keybindings with callbacks for Leptos applications. 
 
 [![crates](https://img.shields.io/badge/📦_crates-install-%20green)](https://crates.io/crates/leptos_hotkeys)
 [![version](https://img.shields.io/badge/version-0.1.0-purple)](https://materialize.com/s/chat)
@@ -13,125 +13,92 @@
     <img width="570" alt="Screen Shot 2024-01-07 at 4 13 48 PM" src="https://github.com/friendlymatthew/leptos_hotkeys/assets/38759997/f3c7b6ee-e6fd-4c0d-90be-ad26ca4e2ec6">
 </a>
 
-leptos_hotkeys is a library designed to simplify the process of integrating keyboard shortcuts into leptos web applications.
 
 ## Live example 
 Curious to see how it works? [See the demo!](https://leptos-hotkeys.vercel.app/)
 
-To get started, follow the [Quick Start](#quick-start) section.
+To get started, follow the [Quick Start](#quick-start) section. It's worth the read!
 ## Features
-### Global
-The quickest way to create a keybinding is to declare a global hotkey.
-```rust
-use leptos_hotkeys::{use_hotkeys};
 
-#[component]
-fn Component() -> impl IntoView {
-    let (count, set_count) = create_signal(0);
-    
-    use_hotkeys(
-        "F", // the F key
-        Callback::new(move |_| {
-            set_count.update(|count| {
-                *count += 1; 
-            }) 
-        })
-    );
+### `use_hotkeys!` macro
+For simplicity and ease, use the `use_hotkeys!` macro to declare global and scoped hotkeys.<br>
+We brought some js idioms while maintaining the leptos look.
+[Learn more about the macro.](#macro-api) <br>
 
-    view! {
-        <p>
-            Press 'F' to pay respect. 
-        
-            {count} times    
-        </p>
-    } 
-}
-```
+If you prefer writing out your callbacks the leptos way, we also non-macro hotkeys. [Learn more about trad hotkeys.](#trad-hotkeys) 
 
-### Scopes
-Assign hotkeys specific to individual sections without collisions using `use_hotkeys_scoped`. 
+### Global Hotkeys
+> This example creates two global hotkeys: `W` and `S`. 
+> 
+> *Note: the `*` symbol is reserved for the global scope*
+> 
+> ```rust
+> use leptos_hotkeys::{use_hotkeys};
+> 
+> #[component]
+> pub fn SomeComponent() -> impl IntoView {
+>   let (count, set_count) = create_signal(0); 
+> 
+>   // creating a global scope for the W key
+>   use_hotkeys!(("w") => move |_| {
+>       logging::log!("s has been pressed"); 
+>       set_count.update(|c| *c += 1);
+>   });
+> 
+>   // this is also a global scope for the S key!
+>   use_hotkeys!(("s", "*") => move |_| {
+>       logging::log!("t has been pressed");
+>       set_count.update(|c| *c -= 1);   
+>   });
+> 
+>   view! {
+>       <p>Current count: {count}</p> 
+>   }
+> }
+> ```
 
-This ensures that keybindings are active only in their designated scope. Dynamically activate or deactivate entire groups of hotkeys using `toggle_scope`, `enable_scope`, `disable_scope`.
-```rust
-use leptos_hotkeys::{
-    use_hotkeys_scoped,
-    use_hotkeys_context,
-    HotkeysContext
-};
+### Scoped Hotkeys
 
-#[component]
-fn Component() -> impl IntoView {
-    let hotkeys_context: HotkeysContext = use_hotkeys_context();
-    
-    let toggle = hotkeys_context.toggle_scope;
-    let enable = hotkeys_context.enable_scope;
-    let disable = hotkeys_context.disable_scope; 
-    
-    use_hotkeys_scoped(
-        "arrowup",
-        Callback::new(move |_| {
-            // move character up 
-        }),
-        vec!["game_scope"]
-    );
+Assign hotkeys specific to individual sections without collisions using scopes.<br/>
+Use functions in `HotkeysContext` for scope management.
 
-    use_hotkeys_scoped(
-        "arrowdown",
-        Callback::new(move |_| {
-            // move character down 
-        }),
-        vec!["game_scope"]
-    );
-  
-    
-    view! {
-        <button
-            // activates the 'game_scope' scope  
-            on:click=move |_| enable("game_scope")  
-        >
-            Start game
-        </button>
-   
-        <button
-            // toggles the 'game_scope' from enabled to disabled 
-            on:click=move |_| toggle("game_scope") 
-        >
-            Pause game
-        </button>
-        
-        
-        <button
-            // disables the 'game_scope' scope 
-            on:click=move |_| disable("game_scope")  
-        >
-            End game
-        </button>
-    }
-}
-```
-
-### Focus trapping
-Pair a keybinding with a `html` element. The hotkey will trigger if the element is focused.  
-```rust
-use leptos_hotkeys::{
-    use_hotkeys_ref 
-};
-
-#[component]
-fn Component() -> impl IntoView {
-    let node_ref = use_hotkeys_ref("l", Callback::new(move |_| {
-        // some logic here 
-    }));
-
-    view! {
-        <body>
-            <div _ref=node_ref>
-                // when this div is focused, the "l" hotkey will fire 
-            </div>
-        </body>
-    }
-}
-```
+> This example shows an inner and outer scope and hotkeys that switch between the scopes.
+> 
+> *Note: scopes are case-insensitive. That means `wef_scope` and `WEf_sCoPe` are considered the same scope.*
+> 
+> ```rust
+> use leptos_hotkeys::{
+>   use_hotkeys
+>   use_hotkeys_context, HotkeysContext 
+> };
+> 
+> #[component]
+> pub fn SomeComponent() -> impl IntoView {
+>   
+>   let HotkeysContext { enable_scope, disable_scope, .. } = use_hotkeys_context();
+> 
+>   // switch into the inner scope 
+>   use_hotkeys(("i", "outer") => {
+>       disable_scope("outer");
+>       enable_scope("inner");
+>   })
+> 
+>   // switch into the outer scope
+>   use_hotkeys(("o", "inner") => {
+>       disable_scope("inner");
+>       enable_scope("outer"); 
+>   })
+> 
+>   view! {
+>       <div id="outer">
+>           //...some outer scope html...
+>           <div id="inner">
+>               //...some inner scope html...
+>           </div>
+>           //...some outer scope html.... 
+>       </div>
+>   }
+> }
 
 
 ## Quick Start
@@ -156,44 +123,178 @@ view! {
 }
 ```
 
-#### Initialize scopes
-If you're using [scopes](#scopes), you can initialize with a specific scope.
-```html
+### Initialize scopes
+If you're using [scopes](#scoped-hotkeys), you can initialize with a specific scope.
+```rust
+use leptos_hotkeys::{scopes};
+
 view! {
     <HotkeysProvider
         initially_active_scopes=scopes!("some_scope_id") 
     >
         <Router>
-            <Routes>
-                <Route path="/" view=HomePage/>
-                <Route path="/:else" view=ErrorPage/>
-            </Routes>
+            //... routes
         </Router>
     </HotkeysProvider>
 }
 ```
 
-### Pair keybindings
-Then you can [pair keybindings](#features):
-```rust
-// in some component (e.g. <HomePage />)
-use leptos_hotkeys::use_hotkeys;
-
-let (count, set_count) = create_signal(0);
-
-use_hotkeys(
-    "ctrl+k",
-    Callback::new(move |_| {
-        set_count.update(|count| {
-            *count += 1;
-        });
-    })
-);
-```
-
-That's it!
+Thats it! Start creating [hotkeys](#features)!
 
 
 ## API
-// todo!
+### `<HotkeysProvider />`
 
+| Prop Name                 | Type              | Default Value                 | Description                                                                                                                                                                          |
+|---------------------------|-------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `allow_blur_event`        | `bool`            | `false`                       | Determines if the component should reset `pressed_keys` when a blur event occurs on the window. This is useful for resetting the state when the user navigates away from the window. |
+| `initially_active_scopes` | `HashSet<String>` | `scopes!("*")` (Global State) | Specifies the set of scopes that are active when the component mounts. Useful for initializing the component with a predefined set of active hotkey scopes.                          |
+
+### `HotkeysContext`
+| Field Name          | Type                            | Description                                                                                           |
+|---------------------|---------------------------------|-------------------------------------------------------------------------------------------------------|
+| `pressed_keys`      | `RwSignal<HashSet<String>>`     | A reactive signal tracking the set of keys currently pressed by the user.                             |
+| `active_ref_target` | `RwSignal<Option<EventTarget>>` | A reactive signal holding the currently active event target, useful for focusing events.              |
+| `set_ref_target`    | `Callback<Option<EventTarget>>` | A method to update the currently active event target.                                                 |
+| `active_scopes`     | `RwSignal<HashSet<String>>`     | A reactive signal tracking the set of currently active scopes, allowing for scoped hotkey management. |
+| `enable_scope`      | `Callback<String>`              | A method to activate a given hotkey scope.                                                            |
+| `disable_scope`     | `Callback<String>`              | A method to deactivate a given hotkey scope.                                                          |
+| `toggle_scope`      | `Callback<String>`              | A method to toggle the activation state of a given hotkey scope.                                      |
+| `bound_hotkeys`     | `RwSignal<Vec<Hotkey>>`         | A reactive signal holding the list of currently bound hotkeys.                                        |
+| `add_hotkey`        | `Callback<Hotkey>`              | A method to add a new hotkey to the list of bound hotkeys.                                            |
+| `remove_hotkey`     | `Callback<Hotkey>`              | A method to remove an existing hotkey from the list of bound hotkeys.                                 |
+
+### Basic Types
+#### Keyboard Modifiers
+| Field Name | Type  | Description                                                                                                                                                                     |
+|------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `alt`      | `bool`| Indicates if the Alt key modifier is active (true) or not (false).                                                                                                              |
+| `ctrl`     | `bool`| Indicates if the Control (Ctrl) key modifier is active (true) or not (false).                                                                                                   |
+| `meta`     | `bool`| Indicates if the [Meta](https://www.basketball-reference.com/players/a/artesro01.html) (Command on macOS, Windows key on Windows) key modifier is active (true) or not (false). |
+| `shift`    | `bool`| Indicates if the Shift key modifier is active (true) or not (false).                                                                                                            |
+
+#### Hotkey
+| Field Name  | Type                | Description                                                                                                                                    |
+|-------------|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
+| `modifiers` | `KeyboardModifiers` | The set of key modifiers (Alt, Ctrl, [Meta](https://www.basketball-reference.com/players/a/artesro01.html), Shift) associated with the hotkey. |
+| `keys`      | `Vec<String>`       | The list of keys that, along with any modifiers, define the hotkey.                                                                            |
+| `description`| `String`           | A human-readable description of what the hotkey does. Intended for future use with scopes.                                                     |
+
+## Trad Hotkeys
+If the macro isn't to your liking, we offer three hotkeys: global, scoped, and focus trapped.
+
+### Global: `use_hotkeys_scoped()` where scope = `*`
+> ```rust
+> use leptos_hotkeys::{use_hotkeys_scoped};
+> 
+> #[component]
+> fn Component() -> impl IntoView {  
+>    let (count, set_count) = create_signal(0);
+>    
+>    use_hotkeys_scoped(
+>        "F", // the F key
+>        "*",
+>        Callback::new(move |_| {
+>            set_count.update(|count| {
+>                *count += 1; 
+>            }) 
+>        })
+>    );
+>
+>    view! {
+>        <p>
+>            Press 'F' to pay respect. 
+>        
+>            {count} times    
+>        </p>
+>    } 
+> }
+>```
+
+### Scoped - `use_hotkeys_scoped` 
+
+> ```rust
+> use leptos_hotkeys::{
+>     use_hotkeys_scoped,
+>     use_hotkeys_context,
+>     HotkeysContext
+> };
+>
+> #[component]
+> fn Component() -> impl IntoView {
+>    let hotkeys_context: HotkeysContext = use_hotkeys_context();
+>
+>   let toggle = hotkeys_context.toggle_scope;
+>   let enable = hotkeys_context.enable_scope;
+>    let disable = hotkeys_context.disable_scope; 
+>
+>   use_hotkeys_scoped(
+>       "arrowup",
+>       Callback::new(move |_| {
+>           // move character up 
+>       }),
+>       vec!["game_scope"]
+>    );
+>
+>   use_hotkeys_scoped(
+>       "arrowdown",
+>       Callback::new(move |_| {
+>           // move character down 
+>       }),
+>       vec!["game_scope"]
+>    );
+>
+>
+>   view! {
+>       <button
+>           // activates the 'game_scope' scope  
+>           on:click=move |_| enable("game_scope")  
+>         >
+>           Start game
+>        </button>
+>
+>       <button
+>           // toggles the 'game_scope' from enabled to disabled 
+>           on:click=move |_| toggle("game_scope") 
+>       >
+>           Pause game
+>        </button>
+>
+>
+>       <button
+>           // disables the 'game_scope' scope 
+>             on:click=move |_| disable("game_scope")  
+>         >
+>             End game
+>         </button>
+>     }
+> }
+> ```
+
+### Focus trapped - `use_hotkeys_ref()` 
+> ```rust
+> use leptos_hotkeys::{
+>     use_hotkeys_ref 
+> };
+>
+> #[component]
+> fn Component() -> impl IntoView {
+>   let node_ref = use_hotkeys_ref("l", Callback::new(move |_| {
+>       // some logic here 
+>    }));
+>
+>   view! {
+>        <body>
+>           <div _ref=node_ref>
+>               // when this div is focused, the "l" hotkey will fire 
+>           </div>
+>       </body>
+>    }
+> }
+> ```
+
+## Contributions
+Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) page and feel free to post a PR!
+
+### Bugs, Issues, Feature Requests
+[Robert](https://github.com/JustBobinAround) and I created `leptos_hotkeys` with the intention of usability. If you encounter any bugs, issues, or feature requests, [please feel free to open an issue.](https://github.com/friendlymatthew/leptos-hotkeys/issues/new)
