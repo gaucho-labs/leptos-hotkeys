@@ -24,6 +24,25 @@
             color: #1a1a1a;
         }
 
+        .green, .yellow {
+            padding: 12px;
+            cursor: pointer;
+        }
+
+        .green {
+            background-color: #39ff14;
+        }
+
+        .yellow {
+            background-color: yellow;
+        }
+
+        .green:focus, .yellow:focus {
+            outline: none;
+            box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
+        }
+
+
         @media (prefers-color-scheme: dark) {
             .active {
                 background-color: #fdfdfd;
