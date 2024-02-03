@@ -59,9 +59,9 @@ If you prefer writing out your callbacks the leptos way, we also non-macro hotke
 
 ### Scoped Hotkeys
 
-Assign hotkeys specific to individual sections without collisions using scopes.<br/>
-Use functions in `HotkeysContext` for scope management.
-
+> Assign hotkeys specific to individual sections without collisions using scopes.<br/>
+> Use functions in `HotkeysContext` for scope management.
+>
 > This example shows an inner and outer scope and hotkeys that switch between the scopes.
 > 
 > *Note: scopes are case-insensitive. That means `wef_scope` and `WEf_sCoPe` are considered the same scope.*
@@ -100,6 +100,31 @@ Use functions in `HotkeysContext` for scope management.
 >   }
 > }
 
+
+### Focus trapped Hotkeys
+> Embed a hotkey with an `HtmlElement` and the hotkey will only fire if the element is focused and the scope is enabled.
+> 
+> ```rust
+> use leptos_hotkeys::{use_hotkeys_ref}; 
+>
+> #[component] 
+> pub fn SomeComponent -> impl IntoView {
+> 
+>   let p_ref = use_hotkeys_ref!(("K", "*") => move |_| {
+>       // some logic 
+>   });
+> 
+>   view! {
+>       <p
+>           tabIndex=-1
+>           _ref=p_ref 
+>       >
+>           p tag with node ref 
+>       </p> 
+>   }
+> }
+>
+> ```
 
 ## Quick Start
 
@@ -193,12 +218,12 @@ If the macro isn't to your liking, we offer three hotkeys: global, scoped, and f
 >    
 >    use_hotkeys_scoped(
 >        "F", // the F key
->        "*",
 >        Callback::new(move |_| {
 >            set_count.update(|count| {
 >                *count += 1; 
 >            }) 
->        })
+>        }),
+>        vec!["*"]
 >    );
 >
 >    view! {
@@ -222,11 +247,11 @@ If the macro isn't to your liking, we offer three hotkeys: global, scoped, and f
 >
 > #[component]
 > fn Component() -> impl IntoView {
->    let hotkeys_context: HotkeysContext = use_hotkeys_context();
+>   let hotkeys_context: HotkeysContext = use_hotkeys_context();
 >
 >   let toggle = hotkeys_context.toggle_scope;
 >   let enable = hotkeys_context.enable_scope;
->    let disable = hotkeys_context.disable_scope; 
+>   let disable = hotkeys_context.disable_scope; 
 >
 >   use_hotkeys_scoped(
 >       "arrowup",
