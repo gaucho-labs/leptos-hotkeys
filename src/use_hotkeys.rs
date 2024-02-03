@@ -2,7 +2,7 @@ use crate::hotkeys_provider::use_hotkeys_context;
 use crate::types::{Hotkey, KeyboardModifiers};
 use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 use leptos_dom::NodeRef;
-use web_sys::{KeyboardEvent, MouseEvent};
+use web_sys::KeyboardEvent;
 
 use std::collections::HashSet;
 

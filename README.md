@@ -33,8 +33,8 @@ If you prefer writing out your callbacks the leptos way, we also non-macro hotke
 > *Note: the `*` symbol is reserved for the global scope*
 > 
 > ```rust
-> use leptos_hotkeys::{use_hotkeys};
-> 
+> use leptos_hotkeys::prelude::*;
+>  
 > #[component]
 > pub fn SomeComponent() -> impl IntoView {
 >   let (count, set_count) = create_signal(0); 
@@ -67,10 +67,7 @@ If you prefer writing out your callbacks the leptos way, we also non-macro hotke
 > *Note: scopes are case-insensitive. That means `wef_scope` and `WEf_sCoPe` are considered the same scope.*
 > 
 > ```rust
-> use leptos_hotkeys::{
->   use_hotkeys
->   use_hotkeys_context, HotkeysContext 
-> };
+> use leptos_hotkeys::prelude::*;
 > 
 > #[component]
 > pub fn SomeComponent() -> impl IntoView {
@@ -105,7 +102,7 @@ If you prefer writing out your callbacks the leptos way, we also non-macro hotke
 > Embed a hotkey with an `HtmlElement` and the hotkey will only fire if the element is focused and the scope is enabled.
 > 
 > ```rust
-> use leptos_hotkeys::{use_hotkeys_ref}; 
+> use leptos_hotkeys::prelude::*;
 >
 > #[component] 
 > pub fn SomeComponent -> impl IntoView {
@@ -151,7 +148,7 @@ view! {
 ### Initialize scopes
 If you're using [scopes](#scoped-hotkeys), you can initialize with a specific scope.
 ```rust
-use leptos_hotkeys::{scopes};
+use leptos_hotkeys::scopes;
 
 view! {
     <HotkeysProvider
@@ -165,6 +162,57 @@ view! {
 ```
 
 Thats it! Start creating [hotkeys](#features)!
+
+## Macro API
+We wanted to strip the verbosity that comes with `str` and `String` type handling.<br> 
+We kept leptos best practices in mind, keeping the `move |_|` idiom in our macro.
+
+### `use_hotkeys!()`
+Here is a general look at the macro:
+> ```rust
+> use leptos_hotkeys::prelude::*;
+> 
+> use_hotkeys!(("key", "scope") => move |_| {
+>    // callback logic here 
+> });
+> ```
+
+For global hotkeys, you can omit the second parameter as it will implicitly add the global scope.
+> ```rust
+> use_hotkeys!(("key") => move |_| {
+>    // callback logic here 
+> });
+> ```
+
+### `use_hotkeys_ref!()`
+This macro is used when you want to focus trap with a specific html element.
+> ```rust
+> use leptos_hotkeys::prelude::*;
+> 
+> let some_ref = use_hotkeys_ref!(("key", "scope") => move |_| {
+>   // callback logic here 
+> });
+> 
+> view! {
+>   <div tabIndex=-1 _ref=some_ref>
+>   </div>
+> }
+> > ```
+
+### `scopes!()`
+Maybe you want to initialize a certain scope upon load, that's where the prop `initially_active_scopes` come into play.
+Instead of having to create a `vec!["scope_name".to_string()]`, use the `scopes!()` macro.
+> ```rust
+> use leptos_hotkeys::prelude::*;
+> // or
+> use leptos_hotkeys::scopes; 
+> 
+> <HotkeysProvider
+>   initially_active_scopes=scopes!("scope_a", "settings_scope")
+> >
+>   // pages here...
+> </HotkeysProvider>
+> ```
 
 
 ## API

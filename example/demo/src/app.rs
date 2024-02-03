@@ -179,6 +179,7 @@ fn HomePage() -> impl IntoView {
                                     <p>
                                         "press 'Arrow Down' to hear Norm tell a story about his friend Drake"
                                     </p>
+                                    <p> "press 'D' to hear a southern man talk without an accent"</p>
                                     <p>
                                         "press 'L+O+W' to listen to Pavarotti's rendition of Flo Rida's 'Low'"
                                     </p>

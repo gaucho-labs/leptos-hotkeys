@@ -14,16 +14,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 
     <style>
-        .active {
-            background-color: #1a1a1a;
-            color: #fdfdfd
-        }
-
-        .not-active {
-            background-color: #fdfdfd;
-            color: #1a1a1a;
-        }
-
         .green, .yellow {
             padding: 12px;
             cursor: pointer;
@@ -42,6 +32,18 @@
             box-shadow: 0 0 4px rgba(0, 0, 0, 0.6);
         }
 
+
+        @media (prefers-color-scheme: light) {
+            .not-active {
+                background-color: #fdfdfd;
+                color: #1a1a1a;
+            }
+
+            .active {
+                background-color: #1a1a1a;
+                color: #fdfdfd
+            }
+        }
 
         @media (prefers-color-scheme: dark) {
             .active {
