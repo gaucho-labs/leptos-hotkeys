@@ -126,7 +126,7 @@ If you prefer writing out your callbacks the leptos way, we also non-macro hotke
 
 ### Installation
 ```shell
-cargo install leptos_hotkeys
+cargo add leptos_hotkeys
 ```
 
 ### Hotkey Provider
