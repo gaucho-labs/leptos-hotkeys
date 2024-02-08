@@ -7,7 +7,10 @@ use web_sys::KeyboardEvent;
 use std::collections::{HashMap, HashSet};
 
 fn parse_key(key_combination: &str) -> Hotkey {
-    let parts = key_combination.split('+').collect::<Vec<&str>>();
+    let parts = key_combination
+        .split('+')
+        .map(str::trim)
+        .collect::<Vec<&str>>();
 
     let mut modifiers = KeyboardModifiers::default();
     let mut keys = Vec::new();
