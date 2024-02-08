@@ -4,7 +4,7 @@ use crate::types::Hotkey;
 use leptos::html::div;
 use leptos::web_sys::KeyboardEvent;
 use leptos::*;
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
 use web_sys::EventTarget;
@@ -12,7 +12,7 @@ use web_sys::EventTarget;
 // Defining a hotkey context structure
 #[derive(Clone)]
 pub struct HotkeysContext {
-    pub(crate) pressed_keys: RwSignal<HashSet<String>>,
+    pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
 
     pub active_ref_target: RwSignal<Option<EventTarget>>,
     pub set_ref_target: Callback<Option<EventTarget>>,
@@ -50,7 +50,7 @@ pub fn HotkeysProvider(
         active_ref_target.set(target);
     });
 
-    let pressed_keys: RwSignal<HashSet<String>> = RwSignal::new(HashSet::<String>::new());
+    let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
     let enable_scope = Callback::new(move |scope: String| {
@@ -106,13 +106,13 @@ pub fn HotkeysProvider(
 
             let blur_listener = Closure::wrap(Box::new(move || {
                 logging::log!("Window lost focus");
-                pressed_keys.set(HashSet::new());
+                pressed_keys.set(HashMap::new());
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
                 // logging::log!("keydown: {}", event.key());
                 pressed_keys.update(|keys| {
-                    keys.insert(event.key().to_lowercase());
+                    keys.insert(event.key().to_lowercase(), event);
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
