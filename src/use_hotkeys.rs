@@ -108,7 +108,6 @@ where
         if let Some(element) = node_ref.get() {
             let keydown_closure = move |event: KeyboardEvent| {
 
-                event.prevent_default();
                 let hotkeys_context = use_hotkeys_context();
                 let active_scopes = hotkeys_context.active_scopes.get();
                 let mut pressed_keys = hotkeys_context.pressed_keys.get();
