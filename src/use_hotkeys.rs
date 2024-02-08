@@ -4,7 +4,7 @@ use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 use leptos_dom::NodeRef;
 use web_sys::KeyboardEvent;
 
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 
 fn parse_key(key_combination: &str) -> Hotkey {
     let parts = key_combination.split('+').collect::<Vec<&str>>();
@@ -44,13 +44,14 @@ fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, Keyboar
         modifiers_match &= pressed_keyset.contains_key("Alt");
     }
 
-    let keys_match = hotkey.keys.iter().all(|key| 
-                                            if let Some(event) = pressed_keyset.get_mut(key) {
-                                                event.prevent_default();
-                                                true
-                                            } else {
-                                                false
-                                            });
+    let keys_match = hotkey.keys.iter().all(|key| {
+        if let Some(event) = pressed_keyset.get_mut(key) {
+            event.prevent_default();
+            true
+        } else {
+            false
+        }
+    });
 
     modifiers_match && keys_match
 }
@@ -80,12 +81,14 @@ pub fn use_hotkeys_scoped(
                 .iter()
                 .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset))
             {
-                on_triggered.call(());
+                Callable::call(&on_triggered, ());
                 //logging::log!("matched!");
             }
-        } else {
-            //logging::log!("out of scope!");
-        }
+        } /*
+          else {
+              logging::log!("out of scope!");
+          }
+          */
     });
 }
 
@@ -106,8 +109,7 @@ where
             .collect();
         let scopes = scopes.clone();
         if let Some(element) = node_ref.get() {
-            let keydown_closure = move |event: KeyboardEvent| {
-
+            let keydown_closure = move |_event: KeyboardEvent| {
                 let hotkeys_context = use_hotkeys_context();
                 let active_scopes = hotkeys_context.active_scopes.get();
                 let mut pressed_keys = hotkeys_context.pressed_keys.get();
@@ -118,7 +120,7 @@ where
                         .iter()
                         .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keys))
                     {
-                        on_triggered.call(());
+                        Callable::call(&on_triggered, ());
                     }
                 }
             };

@@ -1,10 +1,9 @@
 use crate::scopes;
-use crate::types::Hotkey;
 
 use leptos::html::div;
 use leptos::web_sys::KeyboardEvent;
 use leptos::*;
-use std::collections::{HashSet, HashMap};
+use std::collections::{HashMap, HashSet};
 use wasm_bindgen::closure::Closure;
 use wasm_bindgen::JsCast;
 use web_sys::EventTarget;
@@ -20,10 +19,6 @@ pub struct HotkeysContext {
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
     pub toggle_scope: Callback<String>,
-
-    bound_hotkeys: RwSignal<Vec<Hotkey>>,
-    add_hotkey: Callback<Hotkey>,
-    remove_hotkey: Callback<Hotkey>,
 }
 
 pub fn use_hotkeys_context() -> HotkeysContext {
@@ -77,16 +72,6 @@ pub fn HotkeysProvider(
         })
     });
 
-    let bound_hotkeys: RwSignal<Vec<Hotkey>> = RwSignal::new(vec![]);
-
-    let add_hotkey = Callback::new(move |hotkey: Hotkey| {
-        bound_hotkeys.update(|keys| keys.push(hotkey));
-    });
-
-    let remove_hotkey = Callback::new(move |hotkey: Hotkey| {
-        bound_hotkeys.update(|keys| keys.retain(|k| *k != hotkey));
-    });
-
     provide_context(HotkeysContext {
         pressed_keys,
         active_ref_target,
@@ -95,9 +80,6 @@ pub fn HotkeysProvider(
         enable_scope,
         disable_scope,
         toggle_scope,
-        bound_hotkeys,
-        add_hotkey,
-        remove_hotkey,
     });
 
     div()
