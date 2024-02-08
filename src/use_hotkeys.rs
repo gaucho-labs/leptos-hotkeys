@@ -4,7 +4,7 @@ use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 use leptos_dom::NodeRef;
 use web_sys::KeyboardEvent;
 
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 
 fn parse_key(key_combination: &str) -> Hotkey {
     let parts = key_combination.split('+').collect::<Vec<&str>>();
@@ -25,26 +25,32 @@ fn parse_key(key_combination: &str) -> Hotkey {
     Hotkey { modifiers, keys }
 }
 
-fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &HashSet<String>) -> bool {
+fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, KeyboardEvent>) -> bool {
     let mut modifiers_match = true;
 
     if hotkey.modifiers.ctrl {
-        modifiers_match &= pressed_keyset.contains("Control");
+        modifiers_match &= pressed_keyset.contains_key("Control");
     }
 
     if hotkey.modifiers.shift {
-        modifiers_match &= pressed_keyset.contains("Shift");
+        modifiers_match &= pressed_keyset.contains_key("Shift");
     }
 
     if hotkey.modifiers.meta {
-        modifiers_match &= pressed_keyset.contains("Meta");
+        modifiers_match &= pressed_keyset.contains_key("Meta");
     }
 
     if hotkey.modifiers.alt {
-        modifiers_match &= pressed_keyset.contains("Alt");
+        modifiers_match &= pressed_keyset.contains_key("Alt");
     }
 
-    let keys_match = hotkey.keys.iter().all(|key| pressed_keyset.contains(key));
+    let keys_match = hotkey.keys.iter().all(|key| 
+                                            if let Some(event) = pressed_keyset.get_mut(key) {
+                                                event.prevent_default();
+                                                true
+                                            } else {
+                                                false
+                                            });
 
     modifiers_match && keys_match
 }
@@ -60,7 +66,7 @@ pub fn use_hotkeys_scoped(
         .collect();
 
     let hotkeys_context = use_hotkeys_context();
-    let pressed_keys = hotkeys_context.pressed_keys.clone();
+    let pressed_keys = hotkeys_context.pressed_keys;
 
     create_effect(move |_| {
         let active_scopes = hotkeys_context.active_scopes.get();
@@ -69,10 +75,10 @@ pub fn use_hotkeys_scoped(
         let within_scope = &scopes.iter().any(|scope| active_scopes.contains(scope));
 
         if *within_scope {
-            let pressed_keyset = pressed_keys.get();
+            let mut pressed_keyset = pressed_keys.get();
             if parsed_keys
                 .iter()
-                .any(|hotkey| is_hotkey_match(hotkey, &pressed_keyset))
+                .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset))
             {
                 on_triggered.call(());
                 //logging::log!("matched!");
@@ -101,15 +107,16 @@ where
         let scopes = scopes.clone();
         if let Some(element) = node_ref.get() {
             let keydown_closure = move |event: KeyboardEvent| {
+
                 let hotkeys_context = use_hotkeys_context();
                 let active_scopes = hotkeys_context.active_scopes.get();
-                let pressed_keys = hotkeys_context.pressed_keys.get();
+                let mut pressed_keys = hotkeys_context.pressed_keys.get();
                 let within_scope = scopes.iter().any(|scope| active_scopes.contains(scope));
 
                 if within_scope {
                     if parsed_keys
                         .iter()
-                        .any(|hotkey| is_hotkey_match(hotkey, &pressed_keys))
+                        .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keys))
                     {
                         on_triggered.call(());
                     }
