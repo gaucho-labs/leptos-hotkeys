@@ -951,8 +951,9 @@ dependencies = [
 
 [[package]]
 name = "leptos_theme"
-version = "0.1.1"
-source = "git+https://github.com/friendlymatthew/leptos-theme.git#5f2cca3475ed85298f86b90ba00f7754e548c4e9"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "566714b896f24ba6249632e5331638f41b360145a09096c9c6db37322d526c01"
 dependencies = [
  "console_log",
  "leptos",

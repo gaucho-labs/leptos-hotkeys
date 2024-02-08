@@ -13,5 +13,5 @@ copy_dir = "0.1.3"
 leptos_meta = "0.6.5"
 leptos_router = { version = "0.6.5", features = ["csr"] }
 log = "0.4.20"
-leptos_theme = { git = "https://github.com/friendlymatthew/leptos-theme.git" }
+leptos_theme = "0.1.2"
 leptos_hotkeys = { path = "../.." }

@@ -381,5 +381,6 @@ Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) pag
 
 ## CHANGELOG
 
-### Update - `v.1.1` February 7th, 2024
+### Update - `v.1.2` February 8th, 2024
+- Elevate `leptos` to v.0.6.5
 - Added `event.preventDefault()`
