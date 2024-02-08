@@ -71,13 +71,13 @@ fn HomePage() -> impl IntoView {
     );
 
     // scope_a related hotkeys
-    use_hotkeys!(("arrowup", "scope_a") => move |_| {
+    use_hotkeys!(("arrowup,arrowright", "scope_a") => move |_| {
         set_count.update(|count| {
             *count += 1;
         })
     });
 
-    use_hotkeys!(("arrowdown", "scope_a") => move |_| {
+    use_hotkeys!(("arrowdown,arrowleft", "scope_a") => move |_| {
         set_count.update(|count| {
             *count -= 1;
         })
