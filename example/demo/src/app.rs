@@ -106,17 +106,15 @@ fn HomePage() -> impl IntoView {
 
     const GORILLAS: &'static str = "https://www.youtube.com/watch?v=qavePUOut_c";
     const DOGLICKEDTHEOLE: &'static str = "https://www.youtube.com/watch?v=4arBraMyp0Q";
-    const LOW: &'static str = "https://www.youtube.com/watch?v=YIZz2PMnEDM";
     const ALASKA: &'static str = "https://www.youtube.com/watch?v=qRODjitiKP8";
     const TAINAN: &'static str = "https://www.youtube.com/watch?v=pWOFFlPmVdk";
     const NORM: &'static str = "https://www.youtube.com/watch?v=ELoXiuDA_sQ";
 
     go_to_link("G", format!("{}", GORILLAS), "scope_b");
     go_to_link("D", format!("{}", DOGLICKEDTHEOLE), "scope_b");
-    go_to_link("L+O+W", format!("{}", LOW), "scope_b");
     go_to_link("A", format!("{}", ALASKA), "scope_b");
     go_to_link("arrowUp", format!("{}", TAINAN), "scope_b");
-    go_to_link("arrowDown", format!("{}", NORM), "scope_b");
+    go_to_link("meta+k", format!("{}", NORM), "scope_b");
 
     view! {
         <main class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
@@ -176,12 +174,9 @@ fn HomePage() -> impl IntoView {
                                     <p>press 'T' to switch themes</p>
                                     <p>press 'G' to see gorillas avoiding the rain</p>
                                     <p>
-                                        "press 'Arrow Down' to hear Norm tell a story about his friend Drake"
+                                        "press 'cmd/super/windows + k' to hear Norm tell a story about his friend Drake"
                                     </p>
                                     <p> "press 'D' to hear a southern man talk without an accent"</p>
-                                    <p>
-                                        "press 'L+O+W' to listen to Pavarotti's rendition of Flo Rida's 'Low'"
-                                    </p>
                                     <p>
                                         "press 'A' to watch a man brave the Alaskan winter without a tent"
                                     </p>

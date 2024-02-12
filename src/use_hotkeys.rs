@@ -32,19 +32,19 @@ fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, Keyboar
     let mut modifiers_match = true;
 
     if hotkey.modifiers.ctrl {
-        modifiers_match &= pressed_keyset.contains_key("Control");
+        modifiers_match &= pressed_keyset.contains_key("control");
     }
 
     if hotkey.modifiers.shift {
-        modifiers_match &= pressed_keyset.contains_key("Shift");
+        modifiers_match &= pressed_keyset.contains_key("shift");
     }
 
     if hotkey.modifiers.meta {
-        modifiers_match &= pressed_keyset.contains_key("Meta");
+        modifiers_match &= pressed_keyset.contains_key("meta");
     }
 
     if hotkey.modifiers.alt {
-        modifiers_match &= pressed_keyset.contains_key("Alt");
+        modifiers_match &= pressed_keyset.contains_key("alt");
     }
 
     let keys_match = hotkey.keys.iter().all(|key| {
@@ -85,13 +85,8 @@ pub fn use_hotkeys_scoped(
                 .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset))
             {
                 Callable::call(&on_triggered, ());
-                //logging::log!("matched!");
             }
-        } /*
-          else {
-              logging::log!("out of scope!");
-          }
-          */
+        }
     });
 }
 
@@ -128,7 +123,7 @@ where
                 }
             };
 
-            let _ = element.add(leptos::ev::keypress, keydown_closure);
+            let _ = element.add(ev::keypress, keydown_closure);
         }
     });
 

@@ -12,7 +12,6 @@ use web_sys::EventTarget;
 #[derive(Clone)]
 pub struct HotkeysContext {
     pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
-
     pub active_ref_target: RwSignal<Option<EventTarget>>,
     pub set_ref_target: Callback<Option<EventTarget>>,
     pub active_scopes: RwSignal<HashSet<String>>,
@@ -84,21 +83,17 @@ pub fn HotkeysProvider(
 
     div()
         .on_mount(move |_| {
-            //logging::log!("mounted");
-
             let blur_listener = Closure::wrap(Box::new(move || {
                 logging::log!("Window lost focus");
                 pressed_keys.set(HashMap::new());
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                // logging::log!("keydown: {}", event.key());
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase(), event);
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                // logging::log!("keyup: {}", event.key());
                 pressed_keys.update(|keys| {
                     keys.remove(&event.key().to_lowercase());
                 });
@@ -122,6 +117,7 @@ pub fn HotkeysProvider(
             document()
                 .add_event_listener_with_callback("keyup", keyup_listener.as_ref().unchecked_ref())
                 .expect("Failed to add keyup event listener");
+
             on_cleanup(move || {
                 if !allow_blur_event {
                     window()
