@@ -16,7 +16,7 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 
 > [!NOTE]
 > 
-> This library is ready for use. But Bob and I will continue to release updates. <br>
+> This library is ready for use.
 > If you're curious read the [CHANGELOG](#changelog).
 
 
@@ -31,7 +31,7 @@ For simplicity and ease, use the `use_hotkeys!` macro to declare global and scop
 We brought some js idioms while maintaining the leptos look.
 [Learn more about the macro.](#macro-api) <br>
 
-If you prefer writing out your callbacks the leptos way, we also non-macro hotkeys. [Learn more about trad hotkeys.](#trad-hotkeys) 
+If you prefer writing out your callbacks the leptos way, we also have non-macro hotkeys. [Learn more about trad hotkeys.](#trad-hotkeys) 
 
 ### Global Hotkeys
 > This example creates two global hotkeys: `W` and `S`. 
@@ -81,13 +81,13 @@ pub fn SomeComponent() -> impl IntoView {
     let HotkeysContext { enable_scope, disable_scope, .. } = use_hotkeys_context();
 
     // switch into the inner scope 
-    use_hotkeys!(("i", "outer") => {
+    use_hotkeys!(("i", "outer") => move |_| {
         disable_scope("outer");
         enable_scope("inner");
     });
 
     // switch into the outer scope
-    use_hotkeys!(("o", "inner") => {
+    use_hotkeys!(("o", "inner") => move |_| {
         disable_scope("inner");
         enable_scope("outer"); 
     });
@@ -381,6 +381,12 @@ Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) pag
 
 ## CHANGELOG
 
-### Update - `v.1.2` February 8th, 2024
+### Updates for - `v.2.0` 
+
+February 12th, 2024
+- Recognize `meta` key
+
+
+February 8th, 2024
 - Elevate `leptos` to v.0.6.5
 - Added `event.preventDefault()`
