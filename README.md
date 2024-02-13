@@ -6,9 +6,10 @@
 
 Declaratively create and pair keybindings with callbacks for Leptos applications. 
 
-[![crates](https://img.shields.io/badge/📦_crates-install-%20green)](https://crates.io/crates/leptos_hotkeys)
-[![version](https://img.shields.io/badge/version-0.1.1-purple)](https://materialize.com/s/chat)
+[![crates](https://img.shields.io/badge/📦_crates-0.1.3-%20green)](https://crates.io/crates/leptos_hotkeys)
 [![discord](https://img.shields.io/badge/Join-Discord-%235865F2.svg)](https://discord.gg/XhVbKk38ux)
+<!-- [![version](https://img.shields.io/badge/version-0.1.3-purple)](https://materialize.com/s/chat) -->
+
 
 <a href="https://github.com/friendlymatthew/leptos-hotkeys">
     <img width="570" alt="Screen Shot 2024-01-07 at 4 13 48 PM" src="https://github.com/friendlymatthew/leptos_hotkeys/assets/38759997/f3c7b6ee-e6fd-4c0d-90be-ad26ca4e2ec6">
@@ -26,7 +27,7 @@ Curious to see how it works? [See the demo!](https://leptos-hotkeys.vercel.app/)
 To get started, follow the [Quick Start](#quick-start) section. It's worth the read!
 ## Features
 
-### `use_hotkeys!` macro
+### `use_hotkeys!` Macro
 For simplicity and ease, use the `use_hotkeys!` macro to declare global and scoped hotkeys.<br>
 We brought some js idioms while maintaining the leptos look.
 [Learn more about the macro.](#macro-api) <br>
@@ -36,6 +37,8 @@ If you prefer writing out your callbacks the leptos way, we also have non-macro 
 ### Global Hotkeys
 > This example creates two global hotkeys: `W` and `S`. 
 > 
+> For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
+>
 > *Note: the `*` symbol is reserved for the global scope*
 
 ```rust
@@ -69,6 +72,8 @@ pub fn SomeComponent() -> impl IntoView {
 > Use functions in `HotkeysContext` for scope management.
 >
 > This example shows an inner and outer scope and hotkeys that switch between the scopes.
+>
+> For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 > 
 > *Note: scopes are case-insensitive. That means `wef_scope` and `WEf_sCoPe` are considered the same scope.*
 > 
@@ -169,6 +174,21 @@ view! {
 
 Thats it! Start creating [hotkeys](#features)!
 
+### Keybinding Grammar
+`leptos_hotkeys` matches key values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) `key` property.
+<br />
+For reference, here's a list of [all key values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values).
+<br /><br />
+You can bind multiple hotkeys to a callback. For example:
+```
+"G+R,meta+O,control+k"
+```
+The above example creates three hotkeys: `G+R`, [Meta](https://www.basketball-reference.com/players/a/artesro01.html)`+O`, and `Control+K`.
+The `+` symbol is used to create a combo hotkey. A combo hotkey is a keybinding requiring more than one key press. 
+Note that keys are case-agnostic and whitespace-agnostic. You use the `,` as a delimiter in a sequence of multiple hotkeys.
+
+
+
 ## Macro API
 We wanted to strip the verbosity that comes with `str` and `String` type handling.<br> 
 We kept leptos best practices in mind, keeping the `move |_|` idiom in our macro.
@@ -178,7 +198,7 @@ Here is a general look at the macro:
 ```rust
 use leptos_hotkeys::prelude::*;
 
-use_hotkeys!(("key", "scope") => move |_| {
+use_hotkeys!(("keys", "scope") => move |_| {
     // callback logic here 
 });
 ```
@@ -210,13 +230,11 @@ pub fn SomeComponent() -> impl IntoView {
 ```
 
 ### `scopes!()`
-Maybe you want to initialize a certain scope upon load, that's where the prop `initially_active_scopes` come into play.
+Maybe you want to initialize a certain scope upon load, that's where the prop `initially_active_scopes` comes into play.
 Instead of having to create a `vec!["scope_name".to_string()]`, use the `scopes!()` macro.
 
 ```rust
 use leptos_hotkeys::prelude::*;
-// or
-use leptos_hotkeys::scopes; 
 
 view! {
     <HotkeysProvider
@@ -246,9 +264,6 @@ view! {
 | `enable_scope`      | `Callback<String>`              | A method to activate a given hotkey scope.                                                            |
 | `disable_scope`     | `Callback<String>`              | A method to deactivate a given hotkey scope.                                                          |
 | `toggle_scope`      | `Callback<String>`              | A method to toggle the activation state of a given hotkey scope.                                      |
-| `bound_hotkeys`     | `RwSignal<Vec<Hotkey>>`         | A reactive signal holding the list of currently bound hotkeys.                                        |
-| `add_hotkey`        | `Callback<Hotkey>`              | A method to add a new hotkey to the list of bound hotkeys.                                            |
-| `remove_hotkey`     | `Callback<Hotkey>`              | A method to remove an existing hotkey from the list of bound hotkeys.                                 |
 
 ### Basic Types
 #### Keyboard Modifiers
@@ -381,12 +396,14 @@ Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) pag
 
 ## CHANGELOG
 
-### Updates for - `v.2.0` 
+### Next release: `v.0.2.0` 
+[See milestones](https://github.com/friendlymatthew/leptos-hotkeys/milestone/1)
 
-February 12th, 2024
-- Recognize `meta` key
+*February 12th, 2024*
+- Recognize `meta` key (`v.0.1.3`)
+- String cleaning
 
 
-February 8th, 2024
+*February 8th, 2024*
 - Elevate `leptos` to v.0.6.5
 - Added `event.preventDefault()`

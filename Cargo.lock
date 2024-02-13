@@ -627,7 +627,7 @@ dependencies = [
 
 [[package]]
 name = "leptos_hotkeys"
-version = "0.1.2"
+version = "0.1.3"
 dependencies = [
  "leptos",
  "log",
