@@ -42,11 +42,17 @@ cfg_if! {
         #[derive(Clone)]
         pub struct HotkeysContext {
             pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
+            /// This is where events are stored when `_ref` is changed
             pub active_ref_target: RwSignal<Option<EventTarget>>,
+            /// This is the callback that triggers a change in `active_ref_target`
             pub set_ref_target: Callback<Option<EventTarget>>,
+            /// This hashset allows `use_hotkeys` functions to check if a keypress scope matches
             pub active_scopes: RwSignal<HashSet<String>>,
+            /// This callback inserts a scope into `active_scopes`
             pub enable_scope: Callback<String>,
+            /// This callback removes a scope from `active_scopes`
             pub disable_scope: Callback<String>,
+            /// This callback checks if scope exists and then adds/remove from `active_scopes`
             pub toggle_scope: Callback<String>,
         }
     } else {
@@ -101,11 +107,13 @@ pub fn HotkeysProvider(
     #[prop(default = false)]
     allow_blur_event: bool,
 
+    /// This sets the initial scopes to be other than the default scope of `"*"`
     #[prop(default={
         scopes!()
     })]
     initially_active_scopes: HashSet<String>,
 
+    /// The inner components of this components
     children: Children,
 ) -> impl IntoView {
     let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
