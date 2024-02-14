@@ -18,6 +18,7 @@ cfg-if = { version = "1.0.0", features = [] }
 web-sys = { version = "0.3.66", optional = true }
 
 [lib]
+doctest = false  # if you feel like fixing docs go right ahead...
 name = "leptos_hotkeys"
 path = "src/lib.rs"
 

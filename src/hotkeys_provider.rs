@@ -17,14 +17,42 @@ cfg_if! {
 // Defining a hotkey context structure
 cfg_if! {
     if #[cfg(any(feature = "hydrate", feature= "csr"))] {
+/// A Structure used to store the currently pressed keys and any declared scopes.
+///
+/// `HotkeysContext` is accessed by calling the `use_hotkeys_context` function
+/// which returns HotkeysContext via leptos `use_context`. This will fail
+/// if `HotkeysProvider` has not been provided at the root view of the `App()` component, See
+/// `HotkeysProvider`. This struct can then be used to call Callbacks like 'toggle_scope':
+///
+/// ```rust
+/// // <HotkeysProvider> must be used to have access to HotkeysContext
+/// let HotkeysContext { toggle_scope, .. } = use_hotkeys_context();
+/// // global hotkeys
+/// use_hotkeys!(("s") => move |_| {
+///     toggle_scope("scope_a".to_string());
+///     toggle_scope("scope_b".to_string());
+///
+///     if current_scope.get() == "scope_a" {
+///         current_scope.set("scope_b")
+///     } else {
+///         current_scope.set("scope_a")
+///     }
+/// });
+/// ```
         #[derive(Clone)]
         pub struct HotkeysContext {
             pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
+            /// This is where events are stored when `_ref` is changed
             pub active_ref_target: RwSignal<Option<EventTarget>>,
+            /// This is the callback that triggers a change in `active_ref_target`
             pub set_ref_target: Callback<Option<EventTarget>>,
+            /// This hashset allows `use_hotkeys` functions to check if a keypress scope matches
             pub active_scopes: RwSignal<HashSet<String>>,
+            /// This callback inserts a scope into `active_scopes`
             pub enable_scope: Callback<String>,
+            /// This callback removes a scope from `active_scopes`
             pub disable_scope: Callback<String>,
+            /// This callback checks if scope exists and then adds/remove from `active_scopes`
             pub toggle_scope: Callback<String>,
         }
     } else {
@@ -42,6 +70,35 @@ pub fn use_hotkeys_context() -> HotkeysContext {
     use_context::<HotkeysContext>().expect("expected hotkeys context")
 }
 
+/// This is the leptos component that provides HotkeysContext to leptos apps.
+///
+/// In order for `use_hotkeys` to be used and `HotkeysContext` to be accessible,
+/// `HotkeysProvider` component must be added to the root of the `App()` component:
+///
+/// ```rust
+/// #[component]
+/// pub fn App() -> impl IntoView {
+///     provide_meta_context();
+///
+///     view! {
+///         <Stylesheet id="leptos" href="/pkg/demo.css"/>
+///         <HotkeysProvider initially_active_scopes=scopes!("scope_a")>
+///             <ThemeProvider>
+///                 <Router>
+///                     <Routes>
+///                         <Route path="/" view=HomePage/>
+///                         <Route path="/:else" view=ErrorPage/>
+///                     </Routes>
+///                 </Router>
+///             </ThemeProvider>
+///         </HotkeysProvider>
+///     }
+/// }
+/// ```
+///
+/// As can be seen, we have declared initial scope to be `"scopes_a"`. `HotkeysProvider`
+/// defaults to a scope of `"*"`. The `scopes!` macro infers a context of 
+/// `"*"` AND `"scopes_a"`. See `scopes!` macro for more info.
 #[component]
 pub fn HotkeysProvider(
     /// when a blur event occurs, the pressed_keys reset, defaults to `false`
@@ -50,11 +107,13 @@ pub fn HotkeysProvider(
     #[prop(default = false)]
     allow_blur_event: bool,
 
+    /// This sets the initial scopes to be other than the default scope of `"*"`
     #[prop(default={
         scopes!()
     })]
     initially_active_scopes: HashSet<String>,
 
+    /// The inner components of this components
     children: Children,
 ) -> impl IntoView {
     let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);

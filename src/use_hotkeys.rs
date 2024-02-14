@@ -6,6 +6,40 @@ use web_sys::KeyboardEvent;
 
 use std::collections::{HashMap, HashSet};
 
+/// Parses a key combination string and constructs a `Hotkey` struct match.
+///
+/// The `key_combination` parameter is a string representing a combination of keys, 
+/// separated by the '+' character. Each key can be accompanied by modifiers such as 
+/// "ctrl", "alt", "meta", or "shift". The function parses this string and constructs 
+/// a `Hotkey` struct containing the modifiers and keys.
+///
+/// # Arguments
+///
+/// * `key_combination` - A string representing a combination of keys and modifiers.
+///
+/// # Returns
+///
+/// A `Hotkey` struct representing the parsed key combination.
+///
+/// # Examples
+///
+/// ```
+/// use crate::{parse_key, KeyboardModifiers, Hotkey};
+///
+/// let hotkey = parse_key("Ctrl+Shift+A");
+/// assert_eq!(
+///     hotkey,
+///     Hotkey {
+///         modifiers: KeyboardModifiers {
+///             ctrl: true,
+///             alt: false,
+///             meta: false,
+///             shift: true,
+///         },
+///         keys: vec!["a".to_string()],
+///     }
+/// );
+/// ```
 fn parse_key(key_combination: &str) -> Hotkey {
     let parts = key_combination
         .split('+')
@@ -28,6 +62,16 @@ fn parse_key(key_combination: &str) -> Hotkey {
     Hotkey { modifiers, keys }
 }
 
+/// Determines if the given hotkey matches the set of currently pressed keys.
+///
+/// # Arguments
+///
+/// * `hotkey` - A reference to the `Hotkey` struct representing the hotkey to be matched.
+/// * `pressed_keyset` - A mutable reference to a `HashMap<String, KeyboardEvent>` representing the set of currently pressed keys.
+///
+/// # Returns
+///
+/// A boolean value indicating whether the given `hotkey` matches the set of currently pressed keys.
 fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, KeyboardEvent>) -> bool {
     let mut modifiers_match = true;
 
@@ -59,6 +103,23 @@ fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, Keyboar
     modifiers_match && keys_match
 }
 
+/// Handles the usage of hotkeys within specified scopes.
+///
+/// This function takes a `key_combination` as a comma-separated string representing the hotkey combination,
+/// a callback `on_triggered` to be executed when the hotkey is triggered,
+/// and a vector `scopes` containing the scopes within which the hotkeys should be active.
+///
+/// # Arguments
+///
+/// * `key_combination` - A string representing the hotkey combination.
+/// * `on_triggered` - A callback to be executed when the hotkey is triggered.
+/// * `scopes` - A vector of strings containing the scopes within which the hotkeys should be active.
+///
+/// # Example
+///
+/// ```
+/// use_hotkeys_scoped("Ctrl+Shift+A", Callback::new( move |_| { logging::log!("Hotkey triggered!") }), vec!["Editor".to_string(), "Global".to_string()]);
+/// ```
 pub fn use_hotkeys_scoped(
     key_combination: String,
     on_triggered: Callback<()>,
@@ -90,6 +151,26 @@ pub fn use_hotkeys_scoped(
     });
 }
 
+/// Attaches a hotkey listener to the provided element reference within the specified scopes.
+///
+/// # Arguments
+///
+/// * `key_combination` - A string representing the combination of keys to listen for, separated by commas.
+/// * `on_triggered` - A callback function to be invoked when the hotkey combination is triggered.
+/// * `scopes` - A vector of strings representing the scopes in which the hotkey should be active.
+///
+/// # Returns
+///
+/// A reference to the node on which the hotkey listener is attached.
+///
+/// # Type Parameters
+///
+/// * `T` - The type of element reference.
+///
+/// # Constraints
+///
+/// * `T` must implement `ElementDescriptor`, `'static`, and `Clone`.
+///
 pub fn use_hotkeys_ref_scoped<T>(
     key_combination: String,
     on_triggered: Callback<()>,
