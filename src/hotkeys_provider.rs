@@ -1,8 +1,7 @@
 use crate::scopes;
 use cfg_if::cfg_if;
-use leptos::html::div;
 use leptos::*;
-use std::collections::{HashMap, HashSet};
+use std::collections::HashSet;
 
 cfg_if! {
     if #[cfg(any(feature = "hydrate", feature= "csr"))] {
@@ -11,6 +10,8 @@ cfg_if! {
         use web_sys::{
             EventTarget, KeyboardEvent
         };
+        use leptos::html::div;
+        use std::collections::HashMap;
     }
 }
 
@@ -42,6 +43,7 @@ pub fn use_hotkeys_context() -> HotkeysContext {
     use_context::<HotkeysContext>().expect("expected hotkeys context")
 }
 
+#[allow(unused_variables)]
 #[component]
 pub fn HotkeysProvider(
     /// when a blur event occurs, the pressed_keys reset, defaults to `false`
@@ -57,47 +59,50 @@ pub fn HotkeysProvider(
 
     children: Children,
 ) -> impl IntoView {
-    let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
-    let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
-        active_ref_target.set(target);
-    });
+    cfg_if! {
+        if #[cfg(any(feature = "hydrate", feature= "csr"))] {
+            let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
+            let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
+                active_ref_target.set(target);
+            });
 
-    let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
-    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
+            let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
+            let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
-    let enable_scope = Callback::new(move |scope: String| {
-        active_scopes.update(|scopes| {
-            if !scopes.contains(&scope) {
-                scopes.insert(scope);
-            }
-        })
-    });
+            let enable_scope = Callback::new(move |scope: String| {
+                active_scopes.update(|scopes| {
+                    if !scopes.contains(&scope) {
+                        scopes.insert(scope);
+                    }
+                })
+            });
 
-    let disable_scope = Callback::new(move |scope: String| {
-        active_scopes.update(|scopes| {
-            scopes.remove(&scope);
-        })
-    });
+            let disable_scope = Callback::new(move |scope: String| {
+                active_scopes.update(|scopes| {
+                    scopes.remove(&scope);
+                })
+            });
 
-    let toggle_scope = Callback::new(move |scope: String| {
-        active_scopes.update(|scopes| {
-            if scopes.contains(&scope) {
-                scopes.remove(&scope);
-            } else {
-                scopes.insert(scope);
-            }
-        })
-    });
+            let toggle_scope = Callback::new(move |scope: String| {
+                active_scopes.update(|scopes| {
+                    if scopes.contains(&scope) {
+                        scopes.remove(&scope);
+                    } else {
+                        scopes.insert(scope);
+                    }
+                })
+            });
 
-    provide_context(HotkeysContext {
-        pressed_keys,
-        active_ref_target,
-        set_ref_target,
-        active_scopes,
-        enable_scope,
-        disable_scope,
-        toggle_scope,
-    });
+            provide_context(HotkeysContext {
+                pressed_keys,
+                active_ref_target,
+                set_ref_target,
+                active_scopes,
+                enable_scope,
+                disable_scope,
+                toggle_scope,
+            });
+
 
     div()
         .on_mount(move |_| {
@@ -164,4 +169,11 @@ pub fn HotkeysProvider(
             });
         })
         .child(children())
+
+        } else {
+            view! {
+                <></>
+            }
+        }
+    }
 }
