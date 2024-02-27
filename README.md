@@ -6,7 +6,7 @@
 
 Declaratively create and pair keybindings with callbacks for Leptos applications.
 
-[![crates](https://img.shields.io/badge/📦_crates-0.1.3-%20green)](https://crates.io/crates/leptos_hotkeys)
+[![crates](https://img.shields.io/badge/📦_crates-0.1.5-%20green)](https://crates.io/crates/leptos_hotkeys)
 [![discord](https://img.shields.io/badge/Join-Discord-%235865F2.svg)](https://discord.gg/XhVbKk38ux)
 <!-- [![version](https://img.shields.io/badge/version-0.1.3-purple)](https://materialize.com/s/chat) -->
 

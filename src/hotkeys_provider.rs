@@ -54,7 +54,7 @@ pub fn HotkeysProvider(
     #[prop(default={
         scopes!()
     })]
-    mut initially_active_scopes: HashSet<String>,
+    initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {
@@ -67,7 +67,6 @@ pub fn HotkeysProvider(
 
             let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
 
-            initially_active_scopes.insert("*".to_string());
             let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
             let enable_scope = Callback::new(move |scope: String| {
@@ -113,12 +112,15 @@ pub fn HotkeysProvider(
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                logging::log!("key pressed: {}", event.key().to_lowercase());
+                // todo! add tracing
+                // logging::log!("key pressed: {}", event.key().to_lowercase());
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase(), event);
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
+                // todo! add tracing
+                // logging::log!("key up: {}", event.key().to_lowercase())
                 pressed_keys.update(|keys| {
                     keys.remove(&event.key().to_lowercase());
                 });

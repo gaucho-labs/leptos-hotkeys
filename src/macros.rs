@@ -22,6 +22,7 @@ macro_rules! scopes {
     ($($expr:expr),+ $(,)?) => {
         {
             let mut temp_set = HashSet::<String>::new();
+            temp_set.insert("*".to_string());
             $(
                 temp_set.insert($expr);
             )+
