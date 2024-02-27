@@ -1,13 +1,16 @@
 [package]
 name = "leptos_hotkeys"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2021"
-description= "A library that declaratively pairs keybindings with callbacks for Leptos applications."
+description = "A library that declaratively pairs keybindings with callbacks for Leptos applications."
 license = "MIT"
 repository = "http://github.com/friendlymatthew/leptos-hotkeys"
 readme = "README.md"
-authors=["Matthew Kim <matthewkmkim@gmail.com>" , "Robert Junkins <roberthenryjunkins@gmail.com>"]
-keywords=["leptos", "hotkeys", "wasm"]
+authors = [
+    "Matthew Kim <matthewkmkim@gmail.com>",
+    "Robert Junkins <roberthenryjunkins@gmail.com>",
+]
+keywords = ["leptos", "hotkeys", "wasm"]
 
 
 [dependencies]

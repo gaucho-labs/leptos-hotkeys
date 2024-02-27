@@ -176,7 +176,7 @@ fn HomePage() -> impl IntoView {
                                     <p>
                                         "press 'cmd/super/windows + k' to hear Norm tell a story about his friend Drake"
                                     </p>
-                                    <p> "press 'D' to hear a southern man talk without an accent"</p>
+                                    <p>"press 'D' to hear a southern man talk without an accent"</p>
                                     <p>
                                         "press 'A' to watch a man brave the Alaskan winter without a tent"
                                     </p>

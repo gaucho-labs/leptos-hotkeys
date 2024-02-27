@@ -2,7 +2,6 @@ use crate::scopes;
 use cfg_if::cfg_if;
 use leptos::*;
 use std::collections::HashSet;
-
 cfg_if! {
     if #[cfg(any(feature = "hydrate", feature= "csr"))] {
         use wasm_bindgen::closure::Closure;
@@ -31,7 +30,7 @@ cfg_if! {
     } else {
         #[derive(Clone)]
         pub struct HotkeysContext {
-            pub active_scopes: RwSignal<HashSet<String>>,
+            pub active_scopes: RwSignal<String>,
             pub enable_scope: Callback<String>,
             pub disable_scope: Callback<String>,
             pub toggle_scope: Callback<String>,
@@ -55,7 +54,7 @@ pub fn HotkeysProvider(
     #[prop(default={
         scopes!()
     })]
-    initially_active_scopes: HashSet<String>,
+    mut initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {
@@ -67,6 +66,8 @@ pub fn HotkeysProvider(
             });
 
             let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
+
+            initially_active_scopes.insert("*".to_string());
             let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
             let enable_scope = Callback::new(move |scope: String| {
@@ -112,6 +113,7 @@ pub fn HotkeysProvider(
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
+                logging::log!("key pressed: {}", event.key().to_lowercase());
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase(), event);
                 });
@@ -169,7 +171,6 @@ pub fn HotkeysProvider(
             });
         })
         .child(children())
-
         } else {
             view! {
                 <></>
