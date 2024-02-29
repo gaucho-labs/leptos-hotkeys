@@ -107,7 +107,8 @@ pub fn HotkeysProvider(
             div()
                 .on_mount(move |_| {
             let blur_listener = Closure::wrap(Box::new(move || {
-                logging::log!("Window lost focus");
+                // todo! add tracing
+                // logging::log!("Window lost focus");
                 pressed_keys.set(HashMap::new());
             }) as Box<dyn Fn()>);
 
