@@ -6,7 +6,7 @@
 
 Declaratively create and pair keybindings with callbacks for Leptos applications.
 
-[![crates](https://img.shields.io/badge/📦_crates-0.1.5-%20green)](https://crates.io/crates/leptos_hotkeys)
+[![crates](https://img.shields.io/badge/📦_crates-0.1.6-%20green)](https://crates.io/crates/leptos_hotkeys)
 [![discord](https://img.shields.io/badge/Join-Discord-%235865F2.svg)](https://discord.gg/XhVbKk38ux)
 <!-- [![version](https://img.shields.io/badge/version-0.1.3-purple)](https://materialize.com/s/chat) -->
 
@@ -18,7 +18,7 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 > [!NOTE]
 >
 > This library is ready for use.
-> If you're curious read the [CHANGELOG](#changelog).
+> If you're curious about updates, please read the [CHANGELOG](#changelog).
 
 
 ## Live example
@@ -111,7 +111,7 @@ pub fn SomeComponent() -> impl IntoView {
 
 
 ### Focus trapped Hotkeys
-> Embed a hotkey with an `HtmlElement` and the hotkey will only fire if the element is focused and the scope is enabled.
+> Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
 
 ```rust
 use leptos_hotkeys::prelude::*;
@@ -142,18 +142,19 @@ cargo add leptos_hotkeys
 ```
 
 > [!NOTE]
-> `leptos-hotkeys` supports both client-side rendered and server-side rendered > applications. Depending on your application, make sure to include the `csr` or `hydrate` feature flag.
+> `leptos-hotkeys` supports both client-side rendered and server-side rendered applications. Depending on your application, make sure to include the `csr` or `hydrate` feature flag.
 
 > For client side rendered:
 > ```toml
-> leptos_hotkeys = { path = "0.1.4", features = ["csr"] }
+> leptos_hotkeys = { path = "0.1.6", features = ["csr"] }
 > ```
 >
 > For server side rendered:
 > ```toml
-> leptos_hotkeys = { version = "0.1.4", features = ["hydrate"] }
+> leptos_hotkeys = { version = "0.1.6", features = ["hydrate"] }
 > ```
 
+We also other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags)
 
 ### Hotkey Provider
 Wrap your project with `<HotkeysProvider />`:
@@ -259,6 +260,15 @@ view! {
 }
 ```
 
+## Feature Flags
+In addition to the `CSR` and `Hydrate` feature flags, we want to improve developer experience by introducing the `debug` flag which adds logging to your console. It logs the current pressed key values, hotkeys fires, and scopes toggling.
+
+Just simply:
+```toml
+> ```toml
+> leptos_hotkeys = { path = "0.1.6", features = ["hydrate", "debug"] }
+> ```
+```
 
 ## API
 ### `<HotkeysProvider />`

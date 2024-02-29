@@ -7,7 +7,6 @@ cfg_if! {
         use web_sys::KeyboardEvent;
         use crate::hotkeys_provider::use_hotkeys_context;
         use crate::types::{Hotkey, KeyboardModifiers};
-
         use std::collections::{HashMap, HashSet};
 
         fn parse_key(key_combination: &str) -> Hotkey {
@@ -78,16 +77,16 @@ cfg_if! {
 
             create_effect(move |_| {
                 let active_scopes = hotkeys_context.active_scopes.get();
-
-                //intersection should be O(min(scopes, active_scopes))
                 let within_scope = &scopes.iter().any(|scope| active_scopes.contains(scope));
 
                 if *within_scope {
                     let mut pressed_keyset = pressed_keys.get();
-                    if parsed_keys
-                        .iter()
-                        .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset))
-                    {
+                    if let Some(matching_hotkey) = parsed_keys.iter().find(|hotkey| {
+                        is_hotkey_match(hotkey, &mut pressed_keyset)
+                    }) {
+                        if cfg!(feature = "debug") {
+                            logging::log!("\tfiring hotkey: {}", &matching_hotkey);
+                        }
                         Callable::call(&on_triggered, ());
                     }
                 }
@@ -118,10 +117,12 @@ cfg_if! {
                         let within_scope = scopes.iter().any(|scope| active_scopes.contains(scope));
 
                         if within_scope {
-                            if parsed_keys
-                                .iter()
-                                .any(|hotkey| is_hotkey_match(hotkey, &mut pressed_keys))
-                            {
+                            if let Some(matching_hotkey) = parsed_keys.iter().find(|hotkey| {
+                                is_hotkey_match(hotkey, &mut pressed_keys)
+                            }) {
+                                if cfg!(feature = "debug") {
+                                    logging::log!("\tfiring hotkey: {}", &matching_hotkey);
+                                }
                                 Callable::call(&on_triggered, ());
                             }
                         }
