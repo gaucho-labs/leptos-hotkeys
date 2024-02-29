@@ -27,4 +27,5 @@ path = "src/lib.rs"
 [features]
 hydrate = ["dep:web-sys", "dep:wasm-bindgen"]
 csr = ["dep:web-sys", "dep:wasm-bindgen"]
+debug = []
 ssr = []

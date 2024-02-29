@@ -7,7 +7,6 @@ cfg_if! {
         use web_sys::KeyboardEvent;
         use crate::hotkeys_provider::use_hotkeys_context;
         use crate::types::{Hotkey, KeyboardModifiers};
-
         use std::collections::{HashMap, HashSet};
 
         fn parse_key(key_combination: &str) -> Hotkey {
