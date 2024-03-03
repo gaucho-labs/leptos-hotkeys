@@ -49,5 +49,6 @@ fn HomePage() -> impl IntoView {
     view! {
         <h1>"Welcome to Leptos!"</h1>
         <div>"Press arrow up and arrow down: " {count}</div>
+        <input type="text" />
     }
 }

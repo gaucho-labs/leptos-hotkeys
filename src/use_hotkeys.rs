@@ -53,8 +53,10 @@ cfg_if! {
 
             let keys_match = hotkey.keys.iter().all(|key| {
                 if let Some(event) = pressed_keyset.get_mut(key) {
-                    event.prevent_default();
-                    true
+                    if modifiers_match {
+                        event.prevent_default();
+                        return true;
+                    }
                 } else {
                     false
                 }
