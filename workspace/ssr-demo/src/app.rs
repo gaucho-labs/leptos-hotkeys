@@ -38,6 +38,10 @@ fn HomePage() -> impl IntoView {
     // Creates a reactive value to update the button
     let (count, set_count) = create_signal(0);
 
+    use_hotkeys!(("meta+alt+t") => move |_| {
+        set_count.update(|c| *c += 1);
+    });
+
     use_hotkeys!(("arrowup") => move |_| {
         set_count.update(|c| *c += 1);
     });

@@ -29,7 +29,7 @@ impl Display for KeyboardModifiers {
 
         match modifiers.is_empty() {
             true => write!(f, ""),
-            false => write!(f, ", modifiers: {}", modifiers.join(", ")),
+            false => write!(f, "+{}", modifiers.join("+")),
         }
     }
 }
@@ -58,15 +58,11 @@ impl Display for Hotkey {
             .iter()
             .map(|k| k.as_str())
             .collect::<Vec<&str>>()
-            .join(", ");
+            .join("+");
 
         match keys.is_empty() {
             true => write!(f, "{}", self.modifiers),
-            false => write!(f, "keys: {} {}", keys, self.modifiers),
+            false => write!(f, "{}{}", keys, self.modifiers),
         }
     }
 }
-
-pub type RefType<T> = Option<T>;
-
-pub type HotkeyEvent = Hotkey;

@@ -77,7 +77,7 @@ pub fn HotkeysProvider(
                         }
                         scopes.insert(scope);
                     }
-                })
+                });
             });
 
             let disable_scope = Callback::new(move |scope: String| {
@@ -115,6 +115,13 @@ pub fn HotkeysProvider(
                 toggle_scope,
             });
 
+            if cfg!(feature = "debug") {
+                create_effect(move |_| {
+                    let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+                    logging::log!("keys pressed: {:?}", pressed_keys_list());
+                });
+            }
+
 
     div()
         .on_mount(move |_| {
@@ -126,17 +133,11 @@ pub fn HotkeysProvider(
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                if cfg!(feature="debug") {
-                    logging::log!("key pressed: {}", event.key().to_lowercase());
-                }
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase(), event);
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                if cfg!(feature="debug") {
-                    logging::log!("key up: {}", event.key().to_lowercase())
-                }
                 pressed_keys.update(|keys| {
                     keys.remove(&event.key().to_lowercase());
                 });

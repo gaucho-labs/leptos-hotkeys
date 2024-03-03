@@ -8,6 +8,7 @@ cfg_if! {
         use crate::hotkeys_provider::use_hotkeys_context;
         use crate::types::{Hotkey, KeyboardModifiers};
         use std::collections::{HashMap, HashSet};
+        use wasm_bindgen::JsValue;
 
         fn parse_key(key_combination: &str) -> Hotkey {
             let parts = key_combination
@@ -85,7 +86,11 @@ cfg_if! {
                         is_hotkey_match(hotkey, &mut pressed_keyset)
                     }) {
                         if cfg!(feature = "debug") {
-                            logging::log!("\tfiring hotkey: {}", &matching_hotkey);
+                            let message = format!("%c\tfiring hotkey: {}", &matching_hotkey);
+                            web_sys::console::log_2(
+                                  &JsValue::from_str(&message),
+                                  &JsValue::from_str("color: #39FF14;")
+                              );
                         }
                         Callable::call(&on_triggered, ());
                     }
@@ -121,7 +126,11 @@ cfg_if! {
                                 is_hotkey_match(hotkey, &mut pressed_keys)
                             }) {
                                 if cfg!(feature = "debug") {
-                                    logging::log!("\tfiring hotkey: {}", &matching_hotkey);
+                                    let message = format!("%c\tfiring hotkey: {}", &matching_hotkey);
+                                    web_sys::console::log_2(
+                                          &JsValue::from_str(&message),
+                                          &JsValue::from_str("color: #39FF14;")
+                                      );
                                 }
                                 Callable::call(&on_triggered, ());
                             }
@@ -134,5 +143,15 @@ cfg_if! {
 
             node_ref
         }
+    } else {
+        pub fn use_hotkeys_scoped(
+            key_combination: String,
+            scopes: Vec<String>,
+        ) {}
+
+        pub fn use_hotkeys_ref_scoped(
+            key_combination: String,
+            scopes: Vec<String>,
+        ) {}
     }
 }
