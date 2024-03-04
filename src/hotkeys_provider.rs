@@ -34,23 +34,7 @@ pub struct HotkeysContext {
     pub toggle_scope: Callback<String>,
 }
 
-pub fn use_hotkeys_context() -> HotkeysContext {
-    use_context::<HotkeysContext>().expect("expected hotkeys context")
-}
-
-#[allow(unused_variables)]
-#[component]
-pub fn HotkeysProvider(
-    /// when a blur event occurs, the pressed_keys reset, defaults to `false`
-    ///
-    /// https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event
-    #[prop(default = false)]
-    allow_blur_event: bool,
-
-    #[prop(default={scopes!()})] initially_active_scopes: HashSet<String>,
-
-    children: Children,
-) -> impl IntoView {
+pub fn provide_hotkeys_context() {
     #[cfg(any(feature = "hydrate", feature = "csr"))]
     let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
 
@@ -62,7 +46,7 @@ pub fn HotkeysProvider(
     #[cfg(any(feature = "hydrate", feature = "csr"))]
     let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
 
-    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
+    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(HashSet::new());
 
     let enable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
@@ -115,6 +99,34 @@ pub fn HotkeysProvider(
         disable_scope,
         toggle_scope,
     });
+}
+
+pub fn use_hotkeys_context() -> HotkeysContext {
+    use_context::<HotkeysContext>().expect("expected hotkeys context")
+}
+
+#[allow(unused_variables)]
+#[component]
+pub fn HotkeysProvider(
+    /// when a blur event occurs, the pressed_keys reset, defaults to `false`
+    ///
+    /// https://developer.mozilla.org/en-US/docs/Web/API/Element/blur_event
+    #[prop(default = false)]
+    allow_blur_event: bool,
+
+    #[prop(default={scopes!()})] initially_active_scopes: HashSet<String>,
+
+    children: Children,
+) -> impl IntoView {
+    #[cfg(any(feature = "csr", feature = "hydrate"))]
+    let HotkeysContext {
+        active_scopes,
+        pressed_keys,
+        ..
+    } = use_hotkeys_context();
+
+    #[cfg(any(feature = "csr", feature = "hydrate"))]
+    active_scopes.update(|s| s.extend(initially_active_scopes));
 
     #[cfg(feature = "debug")]
     if cfg!(any(feature = "hydrate", feature = "csr")) {

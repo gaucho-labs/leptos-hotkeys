@@ -836,7 +836,7 @@ dependencies = [
 
 [[package]]
 name = "leptos_hotkeys"
-version = "0.1.4"
+version = "0.1.6"
 dependencies = [
  "cfg-if",
  "leptos",

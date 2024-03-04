@@ -17,6 +17,7 @@ pub fn Button(href: &'static str, children: Children) -> impl IntoView {
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
+    provide_hotkeys_context();
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
