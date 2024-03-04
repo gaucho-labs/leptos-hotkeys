@@ -1,4 +1,4 @@
-use crate::scopes;
+use crate::{scopes, use_hotkeys};
 use cfg_if::cfg_if;
 use leptos::*;
 use std::collections::HashSet;
@@ -123,8 +123,8 @@ pub fn HotkeysProvider(
             }
 
 
-    div()
-        .on_mount(move |_| {
+            div()
+                .on_mount(move |_| {
             let blur_listener = Closure::wrap(Box::new(move || {
                 if cfg!(feature = "debug") {
                     logging::log!("Window lost focus");
@@ -188,12 +188,83 @@ pub fn HotkeysProvider(
                 keydown_listener.forget();
                 keyup_listener.forget();
             });
-        })
-        .child(children())
-        } else {
-            view! {
-                <></>
-            }
+                })
+                .child(
+                    view!{
+                    <div>
+                        {children()}
+
+                            if cfg!(feature = "debug") {
+                                    use crate::use_hotkeys::use_hotkeys_scoped;
+
+                                    let HotkeysContext { pressed_keys, active_scopes, .. } = use_hotkeys_context();
+
+                                    let have_pressed_keys = move || pressed_keys.get().len() > 0;
+                                    let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+
+                                    let active_scopes_list = move || active_scopes.get().iter().cloned().collect::<Vec<String>>();
+
+                                    let show_tracer = create_rw_signal(true);
+
+                                    use_hotkeys!(("control+w") => move |_| {
+                                        show_tracer.update(move |s| {
+                                            *s = match s {
+                                                true => false,
+                                                false => true,
+                                            };
+                                        })
+                                    });
+
+                                    view! {
+                                        <style>{include_str!("./styles.css")}</style>
+
+                                        <div class="fixed bottom-4 transform flex justify-center w-full">
+                                        <Show
+                                            when=move || show_tracer.get()
+                                            fallback=move || view! { <p>"Press `control+W` to toggle the hotkey dev tool"</p> }
+                                        >
+                                         <div
+                                         class="px-4 py-2 w-3/4 lg:w-2/5 bg-purple-300"
+                                         >
+                                            <div class="flex space-x-2 items-center">
+                                                <p>"Active scopes: " </p>
+                                                <div class="flex space-x-4">
+                                                    <For
+                                                        each=move || active_scopes_list()
+                                                        key=|s| s.clone()
+                                                        children=move |s| {
+                                                            view! {
+                                                                <div>
+                                                                    {format!("{}", s)}
+                                                                </div>
+                                                            }
+                                                        }
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div class="flex space-x-2 text-xl items-center">
+                                            <p>Currently pressed: </p>
+                                                <For
+                                                    each=move || pressed_keys_list()
+                                                    key=|key| key.clone()
+                                                    children=move |key| {
+                                                        view! {
+                                                            <div>
+                                                                {format!("{}", key)}
+                                                            </div>
+                                                        }
+                                                    }
+                                                />
+                                            </div>
+                                            </div>
+                                        </Show>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                )
         }
     }
 }

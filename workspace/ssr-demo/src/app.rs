@@ -22,7 +22,7 @@ pub fn App() -> impl IntoView {
             view! { <ErrorTemplate outside_errors/> }.into_view()
         }>
             <main>
-                <HotkeysProvider initially_active_scopes=scopes!("wef")>
+                <HotkeysProvider initially_active_scopes=scopes!("wef", "i needa one dance")>
                     <Routes>
                         <Route path="" view=HomePage/>
                     </Routes>
