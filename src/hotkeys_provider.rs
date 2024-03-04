@@ -1,41 +1,37 @@
 use crate::scopes;
-use cfg_if::cfg_if;
 use leptos::*;
 use std::collections::HashSet;
-cfg_if! {
-    if #[cfg(any(feature = "hydrate", feature= "csr"))] {
-        use wasm_bindgen::closure::Closure;
-        use wasm_bindgen::JsCast;
-        use web_sys::{
-            EventTarget, KeyboardEvent
-        };
-        use leptos::html::div;
-        use std::collections::HashMap;
-    }
-}
+
+#[cfg(any(feature = "hydrate", feature = "csr"))]
+use leptos::html::div;
+
+#[cfg(any(feature = "hydrate", feature = "csr"))]
+use std::collections::HashMap;
+
+#[cfg(any(feature = "hydrate", feature = "csr"))]
+use wasm_bindgen::closure::Closure;
+
+#[cfg(any(feature = "hydrate", feature = "csr"))]
+use wasm_bindgen::JsCast;
+
+#[cfg(any(feature = "hydrate", feature = "csr"))]
+use web_sys::{EventTarget, KeyboardEvent};
 
 // Defining a hotkey context structure
-cfg_if! {
-    if #[cfg(any(feature = "hydrate", feature= "csr"))] {
-        #[derive(Clone)]
-        pub struct HotkeysContext {
-            pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
-            pub active_ref_target: RwSignal<Option<EventTarget>>,
-            pub set_ref_target: Callback<Option<EventTarget>>,
-            pub active_scopes: RwSignal<HashSet<String>>,
-            pub enable_scope: Callback<String>,
-            pub disable_scope: Callback<String>,
-            pub toggle_scope: Callback<String>,
-        }
-    } else {
-        #[derive(Clone)]
-        pub struct HotkeysContext {
-            pub active_scopes: RwSignal<String>,
-            pub enable_scope: Callback<String>,
-            pub disable_scope: Callback<String>,
-            pub toggle_scope: Callback<String>,
-        }
-    }
+#[derive(Clone)]
+pub struct HotkeysContext {
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
+
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    pub active_ref_target: RwSignal<Option<EventTarget>>,
+
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    pub set_ref_target: Callback<Option<EventTarget>>,
+    pub active_scopes: RwSignal<HashSet<String>>,
+    pub enable_scope: Callback<String>,
+    pub disable_scope: Callback<String>,
+    pub toggle_scope: Callback<String>,
 }
 
 pub fn use_hotkeys_context() -> HotkeysContext {
@@ -51,78 +47,85 @@ pub fn HotkeysProvider(
     #[prop(default = false)]
     allow_blur_event: bool,
 
-    #[prop(default={
-        scopes!()
-    })]
-    initially_active_scopes: HashSet<String>,
+    #[prop(default={scopes!()})] initially_active_scopes: HashSet<String>,
 
     children: Children,
 ) -> impl IntoView {
-    cfg_if! {
-        if #[cfg(any(feature = "hydrate", feature= "csr"))] {
-            let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
-            let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
-                active_ref_target.set(target);
-            });
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
 
-            let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
+        active_ref_target.set(target);
+    });
 
-            let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
 
-            let enable_scope = Callback::new(move |scope: String| {
-                active_scopes.update(|scopes| {
-                    if !scopes.contains(&scope) {
-                        if cfg!(feature = "debug") {
-                            logging::log!("inserting scope {}", &scope);
-                        }
-                        scopes.insert(scope);
-                    }
-                });
-            });
+    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
-            let disable_scope = Callback::new(move |scope: String| {
-                active_scopes.update(|scopes| {
-                    if cfg!(feature = "debug") {
-                        logging::log!("removing scope {}", &scope);
-                    }
-                    scopes.remove(&scope);
-                })
-            });
-
-            let toggle_scope = Callback::new(move |scope: String| {
-                active_scopes.update(|scopes| {
-                    if scopes.contains(&scope) {
-                        if cfg!(feature = "debug") {
-                            logging::log!("removing scope {}", &scope);
-                        }
-                        scopes.remove(&scope);
-                    } else {
-                        if cfg!(feature = "debug") {
-                            logging::log!("inserting scope {}", &scope);
-                        }
-                        scopes.insert(scope);
-                    }
-                })
-            });
-
-            provide_context(HotkeysContext {
-                pressed_keys,
-                active_ref_target,
-                set_ref_target,
-                active_scopes,
-                enable_scope,
-                disable_scope,
-                toggle_scope,
-            });
-
-            if cfg!(feature = "debug") {
-                create_effect(move |_| {
-                    let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
-                    logging::log!("keys pressed: {:?}", pressed_keys_list());
-                });
+    let enable_scope = Callback::new(move |scope: String| {
+        active_scopes.update(|scopes| {
+            if !scopes.contains(&scope) {
+                if cfg!(feature = "debug") {
+                    logging::log!("inserting scope {}", &scope);
+                }
+                scopes.insert(scope);
             }
+        });
+    });
 
+    let disable_scope = Callback::new(move |scope: String| {
+        active_scopes.update(|scopes| {
+            if cfg!(feature = "debug") {
+                logging::log!("removing scope {}", &scope);
+            }
+            scopes.remove(&scope);
+        })
+    });
 
+    let toggle_scope = Callback::new(move |scope: String| {
+        active_scopes.update(|scopes| {
+            if scopes.contains(&scope) {
+                if cfg!(feature = "debug") {
+                    logging::log!("removing scope {}", &scope);
+                }
+                scopes.remove(&scope);
+            } else {
+                if cfg!(feature = "debug") {
+                    logging::log!("inserting scope {}", &scope);
+                }
+                scopes.insert(scope);
+            }
+        })
+    });
+
+    provide_context(HotkeysContext {
+        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        pressed_keys,
+
+        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        active_ref_target,
+
+        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        set_ref_target,
+
+        active_scopes,
+        enable_scope,
+        disable_scope,
+        toggle_scope,
+    });
+
+    #[cfg(feature = "debug")]
+    if cfg!(any(feature = "hydrate", feature = "csr")) {
+        create_effect(move |_| {
+            let pressed_keys_list =
+                move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+            logging::log!("keys pressed: {:?}", pressed_keys_list());
+        });
+    }
+
+    #[cfg(any(feature = "hydrate", feature = "csr"))]
     div()
         .on_mount(move |_| {
             let blur_listener = Closure::wrap(Box::new(move || {
@@ -190,10 +193,4 @@ pub fn HotkeysProvider(
             });
         })
         .child(children())
-        } else {
-            view! {
-                <></>
-            }
-        }
-    }
 }

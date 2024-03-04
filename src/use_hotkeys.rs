@@ -6,37 +6,10 @@ cfg_if! {
         use leptos_dom::NodeRef;
         use web_sys::KeyboardEvent;
         use crate::hotkeys_provider::use_hotkeys_context;
-        use crate::types::{Hotkey, KeyboardModifiers};
+        use crate::types::{Hotkey};
         use std::collections::{HashMap, HashSet};
         use wasm_bindgen::JsValue;
 
-        fn parse_key(key_combination: &str) -> Hotkey {
-            let parts = key_combination
-                .split('+')
-                .map(str::trim)
-                .collect::<Vec<&str>>();
-
-            let mut modifiers = KeyboardModifiers::default();
-            let mut keys = Vec::new();
-
-            for part in parts {
-                match part.to_lowercase().as_str() {
-                    "control" => modifiers.ctrl = true,
-                    "ctrl" => modifiers.ctrl = true,
-                    "alt" => modifiers.alt = true,
-                    "option" => modifiers.alt = true,
-                    "meta" => modifiers.meta = true,
-                    "command" => modifiers.meta = true,
-                    "cmd" => modifiers.meta = true,
-                    "super" => modifiers.meta = true,
-                    "win" => modifiers.meta = true,
-                    "shift" => modifiers.shift = true,
-                    key => keys.push(key.to_lowercase().to_string()),
-                }
-            }
-
-            Hotkey { modifiers, keys }
-        }
 
         fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, KeyboardEvent>) -> bool {
             let mut modifiers_match = true;
@@ -80,7 +53,7 @@ cfg_if! {
         ) {
             let parsed_keys: HashSet<Hotkey> = key_combination
                 .split(',')
-                .map(|key_combo| parse_key(key_combo))
+                .map(|key_combo| Hotkey::new(key_combo))
                 .collect();
 
             let hotkeys_context = use_hotkeys_context();
@@ -121,7 +94,7 @@ cfg_if! {
             create_effect(move |_| {
                 let parsed_keys: HashSet<Hotkey> = key_combination
                     .split(',')
-                    .map(|key_combo| parse_key(key_combo))
+                    .map(|key_combo| Hotkey::new(key_combo))
                     .collect();
                 let scopes = scopes.clone();
                 if let Some(element) = node_ref.get() {
@@ -163,96 +136,5 @@ cfg_if! {
             key_combination: String,
             scopes: Vec<String>,
         ) {}
-    }
-}
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
-    #[test]
-    fn builds_hotkeys_correctly() {
-        use crate::types::{Hotkey, KeyboardModifiers};
-
-        let test_cases = vec![
-            (
-                "shift+r+meta".to_string(),
-                Hotkey {
-                    modifiers: KeyboardModifiers {
-                        shift: true,
-                        ctrl: false,
-                        alt: false,
-                        meta: true,
-                    },
-                    keys: vec!["r".into()],
-                },
-            ),
-            (
-                "alt + o + T".to_string(),
-                Hotkey {
-                    modifiers: KeyboardModifiers {
-                        shift: false,
-                        ctrl: false,
-                        alt: true,
-                        meta: false,
-                    },
-                    keys: vec!["o".into(), "t".into()],
-                },
-            ),
-            (
-                "control+L+ 8 + 8".to_string(),
-                Hotkey {
-                    modifiers: KeyboardModifiers {
-                        shift: false,
-                        ctrl: true,
-                        alt: false,
-                        meta: false,
-                    },
-                    keys: vec!["l".into(), "8".into(), "8".into()],
-                },
-            ),
-            (
-                "shift+ctrl+alt+t".to_string(),
-                Hotkey {
-                    modifiers: KeyboardModifiers {
-                        shift: true,
-                        ctrl: true,
-                        alt: true,
-                        meta: false,
-                    },
-                    keys: vec!["t".into()],
-                },
-            ),
-            (
-                "command+k".to_string(),
-                Hotkey {
-                    modifiers: KeyboardModifiers {
-                        shift: false,
-                        ctrl: false,
-                        alt: false,
-                        meta: true,
-                    },
-                    keys: vec!["k".into()],
-                },
-            ),
-            (
-                "cmd+k".to_string(),
-                Hotkey {
-                    modifiers: KeyboardModifiers {
-                        shift: false,
-                        ctrl: false,
-                        alt: false,
-                        meta: true,
-                    },
-                    keys: vec!["k".into()],
-                },
-            ),
-        ];
-
-        for (input, expected) in test_cases {
-            let hotkey = parse_key(&input);
-            assert_eq!(hotkey, expected);
-        }
     }
 }

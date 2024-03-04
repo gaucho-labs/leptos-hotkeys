@@ -51,6 +51,36 @@ pub struct Hotkey {
     pub(crate) keys: Keys,
 }
 
+impl Hotkey {
+    pub fn new(key_combination: &str) -> Self {
+        let parts = key_combination
+            .split('+')
+            .map(str::trim)
+            .collect::<Vec<&str>>();
+
+        let mut modifiers = KeyboardModifiers::default();
+        let mut keys = Vec::new();
+
+        for part in parts {
+            match part.to_lowercase().as_str() {
+                "control" => modifiers.ctrl = true,
+                "ctrl" => modifiers.ctrl = true,
+                "alt" => modifiers.alt = true,
+                "option" => modifiers.alt = true,
+                "meta" => modifiers.meta = true,
+                "command" => modifiers.meta = true,
+                "cmd" => modifiers.meta = true,
+                "super" => modifiers.meta = true,
+                "win" => modifiers.meta = true,
+                "shift" => modifiers.shift = true,
+                key => keys.push(key.to_lowercase().to_string()),
+            }
+        }
+
+        Hotkey { modifiers, keys }
+    }
+}
+
 impl Display for Hotkey {
     fn fmt(&self, f: &mut Formatter<'_>) -> Result {
         let keys = self
@@ -63,6 +93,94 @@ impl Display for Hotkey {
         match keys.is_empty() {
             true => write!(f, "{}", self.modifiers),
             false => write!(f, "{}{}", keys, self.modifiers),
+        }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn builds_hotkeys_correctly() {
+        let test_cases = vec![
+            (
+                "shift+r+meta".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: true,
+                        ctrl: false,
+                        alt: false,
+                        meta: true,
+                    },
+                    keys: vec!["r".into()],
+                },
+            ),
+            (
+                "alt + o + T".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: false,
+                        ctrl: false,
+                        alt: true,
+                        meta: false,
+                    },
+                    keys: vec!["o".into(), "t".into()],
+                },
+            ),
+            (
+                "control+L+ 8 + 8".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: false,
+                        ctrl: true,
+                        alt: false,
+                        meta: false,
+                    },
+                    keys: vec!["l".into(), "8".into(), "8".into()],
+                },
+            ),
+            (
+                "shift+ctrl+alt+t".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: true,
+                        ctrl: true,
+                        alt: true,
+                        meta: false,
+                    },
+                    keys: vec!["t".into()],
+                },
+            ),
+            (
+                "command+k".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: false,
+                        ctrl: false,
+                        alt: false,
+                        meta: true,
+                    },
+                    keys: vec!["k".into()],
+                },
+            ),
+            (
+                "cmd+k".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: false,
+                        ctrl: false,
+                        alt: false,
+                        meta: true,
+                    },
+                    keys: vec!["k".into()],
+                },
+            ),
+        ];
+
+        for (input, expected) in test_cases {
+            let hotkey = parse_key(&input);
+            assert_eq!(hotkey, expected);
         }
     }
 }
