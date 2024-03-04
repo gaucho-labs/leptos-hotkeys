@@ -72,13 +72,19 @@ pub fn HotkeysProvider(
             let enable_scope = Callback::new(move |scope: String| {
                 active_scopes.update(|scopes| {
                     if !scopes.contains(&scope) {
+                        if cfg!(feature = "debug") {
+                            logging::log!("inserting scope {}", &scope);
+                        }
                         scopes.insert(scope);
                     }
-                })
+                });
             });
 
             let disable_scope = Callback::new(move |scope: String| {
                 active_scopes.update(|scopes| {
+                    if cfg!(feature = "debug") {
+                        logging::log!("removing scope {}", &scope);
+                    }
                     scopes.remove(&scope);
                 })
             });
@@ -86,8 +92,14 @@ pub fn HotkeysProvider(
             let toggle_scope = Callback::new(move |scope: String| {
                 active_scopes.update(|scopes| {
                     if scopes.contains(&scope) {
+                        if cfg!(feature = "debug") {
+                            logging::log!("removing scope {}", &scope);
+                        }
                         scopes.remove(&scope);
                     } else {
+                        if cfg!(feature = "debug") {
+                            logging::log!("inserting scope {}", &scope);
+                        }
                         scopes.insert(scope);
                     }
                 })
@@ -103,25 +115,29 @@ pub fn HotkeysProvider(
                 toggle_scope,
             });
 
+            if cfg!(feature = "debug") {
+                create_effect(move |_| {
+                    let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+                    logging::log!("keys pressed: {:?}", pressed_keys_list());
+                });
+            }
+
 
     div()
         .on_mount(move |_| {
             let blur_listener = Closure::wrap(Box::new(move || {
-                // todo! add tracing
-                // logging::log!("Window lost focus");
+                if cfg!(feature = "debug") {
+                    logging::log!("Window lost focus");
+                }
                 pressed_keys.set(HashMap::new());
             }) as Box<dyn Fn()>);
 
             let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                // todo! add tracing
-                // logging::log!("key pressed: {}", event.key().to_lowercase());
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase(), event);
                 });
             }) as Box<dyn Fn(_)>);
             let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-                // todo! add tracing
-                // logging::log!("key up: {}", event.key().to_lowercase())
                 pressed_keys.update(|keys| {
                     keys.remove(&event.key().to_lowercase());
                 });
