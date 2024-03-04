@@ -65,13 +65,15 @@ impl Hotkey {
             match part.to_lowercase().as_str() {
                 "control" => modifiers.ctrl = true,
                 "ctrl" => modifiers.ctrl = true,
+
                 "alt" => modifiers.alt = true,
-                "option" => modifiers.alt = true,
+                "option" => modifiers.alt = true, // macos variant
+
                 "meta" => modifiers.meta = true,
-                "command" => modifiers.meta = true,
-                "cmd" => modifiers.meta = true,
-                "super" => modifiers.meta = true,
-                "win" => modifiers.meta = true,
+                "command" => modifiers.meta = true, // macos variant
+                "cmd" => modifiers.meta = true,     // macos variant
+                "super" => modifiers.meta = true,   // linux variant
+                "win" => modifiers.meta = true,     // windows variant
                 "shift" => modifiers.shift = true,
                 key => keys.push(key.to_lowercase().to_string()),
             }
@@ -179,7 +181,7 @@ mod tests {
         ];
 
         for (input, expected) in test_cases {
-            let hotkey = parse_key(&input);
+            let hotkey = Hotkey::new(&input);
             assert_eq!(hotkey, expected);
         }
     }
