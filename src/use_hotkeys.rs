@@ -86,7 +86,7 @@ cfg_if! {
                         is_hotkey_match(hotkey, &mut pressed_keyset)
                     }) {
                         if cfg!(feature = "debug") {
-                            let message = format!("%c\tfiring hotkey: {}", &matching_hotkey);
+                            let message = format!("%cfiring hotkey: {}", &matching_hotkey);
                             web_sys::console::log_2(
                                   &JsValue::from_str(&message),
                                   &JsValue::from_str("color: #39FF14;")
@@ -126,7 +126,7 @@ cfg_if! {
                                 is_hotkey_match(hotkey, &mut pressed_keys)
                             }) {
                                 if cfg!(feature = "debug") {
-                                    let message = format!("%c\tfiring hotkey: {}", &matching_hotkey);
+                                    let message = format!("%cfiring hotkey: {}", &matching_hotkey);
                                     web_sys::console::log_2(
                                           &JsValue::from_str(&message),
                                           &JsValue::from_str("color: #39FF14;")
