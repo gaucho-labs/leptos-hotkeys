@@ -51,16 +51,20 @@ cfg_if! {
                 modifiers_match &= pressed_keyset.contains_key("alt");
             }
 
-            let keys_match = hotkey.keys.iter().all(|key| {
-                if let Some(event) = pressed_keyset.get_mut(key) {
-                    event.prevent_default();
-                    true
-                } else {
-                    false
-                }
-            });
+            if modifiers_match {
+                let keys_match = hotkey.keys.iter().all(|key| {
+                    if let Some(event) = pressed_keyset.get_mut(key) {
+                        event.prevent_default();
+                        true
+                    } else {
+                        false
+                    }
+                });
 
-            modifiers_match && keys_match
+                modifiers_match && keys_match
+            } else {
+                false
+            }
         }
 
         pub fn use_hotkeys_scoped(
