@@ -2,7 +2,7 @@ use std::fmt::{Display, Formatter, Result};
 
 pub type Keys = Vec<String>;
 
-#[derive(PartialEq, Hash, Eq)]
+#[derive(Debug, PartialEq, Hash, Eq)]
 pub struct KeyboardModifiers {
     pub(crate) alt: bool,
     pub(crate) ctrl: bool,
@@ -45,7 +45,7 @@ impl Default for KeyboardModifiers {
     }
 }
 
-#[derive(PartialEq, Hash, Eq)]
+#[derive(Debug, PartialEq, Hash, Eq)]
 pub struct Hotkey {
     pub(crate) modifiers: KeyboardModifiers,
     pub(crate) keys: Keys,
