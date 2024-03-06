@@ -20,14 +20,16 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 > This library is ready for use.
 > If you're curious about updates, please read the [CHANGELOG](#changelog).
 
-
 ## Live example
+
 Curious to see how it works? [See the demo!](https://leptos-hotkeys.vercel.app/)
 
 To get started, follow the [Quick Start](#quick-start) section. It's worth the read!
+
 ## Features
 
 ### `use_hotkeys!` Macro
+
 For simplicity and ease, use the `use_hotkeys!` macro to declare global and scoped hotkeys.<br>
 We brought some js idioms while maintaining the leptos look.
 [Learn more about the macro.](#macro-api) <br>
@@ -35,11 +37,12 @@ We brought some js idioms while maintaining the leptos look.
 If you prefer writing out your callbacks the leptos way, we also have non-macro hotkeys. [Learn more about trad hotkeys.](#trad-hotkeys)
 
 ### Global Hotkeys
+
 > This example creates two global hotkeys: `W` and `S`.
 >
 > For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 >
-> *Note: the `*` symbol is reserved for the global scope*
+> _Note: the `*` symbol is reserved for the global scope_
 
 ```rust
 use leptos_hotkeys::prelude::*;
@@ -75,8 +78,8 @@ pub fn SomeComponent() -> impl IntoView {
 >
 > For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 >
-> *Note: scopes are case-insensitive. That means `wef_scope` and `WEf_sCoPe` are considered the same scope.*
->
+> _Note: scopes are case-insensitive. That means `wef_scope` and `WEf_sCoPe` are considered the same scope._
+
 ```rust
 use leptos_hotkeys::prelude::*;
 
@@ -109,8 +112,8 @@ pub fn SomeComponent() -> impl IntoView {
 }
 ```
 
-
 ### Focus trapped Hotkeys
+
 > Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
 
 ```rust
@@ -137,19 +140,23 @@ pub fn SomeComponent() -> impl IntoView {
 ## Quick Start
 
 ### Installation
+
 ```shell
 cargo add leptos_hotkeys
 ```
 
 > [!NOTE]
+>
 > `leptos-hotkeys` supports both client-side rendered and server-side rendered applications. Depending on your application, make sure to include the `csr` or `hydrate` feature flag.
 
 > For client side rendered:
+>
 > ```toml
 > leptos_hotkeys = { path = "0.1.6", features = ["csr"] }
 > ```
 >
 > For server side rendered:
+>
 > ```toml
 > leptos_hotkeys = { version = "0.1.6", features = ["hydrate"] }
 > ```
@@ -157,7 +164,9 @@ cargo add leptos_hotkeys
 We also other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags)
 
 ### Hotkey Provider
+
 Wrap your project with `<HotkeysProvider />`:
+
 ```html
 view! {
     <HotkeysProvider>
@@ -172,7 +181,9 @@ view! {
 ```
 
 ### Initialize scopes
+
 If you're using [scopes](#scoped-hotkeys), you can initialize with a specific scope.
+
 ```rust
 use leptos_hotkeys::scopes;
 
@@ -190,26 +201,30 @@ view! {
 Thats it! Start creating [hotkeys](#features)!
 
 ### Keybinding Grammar
+
 `leptos_hotkeys` matches key values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) `key` property.
 <br />
 For reference, here's a list of [all key values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values).
 <br /><br />
 You can bind multiple hotkeys to a callback. For example:
+
 ```
 "G+R,meta+O,control+k"
 ```
+
 The above example creates three hotkeys: `G+R`, [Meta](https://www.basketball-reference.com/players/a/artesro01.html)`+O`, and `Control+K`.
 The `+` symbol is used to create a combo hotkey. A combo hotkey is a keybinding requiring more than one key press.
 Note that keys are case-agnostic and whitespace-agnostic. You use the `,` as a delimiter in a sequence of multiple hotkeys.
 
-
-
 ## Macro API
+
 We wanted to strip the verbosity that comes with `str` and `String` type handling.<br>
 We kept leptos best practices in mind, keeping the `move |_|` idiom in our macro.
 
 ### `use_hotkeys!()`
+
 Here is a general look at the macro:
+
 ```rust
 use leptos_hotkeys::prelude::*;
 
@@ -219,6 +234,7 @@ use_hotkeys!(("keys", "scope") => move |_| {
 ```
 
 For global hotkeys, you can omit the second parameter as it will implicitly add the global scope.
+
 ```rust
 use_hotkeys!(("key") => move |_| {
     // callback logic here
@@ -226,6 +242,7 @@ use_hotkeys!(("key") => move |_| {
 ```
 
 ### `use_hotkeys_ref!()`
+
 This macro is used when you want to focus trap with a specific html element.
 
 ```rust
@@ -245,6 +262,7 @@ pub fn SomeComponent() -> impl IntoView {
 ```
 
 ### `scopes!()`
+
 Maybe you want to initialize a certain scope upon load, that's where the prop `initially_active_scopes` comes into play.
 Instead of having to create a `vec!["scope_name".to_string()]`, use the `scopes!()` macro.
 
@@ -261,24 +279,28 @@ view! {
 ```
 
 ## Feature Flags
+
 In addition to the `CSR` and `Hydrate` feature flags, we want to improve developer experience by introducing the `debug` flag which adds logging to your console. It logs the current pressed key values, hotkeys fires, and scopes toggling.
 
 Just simply:
+
 ```toml
 leptos_hotkeys = { path = "0.1.6", features = ["hydrate", "debug"] }
 ```
 
 ## API
+
 ### `<HotkeysProvider />`
 
 | Prop Name                 | Type              | Default Value                 | Description                                                                                                                                                                          |
-|---------------------------|-------------------|-------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| ------------------------- | ----------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `allow_blur_event`        | `bool`            | `false`                       | Determines if the component should reset `pressed_keys` when a blur event occurs on the window. This is useful for resetting the state when the user navigates away from the window. |
 | `initially_active_scopes` | `HashSet<String>` | `scopes!("*")` (Global State) | Specifies the set of scopes that are active when the component mounts. Useful for initializing the component with a predefined set of active hotkey scopes.                          |
 
 ### `HotkeysContext`
+
 | Field Name          | Type                            | Description                                                                                           |
-|---------------------|---------------------------------|-------------------------------------------------------------------------------------------------------|
+| ------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------- |
 | `pressed_keys`      | `RwSignal<HashSet<String>>`     | A reactive signal tracking the set of keys currently pressed by the user.                             |
 | `active_ref_target` | `RwSignal<Option<EventTarget>>` | A reactive signal holding the currently active event target, useful for focusing events.              |
 | `set_ref_target`    | `Callback<Option<EventTarget>>` | A method to update the currently active event target.                                                 |
@@ -288,25 +310,30 @@ leptos_hotkeys = { path = "0.1.6", features = ["hydrate", "debug"] }
 | `toggle_scope`      | `Callback<String>`              | A method to toggle the activation state of a given hotkey scope.                                      |
 
 ### Basic Types
+
 #### Keyboard Modifiers
-| Field Name | Type  | Description                                                                                                                                                                     |
-|------------|-------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `alt`      | `bool`| Indicates if the Alt key modifier is active (true) or not (false).                                                                                                              |
-| `ctrl`     | `bool`| Indicates if the Control (Ctrl) key modifier is active (true) or not (false).                                                                                                   |
-| `meta`     | `bool`| Indicates if the [Meta](https://www.basketball-reference.com/players/a/artesro01.html) (Command on macOS, Windows key on Windows) key modifier is active (true) or not (false). |
-| `shift`    | `bool`| Indicates if the Shift key modifier is active (true) or not (false).                                                                                                            |
+
+| Field Name | Type   | Description                                                                                                                                                                     |
+| ---------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `alt`      | `bool` | Indicates if the Alt key modifier is active (true) or not (false).                                                                                                              |
+| `ctrl`     | `bool` | Indicates if the Control (Ctrl) key modifier is active (true) or not (false).                                                                                                   |
+| `meta`     | `bool` | Indicates if the [Meta](https://www.basketball-reference.com/players/a/artesro01.html) (Command on macOS, Windows key on Windows) key modifier is active (true) or not (false). |
+| `shift`    | `bool` | Indicates if the Shift key modifier is active (true) or not (false).                                                                                                            |
 
 #### Hotkey
-| Field Name  | Type                | Description                                                                                                                                    |
-|-------------|---------------------|------------------------------------------------------------------------------------------------------------------------------------------------|
-| `modifiers` | `KeyboardModifiers` | The set of key modifiers (Alt, Ctrl, [Meta](https://www.basketball-reference.com/players/a/artesro01.html), Shift) associated with the hotkey. |
-| `keys`      | `Vec<String>`       | The list of keys that, along with any modifiers, define the hotkey.                                                                            |
-| `description`| `String`           | A human-readable description of what the hotkey does. Intended for future use with scopes.                                                     |
+
+| Field Name    | Type                | Description                                                                                                                                    |
+| ------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `modifiers`   | `KeyboardModifiers` | The set of key modifiers (Alt, Ctrl, [Meta](https://www.basketball-reference.com/players/a/artesro01.html), Shift) associated with the hotkey. |
+| `keys`        | `Vec<String>`       | The list of keys that, along with any modifiers, define the hotkey.                                                                            |
+| `description` | `String`            | A human-readable description of what the hotkey does. Intended for future use with scopes.                                                     |
 
 ## Trad Hotkeys
+
 If the macro isn't to your liking, we offer three hotkeys: global, scoped, and focus trapped.
 
 ### Global: `use_hotkeys_scoped()` where scope = `*`
+
 ```rust
 use leptos_hotkeys::{use_hotkeys_scoped};
 
@@ -391,6 +418,7 @@ fn Component() -> impl IntoView {
 ```
 
 ### Focus trapped - `use_hotkeys_ref()`
+
 ```rust
 use leptos_hotkeys::use_hotkeys_ref;
 
@@ -411,21 +439,25 @@ fn Component() -> impl IntoView {
 ```
 
 ## Contributions
+
 Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) page and feel free to post a PR!
 
 ## Bugs, Issues, Feature Requests
+
 [Robert](https://github.com/JustBobinAround) and I created `leptos_hotkeys` with the intention of usability. If you encounter any bugs, issues, or feature requests, [please feel free to open an issue.](https://github.com/friendlymatthew/leptos-hotkeys/issues/new)
 
 ## CHANGELOG
 
 ### Next release: `v.0.2.0`
+
 [See milestones](https://github.com/friendlymatthew/leptos-hotkeys/milestone/1)
 
-*February 12th, 2024*
+_February 12th, 2024_
+
 - Recognize `meta` key (`v.0.1.3`)
 - String cleaning
 
+_February 8th, 2024_
 
-*February 8th, 2024*
 - Elevate `leptos` to v.0.6.5
 - Added `event.preventDefault()`
