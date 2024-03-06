@@ -50,13 +50,13 @@ pub fn SomeComponent() -> impl IntoView {
 
     // creating a global scope for the W key
     use_hotkeys!(("w") => move |_| {
-        logging::log!("s has been pressed");
+        logging::log!("w has been pressed");
         set_count.update(|c| *c += 1);
     });
 
     // this is also a global scope for the S key!
     use_hotkeys!(("s", "*") => move |_| {
-        logging::log!("t has been pressed");
+        logging::log!("s has been pressed");
         set_count.update(|c| *c -= 1);
     });
 
