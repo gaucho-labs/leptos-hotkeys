@@ -12,7 +12,9 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 
 
 <a href="https://github.com/friendlymatthew/leptos-hotkeys">
-    <img width="570" alt="Screen Shot 2024-01-07 at 4 13 48 PM" src="https://github.com/friendlymatthew/leptos_hotkeys/assets/38759997/f3c7b6ee-e6fd-4c0d-90be-ad26ca4e2ec6">
+    <img width="570" height="211"
+         alt="A person playing a burning piano at a sandy beach under a cloudy sky"
+         src="https://github.com/friendlymatthew/leptos_hotkeys/assets/38759997/f3c7b6ee-e6fd-4c0d-90be-ad26ca4e2ec6" />
 </a>
 
 > [!NOTE]
