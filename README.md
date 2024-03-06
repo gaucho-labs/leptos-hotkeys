@@ -265,9 +265,7 @@ In addition to the `CSR` and `Hydrate` feature flags, we want to improve develop
 
 Just simply:
 ```toml
-> ```toml
-> leptos_hotkeys = { path = "0.1.6", features = ["hydrate", "debug"] }
-> ```
+leptos_hotkeys = { path = "0.1.6", features = ["hydrate", "debug"] }
 ```
 
 ## API
