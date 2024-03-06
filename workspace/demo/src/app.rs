@@ -3,7 +3,6 @@ use leptos_hotkeys::prelude::*;
 use leptos_meta::*;
 use leptos_router::*;
 use leptos_theme::{use_theme, Theme, ThemeProvider};
-use std::collections::HashSet;
 
 #[component]
 pub fn Button(href: &'static str, children: Children) -> impl IntoView {
@@ -17,10 +16,11 @@ pub fn Button(href: &'static str, children: Children) -> impl IntoView {
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
+    let hotkeys_ref = provide_hotkeys_context(false, scopes!("scope_a"));
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
-        <HotkeysProvider initially_active_scopes=scopes!("scope_a")>
+        <main _ref=hotkeys_ref>
             <ThemeProvider>
                 <Router>
                     <Routes>
@@ -29,7 +29,7 @@ pub fn App() -> impl IntoView {
                     </Routes>
                 </Router>
             </ThemeProvider>
-        </HotkeysProvider>
+        </main>
     }
 }
 
@@ -115,9 +115,8 @@ fn HomePage() -> impl IntoView {
     go_to_link("A", format!("{}", ALASKA), "scope_b");
     go_to_link("arrowUp", format!("{}", TAINAN), "scope_b");
     go_to_link("meta+k", format!("{}", NORM), "scope_b");
-
     view! {
-        <main class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
+        <div class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
 
             <div class="w-10/12 h-full flex flex-col space-y-20">
                 <div class="space-y-2 text-lg">
@@ -200,7 +199,7 @@ fn HomePage() -> impl IntoView {
                 </div>
 
             </div>
-        </main>
+        </div>
     }
 }
 
@@ -212,10 +211,10 @@ fn ErrorPage() -> impl IntoView {
     let unknown = p_unknown();
 
     view! {
-        <main class=format!(
+        <div class=format!(
             "h-screen w-full flex flex-col items-center justify-center font-robotomono",
         )>
             <p class="">Unknown command: {unknown}</p>
-        </main>
+        </div>
     }
 }
