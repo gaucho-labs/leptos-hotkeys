@@ -40,7 +40,9 @@ If you prefer writing out your callbacks the leptos way, we also have non-macro 
 
 ### Global Hotkeys
 
-> This example creates two global hotkeys: `W` and `S`.
+This example creates two global hotkeys: `W` and `S`.
+
+> [!TIP]
 >
 > For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 >
@@ -73,10 +75,12 @@ pub fn SomeComponent() -> impl IntoView {
 
 ### Scoped Hotkeys
 
+This example shows an inner and outer scope and hotkeys that switch between the scopes.
+
+> [!TIP]
+>
 > Assign hotkeys specific to individual sections without collisions using scopes.<br/>
 > Use functions in `HotkeysContext` for scope management.
->
-> This example shows an inner and outer scope and hotkeys that switch between the scopes.
 >
 > For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 >
@@ -116,6 +120,8 @@ pub fn SomeComponent() -> impl IntoView {
 
 ### Focus trapped Hotkeys
 
+> [!TIP]
+>
 > Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
 
 ```rust
@@ -151,17 +157,17 @@ cargo add leptos_hotkeys
 >
 > `leptos-hotkeys` supports both client-side rendered and server-side rendered applications. Depending on your application, make sure to include the `csr` or `hydrate` feature flag.
 
-> For client side rendered:
->
-> ```toml
-> leptos_hotkeys = { path = "0.1.6", features = ["csr"] }
-> ```
->
-> For server side rendered:
->
-> ```toml
-> leptos_hotkeys = { version = "0.1.6", features = ["hydrate"] }
-> ```
+For client side rendered:
+
+```toml
+leptos_hotkeys = { path = "0.1.6", features = ["csr"] }
+```
+
+For server side rendered:
+
+```toml
+leptos_hotkeys = { version = "0.1.6", features = ["hydrate"] }
+```
 
 We also other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags)
 
