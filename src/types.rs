@@ -51,6 +51,22 @@ pub struct Hotkey {
     pub(crate) keys: Keys,
 }
 
+impl Display for Hotkey {
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
+        let keys = self
+            .keys
+            .iter()
+            .map(|k| k.as_str())
+            .collect::<Vec<&str>>()
+            .join("+");
+
+        match keys.is_empty() {
+            true => write!(f, "{}", self.modifiers),
+            false => write!(f, "{}{}", keys, self.modifiers),
+        }
+    }
+}
+
 impl Hotkey {
     pub fn new(key_combination: &str) -> Self {
         let parts = key_combination
@@ -74,28 +90,14 @@ impl Hotkey {
                 "cmd" => modifiers.meta = true,     // macos variant
                 "super" => modifiers.meta = true,   // linux variant
                 "win" => modifiers.meta = true,     // windows variant
+
                 "shift" => modifiers.shift = true,
+
                 key => keys.push(key.to_lowercase().to_string()),
             }
         }
 
         Hotkey { modifiers, keys }
-    }
-}
-
-impl Display for Hotkey {
-    fn fmt(&self, f: &mut Formatter<'_>) -> Result {
-        let keys = self
-            .keys
-            .iter()
-            .map(|k| k.as_str())
-            .collect::<Vec<&str>>()
-            .join("+");
-
-        match keys.is_empty() {
-            true => write!(f, "{}", self.modifiers),
-            false => write!(f, "{}{}", keys, self.modifiers),
-        }
     }
 }
 
