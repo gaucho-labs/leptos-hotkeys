@@ -14,7 +14,7 @@ keywords = ["leptos", "hotkeys", "wasm"]
 
 
 [dependencies]
-leptos = { version = "0.6.5", features = ["nightly"] }
+leptos = { version = "0.6", features = ["nightly"] }
 wasm-bindgen = { version = "0.2.89", optional = true }
 log = "0.4.20"
 cfg-if = { version = "1.0.0", features = [] }
