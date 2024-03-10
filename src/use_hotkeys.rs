@@ -87,15 +87,13 @@ pub fn use_hotkeys_scoped(
 }
 
 pub fn use_hotkeys_ref_scoped<T>(
+    node_ref: NodeRef<T>,
     key_combination: String,
     on_triggered: Callback<()>,
     scopes: Vec<String>,
-) -> NodeRef<T>
-where
+) where
     T: ElementDescriptor + 'static + Clone,
 {
-    let node_ref = create_node_ref::<T>();
-
     create_effect(move |_| {
         let parsed_keys: HashSet<Hotkey> = key_combination
             .split(',')
@@ -129,6 +127,4 @@ where
             let _ = element.add(ev::keypress, keydown_closure);
         }
     });
-
-    node_ref
 }

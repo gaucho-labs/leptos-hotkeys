@@ -52,8 +52,15 @@ fn HomePage() -> impl IntoView {
         set_count.update(|c| *c -= 1);
     });
 
+    let div_ref = create_node_ref::<html::Div>();
+
+    use_hotkeys_ref!((div_ref, "5") => move |_| {
+        logging::log!("howdy")
+    });
+
     view! {
         <h1>"Welcome to Leptos!"</h1>
         <div>"Press arrow up and arrow down: " {count}</div>
+        <div tabIndex=-1 _ref=div_ref>howdy</div>
     }
 }

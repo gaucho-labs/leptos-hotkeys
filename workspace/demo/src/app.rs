@@ -16,11 +16,12 @@ pub fn Button(href: &'static str, children: Children) -> impl IntoView {
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
-    let hotkeys_ref = provide_hotkeys_context(false, scopes!("scope_a"));
+    let main_ref = create_node_ref::<html::Main>();
+    provide_hotkeys_context(main_ref, false, scopes!("scope_a"));
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
-        <main _ref=hotkeys_ref>
+        <main _ref=main_ref>
             <ThemeProvider>
                 <Router>
                     <Routes>
@@ -96,7 +97,8 @@ fn HomePage() -> impl IntoView {
         }
     });
 
-    let a_ref = use_hotkeys_ref!(("6", "scope_a") => move |_| {
+    let a_ref = create_node_ref::<html::Div>();
+    use_hotkeys_ref!((a_ref, "6", "scope_a") => move |_| {
         if is_green.get() {
             is_green.set(false)
         } else {
