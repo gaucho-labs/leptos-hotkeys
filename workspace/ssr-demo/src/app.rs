@@ -8,7 +8,10 @@ use leptos_router::*;
 pub fn App() -> impl IntoView {
     // Provides context that manages stylesheets, titles, meta tags, etc.
     provide_meta_context();
-    let hotkey_ref = provide_hotkeys_context(false, scopes!());
+
+    let main_ref = create_node_ref::<leptos::html::Main>();
+
+    let HotkeysContext { .. } = provide_hotkeys_context(main_ref, false, scopes!());
 
     view! {
         <Stylesheet id="leptos" href="/pkg/ssr-demo.css"/>
@@ -22,7 +25,7 @@ pub fn App() -> impl IntoView {
             outside_errors.insert_with_default_key(AppError::NotFound);
             view! { <ErrorTemplate outside_errors/> }.into_view()
         }>
-            <main _ref=hotkey_ref>
+            <main _ref=main_ref>
                 <Routes>
                     <Route path="" view=HomePage/>
                 </Routes>
