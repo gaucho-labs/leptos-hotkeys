@@ -455,10 +455,13 @@ fn Component() -> impl IntoView {
 }
 ```
 
-## Contributions
 
-Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) page and feel free to post a PR!
+## Contributors
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
 
-## Bugs, Issues, Feature Requests
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
 
-[Robert](https://github.com/JustBobinAround) and I created `leptos_hotkeys` with the intention of usability. If you encounter any bugs, issues, or feature requests, [please feel free to open an issue.](https://github.com/friendlymatthew/leptos-hotkeys/issues/new)
+<!-- ALL-CONTRIBUTORS-LIST:END -->
