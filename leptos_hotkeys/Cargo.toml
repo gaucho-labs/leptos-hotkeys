@@ -1,0 +1,30 @@
+[package]
+name = "leptos_hotkeys"
+version = "0.1.6"
+edition = "2021"
+description = "A library that declaratively pairs keybindings with callbacks for Leptos applications."
+license = "MIT"
+repository = "http://github.com/friendlymatthew/leptos-hotkeys"
+readme = "README.md"
+authors = [
+    "Matthew Kim <matthewkmkim@gmail.com>",
+    "Robert Junkins <roberthenryjunkins@gmail.com>",
+]
+keywords = ["leptos", "hotkeys", "wasm"]
+
+[dependencies]
+leptos = { version = "0.6.5", features = ["nightly"] }
+wasm-bindgen = { version = "0.2.92", optional = true }
+log = "0.4.20"
+cfg-if = { version = "1.0.0", features = [] }
+web-sys = { version = "0.3.66", optional = true }
+
+[lib]
+name = "leptos_hotkeys"
+path = "src/lib.rs"
+
+[features]
+hydrate = ["dep:web-sys", "dep:wasm-bindgen"]
+csr = ["dep:web-sys", "dep:wasm-bindgen"]
+debug = []
+ssr = []
