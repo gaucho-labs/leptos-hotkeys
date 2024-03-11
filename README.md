@@ -462,19 +462,3 @@ Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) pag
 ## Bugs, Issues, Feature Requests
 
 [Robert](https://github.com/JustBobinAround) and I created `leptos_hotkeys` with the intention of usability. If you encounter any bugs, issues, or feature requests, [please feel free to open an issue.](https://github.com/friendlymatthew/leptos-hotkeys/issues/new)
-
-## CHANGELOG
-
-### Next release: `v0.2.0`
-
-[See milestones](https://github.com/gaucho-labs/leptos-hotkeys/milestones)
-
-_February 12th, 2024_
-
-- Recognize `meta` key (`v0.1.3`)
-- String cleaning
-
-_February 8th, 2024_
-
-- Elevate `leptos` to v0.6.5
-- Added `event.preventDefault()`
