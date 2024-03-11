@@ -112,9 +112,10 @@ macro_rules! use_hotkeys {
 #[macro_export]
 macro_rules! use_hotkeys_ref {
 
-    (($key_combo:literal) => $($code:tt)*) => {
+    (($node_ref:expr, $key_combo:literal) => $($code:tt)*) => {
         {
             use_hotkeys_ref_scoped(
+                $node_ref,
                 $key_combo.to_string(),
                 Callback::new(
                 $($code)*
@@ -124,9 +125,10 @@ macro_rules! use_hotkeys_ref {
         }
     };
 
-    (($key_combo:expr) => $($code:tt)*) => {
+    (($node_ref:expr, $key_combo:expr) => $($code:tt)*) => {
         {
             use_hotkeys_ref_scoped(
+                $node_ref,
                 $key_combo.to_string(),
                 Callback::new(
                 $($code)*
@@ -136,9 +138,10 @@ macro_rules! use_hotkeys_ref {
         }
     };
 
-    (($key_combo:expr $(, $scopes:literal)*) => $($code:tt)*) => {
+    (($node_ref:expr, $key_combo:expr $(, $scopes:literal)*) => $($code:tt)*) => {
         {
             use_hotkeys_ref_scoped(
+                $node_ref,
                 $key_combo.to_string(),
                 Callback::new(
                     $($code)*
@@ -148,9 +151,10 @@ macro_rules! use_hotkeys_ref {
         }
     };
 
-    (($key_combo:literal $(, $scopes:literal)*) => $($code:tt)*) => {
+    (($node_ref:expr, $key_combo:literal $(, $scopes:literal)*) => $($code:tt)*) => {
         {
             use_hotkeys_ref_scoped(
+                $node_ref,
                 $key_combo.to_string(),
                 Callback::new(
                     $($code)*

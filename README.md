@@ -165,20 +165,35 @@ leptos_hotkeys = { version = "0.1.6", features = ["hydrate"] }
 
 We also other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags).
 
-### Hotkey Provider
+### `provide_hotkeys_context()`
 
-Wrap your project with `<HotkeysProvider />`:
+Call `provide_hotkeys_context()` in the `App()` component. This will provide the `HotkeysContext` for the current reactive node and all of its descendents. 
+This function takes three parameters, the `node_ref`, a flag to disable blur events (*you should go `false`*), and a list of `initially_active_scopes`.
 
-```html
-view! {
-    <HotkeysProvider>
-        <Router>
-            <Routes>
-                <Route path="/" view=HomePage/>
-                <Route path="/:else" view=ErrorPage/>
-            </Routes>
-        </Router>
-    </HotkeysProvider>
+> [!NOTE]
+>
+> `provide_hotkeys_context()` returns a `HotkeysContext`. To learn more, see [HotkeysContext](#hotkeyscontext).
+
+```rust
+#[component]
+pub fn App() -> impl IntoView {
+    provide_meta_context();
+    
+    let main_ref = create_node_ref::<html::Main>();
+    provide_hotkeys_context(main_ref, false, scopes!()); 
+    
+    view! {
+        <HotkeysProvider>
+            <Router>
+                <main _ref=main_ref>  // <-- attach main ref here!
+                    <Routes>
+                        <Route path="/" view=HomePage/>
+                        <Route path="/:else" view=ErrorPage/>
+                    </Routes>
+                </main>
+            </Router>
+        </HotkeysProvider>
+    }
 }
 ```
 

@@ -13,11 +13,12 @@ use wasm_bindgen::closure::Closure;
 #[cfg(any(feature = "hydrate", feature = "csr"))]
 use wasm_bindgen::JsCast;
 
+use crate::types::Hotkey;
 #[cfg(any(feature = "hydrate", feature = "csr"))]
 use web_sys::{EventTarget, KeyboardEvent};
 
 // Defining a hotkey context structure
-#[derive(Clone)]
+#[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(any(feature = "hydrate", feature = "csr"))]
     pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
@@ -34,14 +35,13 @@ pub struct HotkeysContext {
 }
 
 pub fn provide_hotkeys_context<T>(
+    node_ref: NodeRef<T>,
     allow_blur_event: bool,
     initially_active_scopes: HashSet<String>,
-) -> NodeRef<T>
+) -> HotkeysContext
 where
     T: ElementDescriptor + 'static + Clone,
 {
-    let node_ref = create_node_ref::<T>();
-
     #[cfg(any(feature = "hydrate", feature = "csr"))]
     let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
 
@@ -91,22 +91,6 @@ where
         })
     });
 
-    provide_context(HotkeysContext {
-        #[cfg(any(feature = "hydrate", feature = "csr"))]
-        pressed_keys,
-
-        #[cfg(any(feature = "hydrate", feature = "csr"))]
-        active_ref_target,
-
-        #[cfg(any(feature = "hydrate", feature = "csr"))]
-        set_ref_target,
-
-        active_scopes,
-        enable_scope,
-        disable_scope,
-        toggle_scope,
-    });
-
     #[cfg(feature = "debug")]
     if cfg!(any(feature = "hydrate", feature = "csr")) {
         create_effect(move |_| {
@@ -121,7 +105,7 @@ where
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
-            pressed_keys.set(HashMap::new());
+            pressed_keys.set_untracked(HashMap::new());
         }) as Box<dyn Fn()>);
 
         let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
@@ -176,7 +160,24 @@ where
         });
     });
 
-    node_ref
+    let hotkeys_context = HotkeysContext {
+        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        pressed_keys,
+
+        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        active_ref_target,
+
+        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        set_ref_target,
+
+        active_scopes,
+        enable_scope,
+        disable_scope,
+        toggle_scope,
+    };
+
+    provide_context(hotkeys_context);
+    hotkeys_context
 }
 
 pub fn use_hotkeys_context() -> HotkeysContext {
