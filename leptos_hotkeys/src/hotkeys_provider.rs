@@ -1,32 +1,32 @@
 use leptos::*;
 use std::collections::HashSet;
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use std::collections::HashMap;
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use leptos::html::ElementDescriptor;
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use wasm_bindgen::closure::Closure;
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
 use crate::types::Hotkey;
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use web_sys::{EventTarget, KeyboardEvent};
 
 // Defining a hotkey context structure
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    #[cfg(not(feature = "ssr"))]
     pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
 
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<EventTarget>>,
 
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    #[cfg(not(feature = "ssr"))]
     pub set_ref_target: Callback<Option<EventTarget>>,
     pub active_scopes: RwSignal<HashSet<String>>,
     pub enable_scope: Callback<String>,
@@ -42,15 +42,15 @@ pub fn provide_hotkeys_context<T>(
 where
     T: ElementDescriptor + 'static + Clone,
 {
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    #[cfg(not(feature = "ssr"))]
     let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
 
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    #[cfg(not(feature = "ssr"))]
     let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
         active_ref_target.set(target);
     });
 
-    #[cfg(any(feature = "hydrate", feature = "csr"))]
+    #[cfg(not(feature = "ssr"))]
     let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
@@ -92,7 +92,7 @@ where
     });
 
     #[cfg(feature = "debug")]
-    if cfg!(any(feature = "hydrate", feature = "csr")) {
+    if cfg!(not(feature = "ssr")) {
         create_effect(move |_| {
             let pressed_keys_list =
                 move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
@@ -161,13 +161,13 @@ where
     });
 
     let hotkeys_context = HotkeysContext {
-        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        #[cfg(not(feature = "ssr"))]
         pressed_keys,
 
-        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        #[cfg(not(feature = "ssr"))]
         active_ref_target,
 
-        #[cfg(any(feature = "hydrate", feature = "csr"))]
+        #[cfg(not(feature = "ssr"))]
         set_ref_target,
 
         active_scopes,
