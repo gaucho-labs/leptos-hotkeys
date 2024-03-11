@@ -1,15 +1,9 @@
-<h1>
-    <a href="https://github.com/friendlymatthew/leptos-hotkeys">
-    <em>leptos-hotkeys</em>
-</a>
-</h1>
+# [_leptos-hotkeys_](https://github.com/friendlymatthew/leptos-hotkeys)
 
 Declaratively create and pair keybindings with callbacks for Leptos applications.
 
 [![crates](https://img.shields.io/badge/📦_crates-0.1.6-%20green)](https://crates.io/crates/leptos_hotkeys)
 [![discord](https://img.shields.io/badge/Join-Discord-%235865F2.svg)](https://discord.gg/XhVbKk38ux)
-<!-- [![version](https://img.shields.io/badge/version-0.1.3-purple)](https://materialize.com/s/chat) -->
-
 
 <a href="https://github.com/friendlymatthew/leptos-hotkeys">
     <img width="570" height="211"
@@ -32,11 +26,12 @@ To get started, follow the [Quick Start](#quick-start) section. It's worth the r
 
 ### `use_hotkeys!` Macro
 
-For simplicity and ease, use the `use_hotkeys!` macro to declare global and scoped hotkeys.<br>
-We brought some js idioms while maintaining the leptos look.
-[Learn more about the macro.](#macro-api) <br>
+For simplicity and ease, use the `use_hotkeys!` macro to declare global and scoped hotkeys.
 
-If you prefer writing out your callbacks the leptos way, we also have non-macro hotkeys. [Learn more about trad hotkeys.](#trad-hotkeys)
+We brought some js idioms while maintaining the leptos look.
+[Learn more about the macro](#macro-api).
+
+If you prefer writing out your callbacks the leptos way, we also have non-macro hotkeys. [Learn more about trad hotkeys](#trad-hotkeys).
 
 ### Global Hotkeys
 
@@ -79,8 +74,7 @@ This example shows an inner and outer scope and hotkeys that switch between the 
 
 > [!TIP]
 >
-> Assign hotkeys specific to individual sections without collisions using scopes.<br/>
-> Use functions in `HotkeysContext` for scope management.
+> Assign hotkeys specific to individual sections without collisions using scopes. Use functions in `HotkeysContext` for scope management.
 >
 > For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 >
@@ -169,7 +163,7 @@ For server side rendered:
 leptos_hotkeys = { version = "0.1.6", features = ["hydrate"] }
 ```
 
-We also other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags)
+We also other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags).
 
 ### `provide_hotkeys_context()`
 
@@ -226,12 +220,12 @@ Thats it! Start creating [hotkeys](#features)!
 ### Keybinding Grammar
 
 `leptos_hotkeys` matches key values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) `key` property.
-<br />
+
 For reference, here's a list of [all key values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values).
-<br /><br />
+
 You can bind multiple hotkeys to a callback. For example:
 
-```
+```txt
 "G+R,meta+O,control+k"
 ```
 
@@ -471,16 +465,16 @@ Check the [issues](https://github.com/friendlymatthew/leptos-hotkeys/issues) pag
 
 ## CHANGELOG
 
-### Next release: `v.0.2.0`
+### Next release: `v0.2.0`
 
-[See milestones](https://github.com/friendlymatthew/leptos-hotkeys/milestone/1)
+[See milestones](https://github.com/gaucho-labs/leptos-hotkeys/milestones)
 
 _February 12th, 2024_
 
-- Recognize `meta` key (`v.0.1.3`)
+- Recognize `meta` key (`v0.1.3`)
 - String cleaning
 
 _February 8th, 2024_
 
-- Elevate `leptos` to v.0.6.5
+- Elevate `leptos` to v0.6.5
 - Added `event.preventDefault()`
