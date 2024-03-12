@@ -1,6 +1,5 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
-use std::collections::HashMap;
 use std::collections::HashSet;
 
 #[cfg(not(feature = "ssr"))]
@@ -10,13 +9,14 @@ use wasm_bindgen::JsCast;
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<HashMap<String, web_sys::KeyboardEvent>>,
+    pub(crate) pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>>,
 
     #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
 
     #[cfg(not(feature = "ssr"))]
     pub set_ref_target: Callback<Option<web_sys::EventTarget>>,
+
     pub active_scopes: RwSignal<HashSet<String>>,
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
@@ -24,8 +24,8 @@ pub struct HotkeysContext {
 }
 
 pub fn provide_hotkeys_context<T>(
-    node_ref: NodeRef<T>,
-    allow_blur_event: bool,
+    #[cfg_attr(feature = "ssr", allow(unused_variables))] node_ref: NodeRef<T>,
+    #[cfg_attr(feature = "ssr", allow(unused_variables))] allow_blur_event: bool,
     initially_active_scopes: HashSet<String>,
 ) -> HotkeysContext
 where
@@ -40,8 +40,8 @@ where
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<HashMap<String, web_sys::KeyboardEvent>> =
-        RwSignal::new(HashMap::new());
+    let pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>> =
+        RwSignal::new(std::collections::HashMap::new());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -81,19 +81,19 @@ where
         })
     });
 
-    #[cfg(feature = "debug")]
+    #[cfg(all(feature = "debug", not(feature = "ssr")))]
     create_effect(move |_| {
-        let pressed_keys_list =
-            move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+        let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
         logging::log!("keys pressed: {:?}", pressed_keys_list());
     });
 
+    #[cfg(not(feature = "ssr"))]
     node_ref.on_load(move |_| {
         let blur_listener = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
-            pressed_keys.set_untracked(HashMap::new());
+            pressed_keys.set_untracked(std::collections::HashMap::new());
         }) as Box<dyn Fn()>);
 
         let keydown_listener =
