@@ -1180,7 +1180,6 @@ dependencies = [
 name = "leptos_hotkeys"
 version = "0.1.6"
 dependencies = [
- "cfg-if",
  "leptos",
  "log",
  "wasm-bindgen",
