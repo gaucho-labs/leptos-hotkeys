@@ -30,6 +30,7 @@ args = [
 ]
 
 [tasks.cargo-check]
+description = "Run cargo-check"
 clear = true
 install_crate = "cargo-hack"
 command = "cargo"
