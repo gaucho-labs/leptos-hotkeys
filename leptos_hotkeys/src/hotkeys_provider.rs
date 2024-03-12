@@ -1,9 +1,8 @@
 use leptos::html::ElementDescriptor;
+#[cfg(not(feature = "ssr"))]
+use leptos::wasm_bindgen::JsCast;
 use leptos::*;
 use std::collections::HashSet;
-
-#[cfg(not(feature = "ssr"))]
-use wasm_bindgen::JsCast;
 
 // Defining a hotkey context structure
 #[derive(Clone, Copy)]
@@ -89,25 +88,30 @@ where
 
     #[cfg(not(feature = "ssr"))]
     node_ref.on_load(move |_| {
-        let blur_listener = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
+        let blur_listener = leptos::wasm_bindgen::closure::Closure::wrap(Box::new(move || {
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
             pressed_keys.set_untracked(std::collections::HashMap::new());
-        }) as Box<dyn Fn()>);
+        })
+            as Box<dyn Fn()>);
 
-        let keydown_listener =
-            wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+        let keydown_listener = leptos::wasm_bindgen::closure::Closure::wrap(Box::new(
+            move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
                     keys.insert(event.key().to_lowercase(), event);
                 });
-            }) as Box<dyn Fn(_)>);
-        let keyup_listener =
-            wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+            },
+        )
+            as Box<dyn Fn(_)>);
+        let keyup_listener = leptos::wasm_bindgen::closure::Closure::wrap(Box::new(
+            move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
                     keys.remove(&event.key().to_lowercase());
                 });
-            }) as Box<dyn Fn(_)>);
+            },
+        )
+            as Box<dyn Fn(_)>);
 
         if !allow_blur_event {
             window()
