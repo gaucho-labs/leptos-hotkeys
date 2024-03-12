@@ -1,6 +1,6 @@
 # [_leptos-hotkeys_](https://github.com/friendlymatthew/leptos-hotkeys)
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-3-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Declaratively create and pair keybindings with callbacks for Leptos applications.
@@ -467,7 +467,8 @@ fn Component() -> impl IntoView {
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mondeja"><img src="https://avatars.githubusercontent.com/u/23049315?v=4?s=100" width="100px;" alt="Álvaro Mondéjar"/><br /><sub><b>Álvaro Mondéjar</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=mondeja" title="Code">💻</a></td>
-        <td align="center" valign="top" width="14.28%"><a href="https://github.com/justbobinaround"><img src="https://avatars.githubusercontent.com/u/67753581?v=4?s=100" width="100px;" alt="Robert Junkins"/><br /><sub><b>Robert Junkins</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=justbobinaround" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/JustBobinAround"><img src="https://avatars.githubusercontent.com/u/67753581?v=4?s=100" width="100px;" alt="Robert Junkins"/><br /><sub><b>Robert Junkins</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=JustBobinAround" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeoniePhiline"><img src="https://avatars.githubusercontent.com/u/22329650?v=4?s=100" width="100px;" alt="LeoniePhiline"/><br /><sub><b>LeoniePhiline</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=LeoniePhiline" title="Documentation">📖</a></td>
     </tr>
   </tbody>
 </table>
