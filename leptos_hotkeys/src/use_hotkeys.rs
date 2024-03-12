@@ -2,12 +2,10 @@ use crate::types::Hotkey;
 
 use leptos::{html::ElementDescriptor, *};
 
-use std::collections::HashMap;
-
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 fn is_hotkey_match(
     hotkey: &Hotkey,
-    pressed_keyset: &mut HashMap<String, web_sys::KeyboardEvent>,
+    pressed_keyset: &mut std::collections::HashMap<String, web_sys::KeyboardEvent>,
 ) -> bool {
     let mut modifiers_match = true;
 
@@ -122,7 +120,7 @@ pub fn use_hotkeys_ref_scoped<T>(
                 }
             };
 
-            // element.add needs `leptos::ev::DOMEventResponder`
+            // needs `leptos::ev::DOMEventResponder`
             let _ = element.add(ev::keypress, keydown_closure);
         }
     });

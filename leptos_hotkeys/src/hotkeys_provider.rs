@@ -1,7 +1,5 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
-#[cfg_attr(feature = "ssr", allow(unused_imports))]
-use std::collections::HashMap;
 use std::collections::HashSet;
 
 #[cfg(not(feature = "ssr"))]
@@ -11,7 +9,7 @@ use wasm_bindgen::JsCast;
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<HashMap<String, web_sys::KeyboardEvent>>,
+    pub(crate) pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>>,
 
     #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
@@ -42,8 +40,8 @@ where
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<HashMap<String, web_sys::KeyboardEvent>> =
-        RwSignal::new(HashMap::new());
+    let pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>> =
+        RwSignal::new(std::collections::HashMap::new());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -95,7 +93,7 @@ where
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
-            pressed_keys.set_untracked(HashMap::new());
+            pressed_keys.set_untracked(std::collections::HashMap::new());
         }) as Box<dyn Fn()>);
 
         let keydown_listener =
