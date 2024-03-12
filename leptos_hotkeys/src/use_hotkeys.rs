@@ -1,15 +1,15 @@
 use crate::hotkeys_provider::use_hotkeys_context;
 use crate::types::Hotkey;
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 
 use std::collections::{HashMap, HashSet};
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsValue;
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
+#[cfg(not(feature = "ssr"))]
 use web_sys::KeyboardEvent;
 
 fn is_hotkey_match(hotkey: &Hotkey, pressed_keyset: &mut HashMap<String, KeyboardEvent>) -> bool {

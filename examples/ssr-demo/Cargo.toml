@@ -20,18 +20,10 @@ wasm-bindgen = "=0.2.92"
 thiserror = "1"
 tracing = { version = "0.1", optional = true }
 http = "1"
-leptos_hotkeys = { path = "../../leptos_hotkeys", features = [
-    "hydrate",
-    "debug"
-] }
+leptos_hotkeys = { path = "../../leptos_hotkeys", features = ["debug"] }
 
 [features]
-hydrate = [
-    "leptos/hydrate",
-    "leptos_meta/hydrate",
-    "leptos_router/hydrate",
-    "leptos_hotkeys/hydrate",
-]
+hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
 ssr = [
     "dep:axum",
     "dep:tokio",
