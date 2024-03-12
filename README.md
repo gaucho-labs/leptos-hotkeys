@@ -467,6 +467,7 @@ fn Component() -> impl IntoView {
   <tbody>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mondeja"><img src="https://avatars.githubusercontent.com/u/23049315?v=4?s=100" width="100px;" alt="Álvaro Mondéjar"/><br /><sub><b>Álvaro Mondéjar</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=mondeja" title="Code">💻</a></td>
+        <td align="center" valign="top" width="14.28%"><a href="https://github.com/justbobinaround"><img src="https://avatars.githubusercontent.com/u/67753581?v=4?s=100" width="100px;" alt="Robert Junkins"/><br /><sub><b>Robert Junkins</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=justbobinaround" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
