@@ -10,51 +10,36 @@ description = "Lint Rust code"
 run_task = { name = ["clippy", "cargo-check", "format-check"] }
 
 [tasks.clippy]
-clear = true
 description = "Run clippy"
-run_task = { name = [
-    "clippy-no-features",
-    "clippy-debug",
-    "clippy-ssr"
-] }
-
-# TODO: Remove ["-W", "clippy::empty-docs"] when the next issue is resolved:
+clear = true
+install_crate = "cargo-hack"
+command = "cargo"
+# TODO: Remove ["-A", "clippy::empty-docs"] when the next issue is resolved:
 # https://github.com/leptos-rs/leptos/issues/2406
-[tasks.clippy-no-features]
-install_crate = "clippy"
-command = "cargo"
-args = ["clippy", "--", "-Dwarnings", "-A", "clippy::empty-docs"]
-
-[tasks.clippy-debug]
-install_crate = "clippy"
-command = "cargo"
-args = ["clippy", "--features=debug", "--", "-Dwarnings", "-A", "clippy::empty-docs"]
-
-[tasks.clippy-ssr]
-install_crate = "clippy"
-command = "cargo"
-args = ["clippy", "--features=ssr", "--", "-Dwarnings", "-A", "clippy::empty-docs"]
+args = [
+  "hack",
+  "clippy",
+  "--all",
+  "--each-feature",
+  "--no-dev-deps",
+  "--",
+  "-A",
+  "clippy::empty-docs",
+  "-D",
+  "clippy::print_stdout"
+]
 
 [tasks.cargo-check]
 clear = true
-description = "Run cargo-check"
-run_task = { name = [
-    "cargo-check-no-features",
-    "cargo-check-debug",
-    "cargo-check-ssr"
-] }
-
-[tasks.cargo-check-no-features]
+install_crate = "cargo-hack"
 command = "cargo"
-args = ["check"]
-
-[tasks.cargo-check-debug]
-command = "cargo"
-args = ["check", "--features=debug"]
-
-[tasks.cargo-check-ssr]
-command = "cargo"
-args = ["check", "--features=ssr"]
+args = [
+  "hack",
+  "check",
+  "--all",
+  "--each-feature",
+  "--no-dev-deps",
+]
 
 [tasks.format-check]
 description = "Check Rust code formatting with rustfmt"
