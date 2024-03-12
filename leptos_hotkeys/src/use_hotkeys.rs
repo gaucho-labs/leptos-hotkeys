@@ -4,9 +4,6 @@ use crate::types::Hotkey;
 #[cfg(any(feature = "hydrate", feature = "csr"))]
 use leptos::{ev::DOMEventResponder, html::ElementDescriptor, *};
 
-#[cfg(any(feature = "hydrate", feature = "csr"))]
-use leptos_dom::NodeRef;
-
 use std::collections::{HashMap, HashSet};
 
 #[cfg(any(feature = "hydrate", feature = "csr"))]
@@ -55,19 +52,16 @@ pub fn use_hotkeys_scoped(
     on_triggered: Callback<()>,
     scopes: Vec<String>,
 ) {
-    let parsed_keys: HashSet<Hotkey> = key_combination
-        .split(',')
-        .map(|key_combo| Hotkey::new(key_combo))
-        .collect();
+    let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
 
     let hotkeys_context = use_hotkeys_context();
     let pressed_keys = hotkeys_context.pressed_keys;
 
     create_effect(move |_| {
         let active_scopes = hotkeys_context.active_scopes.get();
-        let within_scope = &scopes.iter().any(|scope| active_scopes.contains(scope));
+        let within_scope = scopes.iter().any(|scope| active_scopes.contains(scope));
 
-        if *within_scope {
+        if within_scope {
             let mut pressed_keyset = pressed_keys.get();
             if let Some(matching_hotkey) = parsed_keys
                 .iter()
@@ -95,10 +89,7 @@ pub fn use_hotkeys_ref_scoped<T>(
     T: ElementDescriptor + 'static + Clone,
 {
     create_effect(move |_| {
-        let parsed_keys: HashSet<Hotkey> = key_combination
-            .split(',')
-            .map(|key_combo| Hotkey::new(key_combo))
-            .collect();
+        let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
         let scopes = scopes.clone();
         if let Some(element) = node_ref.get() {
             let keydown_closure = move |_event: KeyboardEvent| {

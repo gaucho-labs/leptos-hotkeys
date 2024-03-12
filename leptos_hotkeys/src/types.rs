@@ -2,7 +2,7 @@ use std::fmt::{Display, Formatter, Result};
 
 pub type Keys = Vec<String>;
 
-#[derive(Debug, PartialEq, Hash, Eq)]
+#[derive(Debug, PartialEq, Hash, Eq, Default)]
 pub struct KeyboardModifiers {
     pub(crate) alt: bool,
     pub(crate) ctrl: bool,
@@ -30,17 +30,6 @@ impl Display for KeyboardModifiers {
         match modifiers.is_empty() {
             true => write!(f, ""),
             false => write!(f, "+{}", modifiers.join("+")),
-        }
-    }
-}
-
-impl Default for KeyboardModifiers {
-    fn default() -> Self {
-        KeyboardModifiers {
-            alt: false,
-            ctrl: false,
-            meta: false,
-            shift: false,
         }
     }
 }

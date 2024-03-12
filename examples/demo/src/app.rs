@@ -36,7 +36,7 @@ pub fn App() -> impl IntoView {
 
 #[component]
 fn HomePage() -> impl IntoView {
-    const SCOPE_BORDER: &'static str =
+    const SCOPE_BORDER: &str =
         "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20 h-full";
     let current_scope = create_rw_signal("scope_a");
     let is_green = create_rw_signal(true);
@@ -106,17 +106,17 @@ fn HomePage() -> impl IntoView {
         }
     });
 
-    const GORILLAS: &'static str = "https://www.youtube.com/watch?v=qavePUOut_c";
-    const DOGLICKEDTHEOLE: &'static str = "https://www.youtube.com/watch?v=4arBraMyp0Q";
-    const ALASKA: &'static str = "https://www.youtube.com/watch?v=qRODjitiKP8";
-    const TAINAN: &'static str = "https://www.youtube.com/watch?v=pWOFFlPmVdk";
-    const NORM: &'static str = "https://www.youtube.com/watch?v=ELoXiuDA_sQ";
+    const GORILLAS: &str = "https://www.youtube.com/watch?v=qavePUOut_c";
+    const DOGLICKEDTHEOLE: &str = "https://www.youtube.com/watch?v=4arBraMyp0Q";
+    const ALASKA: &str = "https://www.youtube.com/watch?v=qRODjitiKP8";
+    const TAINAN: &str = "https://www.youtube.com/watch?v=pWOFFlPmVdk";
+    const NORM: &str = "https://www.youtube.com/watch?v=ELoXiuDA_sQ";
 
-    go_to_link("G", format!("{}", GORILLAS), "scope_b");
-    go_to_link("D", format!("{}", DOGLICKEDTHEOLE), "scope_b");
-    go_to_link("A", format!("{}", ALASKA), "scope_b");
-    go_to_link("arrowUp", format!("{}", TAINAN), "scope_b");
-    go_to_link("meta+k", format!("{}", NORM), "scope_b");
+    go_to_link("G", GORILLAS.to_string(), "scope_b");
+    go_to_link("D", DOGLICKEDTHEOLE.to_string(), "scope_b");
+    go_to_link("A", ALASKA.to_string(), "scope_b");
+    go_to_link("arrowUp", TAINAN.to_string(), "scope_b");
+    go_to_link("meta+k", NORM.to_string(), "scope_b");
     view! {
         <div class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
 
@@ -157,8 +157,8 @@ fn HomePage() -> impl IntoView {
                                 <div
                                     _ref=a_ref
                                     tabIndex=-1
-                                    class:green=move || is_green.get() == true
-                                    class:yellow=move || is_green.get() == false
+                                    class:green=move || is_green.get()
+                                    class:yellow=move || !is_green.get()
                                 >
                                     <p>click on me and press 6</p>
                                 </div>

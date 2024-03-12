@@ -13,7 +13,6 @@ use wasm_bindgen::closure::Closure;
 #[cfg(any(feature = "hydrate", feature = "csr"))]
 use wasm_bindgen::JsCast;
 
-use crate::types::Hotkey;
 #[cfg(any(feature = "hydrate", feature = "csr"))]
 use web_sys::{EventTarget, KeyboardEvent};
 
