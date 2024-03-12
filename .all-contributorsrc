@@ -8,25 +8,30 @@
   "commitConvention": "angular",
   "contributors": [
     {
-
       "login": "mondeja",
       "name": "Álvaro Mondéjar",
       "avatar_url": "https://avatars.githubusercontent.com/u/23049315?v=4",
       "profile": "https://github.com/mondeja",
-
       "contributions": [
         "code"
       ]
     },
     {
-
       "login": "JustBobinAround",
       "name": "Robert Junkins",
       "avatar_url": "https://avatars.githubusercontent.com/u/67753581?v=4",
       "profile": "https://github.com/JustBobinAround",
-
       "contributions": [
         "code"
+      ]
+    },
+    {
+      "login": "LeoniePhiline",
+      "name": "LeoniePhiline",
+      "avatar_url": "https://avatars.githubusercontent.com/u/22329650?v=4",
+      "profile": "https://github.com/LeoniePhiline",
+      "contributions": [
+        "doc"
       ]
     }
   ],
