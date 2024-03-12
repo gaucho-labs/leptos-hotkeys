@@ -1,0 +1,91 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - v*
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get toolchain
+        id: toolchain
+        uses: ./.github/actions/get-toolchain
+      - name: Setup Rust
+        uses: hecrj/setup-rust-action@v2
+        with:
+          rust-version: ${{ steps.toolchain.outputs.channel }}
+          targets: wasm32-unknown-unknown
+      - name: Install cargo binstall
+        uses: cargo-bins/cargo-binstall@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+      - name: Install cargo-make
+        run: cargo binstall -y cargo-make
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Lint
+        run: cargo make lint
+
+  build-example:
+    name: Build example
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - example: demo
+            builder: trunk
+          - example: ssr-demo
+            builder: cargo-leptos
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get toolchain
+        id: toolchain
+        uses: ./.github/actions/get-toolchain
+      - name: Setup Rust
+        uses: hecrj/setup-rust-action@v2
+        with:
+          rust-version: ${{ steps.toolchain.outputs.channel }}
+          targets: wasm32-unknown-unknown
+      - name: Install cargo binstall
+        uses: cargo-bins/cargo-binstall@main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install builder
+        run: cargo binstall -y ${{ matrix.builder }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Cache dependencies
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            target
+          key: ${{ runner.os }}-cargo-${{ matrix.example }}-${{ matrix.builder }}-${{ hashFiles('**/Cargo.toml') }}-${{ hashFiles('**/Cargo.lock') }}
+      - name: Build with trunk
+        if: ${{ matrix.builder == 'trunk' }}
+        run: |
+          cd examples/${{ matrix.example }}
+          trunk build --release
+      - name: Build with cargo-leptos
+        if: ${{ matrix.builder == 'cargo-leptos' }}
+        run: |
+          cd examples/${{ matrix.example }}
+          cargo leptos build --release

@@ -1,33 +1,22 @@
+use leptos::html::ElementDescriptor;
 use leptos::*;
+use std::collections::HashMap;
 use std::collections::HashSet;
 
 #[cfg(not(feature = "ssr"))]
-use std::collections::HashMap;
-
-#[cfg(not(feature = "ssr"))]
-use leptos::html::ElementDescriptor;
-
-#[cfg(not(feature = "ssr"))]
-use wasm_bindgen::closure::Closure;
-
-#[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
-
-use crate::types::Hotkey;
-#[cfg(not(feature = "ssr"))]
-use web_sys::{EventTarget, KeyboardEvent};
 
 // Defining a hotkey context structure
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<HashMap<String, KeyboardEvent>>,
+    pub(crate) pressed_keys: RwSignal<HashMap<String, web_sys::KeyboardEvent>>,
 
     #[cfg(not(feature = "ssr"))]
-    pub active_ref_target: RwSignal<Option<EventTarget>>,
+    pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
 
     #[cfg(not(feature = "ssr"))]
-    pub set_ref_target: Callback<Option<EventTarget>>,
+    pub set_ref_target: Callback<Option<web_sys::EventTarget>>,
     pub active_scopes: RwSignal<HashSet<String>>,
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
@@ -43,15 +32,16 @@ where
     T: ElementDescriptor + 'static + Clone,
 {
     #[cfg(not(feature = "ssr"))]
-    let active_ref_target: RwSignal<Option<EventTarget>> = RwSignal::new(None);
+    let active_ref_target: RwSignal<Option<web_sys::EventTarget>> = RwSignal::new(None);
 
     #[cfg(not(feature = "ssr"))]
-    let set_ref_target = Callback::new(move |target: Option<EventTarget>| {
+    let set_ref_target = Callback::new(move |target: Option<web_sys::EventTarget>| {
         active_ref_target.set(target);
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<HashMap<String, KeyboardEvent>> = RwSignal::new(HashMap::new());
+    let pressed_keys: RwSignal<HashMap<String, web_sys::KeyboardEvent>> =
+        RwSignal::new(HashMap::new());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -92,32 +82,32 @@ where
     });
 
     #[cfg(feature = "debug")]
-    if cfg!(not(feature = "ssr")) {
-        create_effect(move |_| {
-            let pressed_keys_list =
-                move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
-            logging::log!("keys pressed: {:?}", pressed_keys_list());
-        });
-    }
+    create_effect(move |_| {
+        let pressed_keys_list =
+            move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+        logging::log!("keys pressed: {:?}", pressed_keys_list());
+    });
 
     node_ref.on_load(move |_| {
-        let blur_listener = Closure::wrap(Box::new(move || {
+        let blur_listener = wasm_bindgen::closure::Closure::wrap(Box::new(move || {
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
             pressed_keys.set_untracked(HashMap::new());
         }) as Box<dyn Fn()>);
 
-        let keydown_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-            pressed_keys.update(|keys| {
-                keys.insert(event.key().to_lowercase(), event);
-            });
-        }) as Box<dyn Fn(_)>);
-        let keyup_listener = Closure::wrap(Box::new(move |event: KeyboardEvent| {
-            pressed_keys.update(|keys| {
-                keys.remove(&event.key().to_lowercase());
-            });
-        }) as Box<dyn Fn(_)>);
+        let keydown_listener =
+            wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+                pressed_keys.update(|keys| {
+                    keys.insert(event.key().to_lowercase(), event);
+                });
+            }) as Box<dyn Fn(_)>);
+        let keyup_listener =
+            wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
+                pressed_keys.update(|keys| {
+                    keys.remove(&event.key().to_lowercase());
+                });
+            }) as Box<dyn Fn(_)>);
 
         if !allow_blur_event {
             window()
