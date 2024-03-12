@@ -69,8 +69,8 @@ pub fn use_hotkeys_scoped(
                     if cfg!(feature = "debug") {
                         let message = format!("%cfiring hotkey: {}", &matching_hotkey);
                         web_sys::console::log_2(
-                            &leptos::wasm_bindgen::JsValue::from_str(&message),
-                            &leptos::wasm_bindgen::JsValue::from_str("color: #39FF14;"),
+                            &wasm_bindgen::JsValue::from_str(&message),
+                            &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
                         );
                     }
                     Callable::call(&on_triggered, ());
@@ -111,8 +111,8 @@ pub fn use_hotkeys_ref_scoped<T>(
                         if cfg!(feature = "debug") {
                             let message = format!("%cfiring hotkey: {}", &matching_hotkey);
                             web_sys::console::log_2(
-                                &leptos::wasm_bindgen::JsValue::from_str(&message),
-                                &leptos::wasm_bindgen::JsValue::from_str("color: #39FF14;"),
+                                &wasm_bindgen::JsValue::from_str(&message),
+                                &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
                             );
                         }
                         Callable::call(&on_triggered, ());
