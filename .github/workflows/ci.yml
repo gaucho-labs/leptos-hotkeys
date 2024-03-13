@@ -89,3 +89,57 @@ jobs:
         run: |
           cd examples/${{ matrix.example }}
           cargo leptos build --release
+
+  test-release-leptos-hotkeys:
+    if: startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main'
+    name: Test leptos-hotkeys release
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: hecrj/setup-rust-action@v2
+      - name: Publish
+        run: |
+          cargo login ${{ secrets.CRATES_TOKEN }}
+          cargo publish -v -p leptos-hotkeys
+
+  release-leptos-hotkeys:
+    if: startsWith(github.ref, 'refs/tags/')
+    name: Release leptos-hotkeys
+    needs:
+      - lint
+      - build-example
+      - test-release-leptos-hotkeys
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Rust
+        uses: hecrj/setup-rust-action@v2
+      - name: Publish
+        run: |
+          cargo login ${{ secrets.CRATES_TOKEN }}
+          cargo publish -v -p leptos-fluent-macros
+
+  create-release:
+    if: startsWith(github.ref, 'refs/tags/')
+    name: Create release
+    needs: release-leptos-hotkeys
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get tag metadata
+        id: tag
+        run: |
+          TAG_TITLE=${GITHUB_REF#refs/*/}
+          echo "title=$TAG_TITLE" >> $GITHUB_OUTPUT
+      - name: Create release
+        uses: softprops/action-gh-release@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          name: ${{ steps.tag.outputs.title }}
+          tag_name: ${{ steps.tag.outputs.title }}
+          body: |
+            See [CHANGELOG](https://github.com/gaucho-labs/leptos-hotkeys/blob/main/CHANGELOG.md).
+          draft: false
+          prerelease: false

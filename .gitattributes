@@ -1,0 +1,8 @@
+* text=auto
+
+# Don't compute diff for these files
+Cargo.lock -diff
+dist/** -diff
+
+# Don't export/archive these files
+.github export-ignore
