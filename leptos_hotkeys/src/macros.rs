@@ -2,7 +2,7 @@
 macro_rules! scopes {
     () => {
         {
-            let mut set = HashSet::<String>::new();
+            let mut set = std::collections::HashSet::<String>::new();
             set.insert("*".to_string());
             set
         }
@@ -10,7 +10,7 @@ macro_rules! scopes {
 
     ($($lit:literal),+ $(,)?) => {
         {
-            let mut temp_set = HashSet::<String>::new();
+            let mut temp_set = std::collections::HashSet::<String>::new();
             temp_set.insert("*".to_string());
             $(
                 temp_set.insert($lit.to_string());
@@ -21,7 +21,7 @@ macro_rules! scopes {
 
     ($($expr:expr),+ $(,)?) => {
         {
-            let mut temp_set = HashSet::<String>::new();
+            let mut temp_set = std::collections::HashSet::<String>::new();
             temp_set.insert("*".to_string());
             $(
                 temp_set.insert($expr);
@@ -29,18 +29,16 @@ macro_rules! scopes {
             temp_set
         }
     };
-
 }
 
 #[macro_export]
 macro_rules! use_hotkeys {
-
     (($key_combo:literal) => $($code:tt)*) => {
         {
             use_hotkeys_scoped(
                 $key_combo.to_string(),
-                Callback::new(
-                $($code)*
+                ::leptos::Callback::new(
+                    $($code)*
                 ),
                 vec!["*".to_string()]
             );
@@ -51,8 +49,8 @@ macro_rules! use_hotkeys {
         {
             use_hotkeys_scoped(
                 $key_combo.to_string(),
-                Callback::new(
-                $($code)*
+                ::leptos::Callback::new(
+                    $($code)*
                 ),
                 vec!["*".to_string()]
             );
@@ -63,7 +61,7 @@ macro_rules! use_hotkeys {
         {
             use_hotkeys_scoped(
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
@@ -75,7 +73,7 @@ macro_rules! use_hotkeys {
         {
             use_hotkeys_scoped(
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
@@ -87,7 +85,7 @@ macro_rules! use_hotkeys {
         {
             use_hotkeys_scoped(
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
@@ -99,26 +97,24 @@ macro_rules! use_hotkeys {
         {
             use_hotkeys_scoped(
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
             );
         }
     };
-
 }
 
 #[macro_export]
 macro_rules! use_hotkeys_ref {
-
     (($node_ref:expr, $key_combo:literal) => $($code:tt)*) => {
         {
             use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
-                Callback::new(
-                $($code)*
+                ::leptos::Callback::new(
+                    $($code)*
                 ),
                 vec!["*".to_string()]
             )
@@ -130,8 +126,8 @@ macro_rules! use_hotkeys_ref {
             use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
-                Callback::new(
-                $($code)*
+                ::leptos::Callback::new(
+                    $($code)*
                 ),
                 vec!["*".to_string()]
             )
@@ -143,7 +139,7 @@ macro_rules! use_hotkeys_ref {
             use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
@@ -156,7 +152,7 @@ macro_rules! use_hotkeys_ref {
             use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
@@ -168,7 +164,7 @@ macro_rules! use_hotkeys_ref {
         {
             use_hotkeys_ref_scoped(
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
@@ -180,12 +176,11 @@ macro_rules! use_hotkeys_ref {
         {
             use_hotkeys_ref_scoped(
                 $key_combo.to_string(),
-                Callback::new(
+                ::leptos::Callback::new(
                     $($code)*
                 ),
                 vec![$($scopes.to_string(),)*]
             )
         }
     };
-
 }
