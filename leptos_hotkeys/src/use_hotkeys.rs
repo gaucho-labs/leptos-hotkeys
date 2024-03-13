@@ -1,44 +1,30 @@
-use crate::types::Hotkey;
+use wasm_keys::{
+    hotkey::Hotkey,
+    wasm_key::WasmKey,
+    Fluid
+};
 
 use leptos::{html::ElementDescriptor, *};
 
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 fn is_hotkey_match(
     hotkey: &Hotkey,
-    pressed_keyset: &mut std::collections::HashMap<String, web_sys::KeyboardEvent>,
+    pressed_keyset: &mut std::collections::HashMap<WasmKey, web_sys::KeyboardEvent>,
 ) -> bool {
-    let mut modifiers_match = true;
+    let pressed_keys = pressed_keyset.keys().cloned().collect();
 
-    if hotkey.modifiers.ctrl {
-        modifiers_match &= pressed_keyset.contains_key("control");
-    }
-
-    if hotkey.modifiers.shift {
-        modifiers_match &= pressed_keyset.contains_key("shift");
-    }
-
-    if hotkey.modifiers.meta {
-        modifiers_match &= pressed_keyset.contains_key("meta");
-    }
-
-    if hotkey.modifiers.alt {
-        modifiers_match &= pressed_keyset.contains_key("alt");
-    }
-
-    if modifiers_match {
-        let keys_match = hotkey.keys.iter().all(|key| {
-            if let Some(event) = pressed_keyset.get_mut(key) {
+   if *hotkey == Hotkey::from_keys(pressed_keys) {
+        hotkey.keys.iter().all(|(key, _count)| {
+            return if let Some(event) = pressed_keyset.get_mut(key) {
                 event.prevent_default();
                 true
             } else {
                 false
             }
-        });
-
-        modifiers_match && keys_match
+        })
     } else {
-        false
-    }
+       false
+   }
 }
 
 pub fn use_hotkeys_scoped(
@@ -51,7 +37,7 @@ pub fn use_hotkeys_scoped(
         use crate::hotkeys_provider::use_hotkeys_context;
         use std::collections::HashSet;
 
-        let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
+        let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::from_str).collect();
 
         let hotkeys_context = use_hotkeys_context();
         let pressed_keys = hotkeys_context.pressed_keys;
@@ -67,11 +53,11 @@ pub fn use_hotkeys_scoped(
                     .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset))
                 {
                     if cfg!(feature = "debug") {
-                        let message = format!("%cfiring hotkey: {}", &matching_hotkey);
+                        /*let message = format!("%cfiring hotkey: {}", &matching_hotkey);
                         web_sys::console::log_2(
                             &wasm_bindgen::JsValue::from_str(&message),
                             &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
-                        );
+                        );*/
                     }
                     Callable::call(&on_triggered, ());
                 }
@@ -94,7 +80,7 @@ pub fn use_hotkeys_ref_scoped<T>(
         use leptos::ev::DOMEventResponder;
         use std::collections::HashSet;
 
-        let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
+        let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::from_str).collect();
         let scopes = scopes.clone();
         if let Some(element) = node_ref.get() {
             let keydown_closure = move |_event: web_sys::KeyboardEvent| {
@@ -109,11 +95,13 @@ pub fn use_hotkeys_ref_scoped<T>(
                         .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keys))
                     {
                         if cfg!(feature = "debug") {
-                            let message = format!("%cfiring hotkey: {}", &matching_hotkey);
+                        /*    let message = format!("%cfiring hotkey: {}", &matching_hotkey);
                             web_sys::console::log_2(
                                 &wasm_bindgen::JsValue::from_str(&message),
                                 &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
                             );
+
+                         */
                         }
                         Callable::call(&on_triggered, ());
                     }

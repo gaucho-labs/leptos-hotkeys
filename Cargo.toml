@@ -1,5 +1,5 @@
 [workspace]
-members = ["leptos_hotkeys", "examples/demo", "examples/ssr-demo"]
+members = ["leptos_hotkeys", "wasm-keys", "examples/demo", "examples/ssr-demo"]
 resolver = "2"
 
 [profile.wasm-release]
