@@ -15,3 +15,16 @@ cargo make lint
 ```sh
 cargo make format
 ```
+
+## Release
+
+1. Update *CHANGELOG.md* and bump version.
+1. Push the changes to the main branch.
+1. Create a and push GIT tag from latest main branch:
+
+```sh
+git tag -a v0.1.0 -m ""
+git push origin v0.1.0
+```
+
+> [!NOTE] Change `v0.1.0` to the new version number.
