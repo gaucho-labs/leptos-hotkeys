@@ -101,7 +101,7 @@ jobs:
       - name: Publish
         run: |
           cargo login ${{ secrets.CRATES_TOKEN }}
-          cargo publish -v -p leptos-hotkeys
+          cargo publish -v -p leptos_hotkeys
 
   release-leptos-hotkeys:
     if: startsWith(github.ref, 'refs/tags/')
@@ -118,7 +118,7 @@ jobs:
       - name: Publish
         run: |
           cargo login ${{ secrets.CRATES_TOKEN }}
-          cargo publish -v -p leptos-fluent-macros
+          cargo publish -v -p leptos_hotkeys
 
   create-release:
     if: startsWith(github.ref, 'refs/tags/')
