@@ -5,7 +5,7 @@ edition = "2021"
 description = "A library that declaratively pairs keybindings with callbacks for Leptos applications."
 license = "MIT"
 repository = "http://github.com/friendlymatthew/leptos-hotkeys"
-readme = "README.md"
+readme = "../README.md"
 authors = ["Matthew Kim", "Álvaro Mondéjar Rubio", "Robert Junkins"]
 keywords = ["leptos", "hotkeys", "wasm"]
 
