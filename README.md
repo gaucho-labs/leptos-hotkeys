@@ -41,9 +41,13 @@ If you prefer writing out your callbacks the leptos way, we also have non-macro 
 
 This example creates two global hotkeys: `W` and `S`.
 
-> [!TIP] For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
+> [!TIP]
+>
+> For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 
-> [!NOTE] The `*` symbol is reserved for the global scope_
+> [!NOTE]
+>
+> The `*` symbol is reserved for the global scope_
 
 ```rust
 use leptos_hotkeys::use_hotkeys;
@@ -78,7 +82,9 @@ This example shows an inner and outer scope and hotkeys that switch between the 
 >
 > Assign hotkeys specific to individual sections without collisions using scopes. Use functions in `HotkeysContext` for scope management. For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 
-> [!NOTE] Scopes are case-insensitive. That means `my_scope` and `mY_sCoPe` are considered the same scope.
+> [!NOTE]
+>
+> Scopes are case-insensitive. That means `my_scope` and `mY_sCoPe` are considered the same scope.
 
 ```rust
 use leptos_hotkeys::{use_hotkeys, use_hotkeys_context, HotkeysContext};
@@ -114,7 +120,9 @@ pub fn SomeComponent() -> impl IntoView {
 
 ### Focus trapped Hotkeys
 
-> [!TIP] Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
+> [!TIP]
+>
+> Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
 
 ```rust
 use leptos_hotkeys::use_hotkeys_ref;
