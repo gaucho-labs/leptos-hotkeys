@@ -162,7 +162,7 @@ For server side rendered:
 leptos_hotkeys = { version = "0.2.0-alpha.1", features = ["ssr"] }
 ```
 
-We also offer other feature flags that enhance developer experience, see [feature-flags](#feature-flags).
+We also offer other feature flags that enhance developer experience, see [features](#features).
 
 ### `provide_hotkeys_context()`
 
