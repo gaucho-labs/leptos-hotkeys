@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_hotkeys::prelude::*;
+use leptos_hotkeys::prelude::{provide_hotkeys_context, scopes, use_hotkeys_context, use_hotkeys, HotkeysContext, use_hotkeys_ref};
 use leptos_meta::*;
 use leptos_router::*;
 use leptos_theme::{use_theme, Theme, ThemeProvider};
@@ -67,7 +67,7 @@ fn HomePage() -> impl IntoView {
 
     go_to_link(
         "control+R",
-        "https://github.com/friendlymatthew/leptos_hotkeys".to_string(),
+        "https://github.com/gaucho-labs/leptos_hotkeys".to_string(),
         "*",
     );
 
@@ -123,7 +123,7 @@ fn HomePage() -> impl IntoView {
             <div class="w-10/12 h-full flex flex-col space-y-20">
                 <div class="space-y-2 text-lg">
                     <div class="flex space-x-8 flex items-end">
-                        <Button href="https://github.com/friendlymatthew/leptos-hotkeys">
+                        <Button href="https://github.com/gaucho-labs/leptos-hotkeys">
                             <p class="text-2xl">leptos_hotkeys</p>
                         </Button>
                         <p class="text-sm">press ctrl+R to go to repository</p>
@@ -189,10 +189,10 @@ fn HomePage() -> impl IntoView {
                     </div>
                 </div>
                 <div class="flex space-x-8">
-                    <Button href="https://github.com/friendlymatthew/leptos-hotkeys">
+                    <Button href="https://github.com/gaucho-labs/leptos-hotkeys">
                         <p>Source code</p>
                     </Button>
-                    <Button href="https://github.com/friendlymatthew/leptos-hotkeys?tab=readme-ov-file#quick-start">
+                    <Button href="https://github.com/gaucho-labs/leptos-hotkeys?tab=readme-ov-file#quick-start">
                         <p>Quick start</p>
                     </Button>
                     <Button href="https://crates.io/crate/leptos_hotkeys">
@@ -213,9 +213,7 @@ fn ErrorPage() -> impl IntoView {
     let unknown = p_unknown();
 
     view! {
-        <div class=format!(
-            "h-screen w-full flex flex-col items-center justify-center font-robotomono",
-        )>
+        <div class="h-screen w-full flex flex-col items-center justify-center font-robotomono".to_string()>
             <p class="">Unknown command: {unknown}</p>
         </div>
     }
