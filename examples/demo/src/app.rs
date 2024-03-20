@@ -1,5 +1,8 @@
 use leptos::*;
-use leptos_hotkeys::prelude::{provide_hotkeys_context, scopes, use_hotkeys_context, use_hotkeys, HotkeysContext, use_hotkeys_ref};
+use leptos_hotkeys::prelude::{
+    provide_hotkeys_context, scopes, use_hotkeys, use_hotkeys_context, use_hotkeys_ref,
+    HotkeysContext,
+};
 use leptos_meta::*;
 use leptos_router::*;
 use leptos_theme::{use_theme, Theme, ThemeProvider};
