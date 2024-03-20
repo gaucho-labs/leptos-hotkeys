@@ -169,7 +169,7 @@ For server side rendered:
 leptos_hotkeys = { version = "0.2.0-alpha.1", features = ["ssr"] }
 ```
 
-We also offer other feature flags that enhance developer experience, to learn more read [feature-flags](#feature-flags).
+We also offer other feature flags that enhance developer experience, see [feature-flags](#feature-flags).
 
 ### `provide_hotkeys_context()`
 
@@ -177,7 +177,7 @@ Call `provide_hotkeys_context()` in the `App()` component. This will provide the
 
 > [!NOTE]
 >
-> `provide_hotkeys_context()` returns a `HotkeysContext`. To learn more, see [HotkeysContext](#hotkeyscontext).
+> `provide_hotkeys_context()` returns a `HotkeysContext`. See [HotkeysContext](#hotkeyscontext).
 
 ```rust
 use leptos_hotkeys::{provide_hotkeys_context, scopes};
