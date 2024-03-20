@@ -19,8 +19,7 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 <!-- markdownlint-restore -->
 
 > [!NOTE]
-> This library is ready for use.
-> If you're curious about updates, please read the [CHANGELOG](https://github.com/gaucho-labs/leptos-hotkeys/blob/main/CHANGELOG.md).
+> This library is ready for use. If you're curious about updates read the [CHANGELOG](https://github.com/gaucho-labs/leptos-hotkeys/blob/main/CHANGELOG.md).
 
 ## Live example
 
