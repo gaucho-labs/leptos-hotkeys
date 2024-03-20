@@ -19,7 +19,6 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 <!-- markdownlint-restore -->
 
 > [!NOTE]
->
 > This library is ready for use.
 > If you're curious about updates, please read the [CHANGELOG](https://github.com/gaucho-labs/leptos-hotkeys/blob/main/CHANGELOG.md).
 
@@ -42,11 +41,9 @@ If you prefer writing out your callbacks the leptos way, we also have non-macro 
 This example creates two global hotkeys: `W` and `S`.
 
 > [!TIP]
->
 > For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 
 > [!NOTE]
->
 > The `*` symbol is reserved for the global scope_
 
 ```rust
@@ -79,11 +76,9 @@ pub fn SomeComponent() -> impl IntoView {
 This example shows an inner and outer scope and hotkeys that switch between the scopes.
 
 > [!TIP]
->
 > Assign hotkeys specific to individual sections without collisions using scopes. Use functions in `HotkeysContext` for scope management. For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
 
 > [!NOTE]
->
 > Scopes are case-insensitive. That means `my_scope` and `mY_sCoPe` are considered the same scope.
 
 ```rust
@@ -121,7 +116,6 @@ pub fn SomeComponent() -> impl IntoView {
 ### Focus trapped Hotkeys
 
 > [!TIP]
->
 > Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
 
 ```rust
@@ -154,7 +148,6 @@ cargo add leptos_hotkeys
 ```
 
 > [!NOTE]
->
 > `leptos-hotkeys` supports both client-side rendered and server-side rendered applications.
 
 For client side rendered:
@@ -176,7 +169,6 @@ We also offer other feature flags that enhance developer experience, see [featur
 Call `provide_hotkeys_context()` in the `App()` component. This will provide the `HotkeysContext` for the current reactive node and all of its descendents. This function takes three parameters, the `node_ref`, a flag to disable blur events and a list of `initially_active_scopes`.
 
 > [!NOTE]
->
 > `provide_hotkeys_context()` returns a `HotkeysContext`. See [HotkeysContext](#hotkeyscontext).
 
 ```rust
@@ -232,7 +224,7 @@ You can bind multiple hotkeys to a callback. For example:
 "G+R,meta+O,control+k"
 ```
 
-The above example creates three hotkeys: `G+R`, [Meta](https://www.basketball-reference.com/players/a/artesro01.html)`+O`, and `Control+K`. The `+` symbol is used to create a combo hotkey. A combo hotkey is a keybinding requiring more than one key press.
+The above example creates three hotkeys: <kbd>G</kbd>+<kbd>R</kbd>, <kbd>[Meta](https://www.basketball-reference.com/players/a/artesro01.html)</kbd>+<kbd>O</kbd>, and <kbd>Ctrl</kbd>+<kbd>K</kbd>. The `+` symbol is used to create a combo hotkey. A combo hotkey is a keybinding requiring more than one key press.
 
 > [!NOTE]
 > Keys are case-agnostic and whitespace-agnostic. You use the `,` as a delimiter in a sequence of multiple hotkeys.
