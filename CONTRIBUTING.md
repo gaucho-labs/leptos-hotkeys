@@ -20,10 +20,10 @@ cargo make format
 
 1. Update *CHANGELOG.md* and bump version.
 1. Push the changes to the main branch.
-1. Create a and push GIT tag from latest main branch:
+1. Create and push a GIT tag from latest main branch:
 
 ```sh
-git tag -a v0.1.0 -m ""
+git tag v0.1.0
 git push origin v0.1.0
 ```
 
