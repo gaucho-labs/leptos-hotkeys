@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased - 0.2.0-alpha.2
+
+### Breaking changes
+
+- Remove `prelude` module.
+- Internal modules are no longer public.
+
 ## _March 21th, 2024_ - 0.2.0-alpha.1
 
 ### Breaking changes
