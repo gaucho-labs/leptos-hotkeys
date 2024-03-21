@@ -1,5 +1,5 @@
 use leptos::*;
-use leptos_hotkeys::prelude::{
+use leptos_hotkeys::{
     provide_hotkeys_context, scopes, use_hotkeys, use_hotkeys_context, use_hotkeys_ref,
     HotkeysContext,
 };
