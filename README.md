@@ -190,16 +190,14 @@ pub fn App() -> impl IntoView {
     provide_hotkeys_context(main_ref, false, scopes!());
 
     view! {
-        <HotkeysProvider>
-            <Router>
-                <main _ref=main_ref>  // <-- attach main ref here!
-                    <Routes>
-                        <Route path="/" view=HomePage/>
-                        <Route path="/:else" view=ErrorPage/>
-                    </Routes>
-                </main>
-            </Router>
-        </HotkeysProvider>
+        <Router>
+            <main _ref=main_ref>  // <-- attach main ref here!
+                <Routes>
+                    <Route path="/" view=HomePage/>
+                    <Route path="/:else" view=ErrorPage/>
+                </Routes>
+            </main>
+        </Router>
     }
 }
 ```
@@ -209,16 +207,22 @@ pub fn App() -> impl IntoView {
 If you're using [scopes](#scoped-hotkeys), you can initialize with a specific scope.
 
 ```rust
-use leptos_hotkeys::{scopes, HotkeysProvider};
+use leptos_hotkeys::{provide_hotkeys_context, scopes};
 
-view! {
-    <HotkeysProvider
-        initially_active_scopes=scopes!("some_scope_id")
-    >
+#[component]
+pub fn App() -> impl IntoView {
+    let main_ref = create_node_ref::<html::Main>();
+    provide_hotkeys_context(main_ref, false, scopes!("some_scope_id"));
+
+    view! {
         <Router>
-            //... routes
+            <main _ref=main_ref>
+                <Routes>
+                    // ... routes
+                </Routes>
+            </main>
         </Router>
-    </HotkeysProvider>
+    }
 }
 ```
 
@@ -287,14 +291,22 @@ Maybe you want to initialize a certain scope upon load, that's where the prop `i
 Instead of having to create a `vec!["scope_name".to_string()]`, use the `scopes!()` macro.
 
 ```rust
-use leptos_hotkeys::{scopes, HotkeysProvider};
+use leptos_hotkeys::{provide_hotkeys_context, scopes};
 
-view! {
-    <HotkeysProvider
-        initially_active_scopes=scopes!("scope_a", "settings_scope");
-    >
-        // pages here...
-    </HotkeysProvider>
+#[component]
+pub fn App() -> impl IntoView {
+    let main_ref = create_node_ref::<html::Main>();
+    provide_hotkeys_context(main_ref, false, scopes!("scope_a", "settings_scope"));
+
+    view! {
+        <Router>
+            <main _ref=main_ref>
+                <Routes>
+                    // ... routes
+                </Routes>
+            </main>
+        </Router>
+    }
 }
 ```
 
@@ -311,13 +323,6 @@ leptos_hotkeys = { path = "0.2.0-alpha.1", features = ["debug"] }
 ```
 
 ## API
-
-### `<HotkeysProvider />`
-
-| Prop Name                 | Type              | Default Value                 | Description                                                                                                                                                                          |
-| ------------------------- | ----------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `allow_blur_event`        | `bool`            | `false`                       | Determines if the component should reset `pressed_keys` when a blur event occurs on the window. This is useful for resetting the state when the user navigates away from the window. |
-| `initially_active_scopes` | `HashSet<String>` | `scopes!("*")` (Global State) | Specifies the set of scopes that are active when the component mounts. Useful for initializing the component with a predefined set of active hotkey scopes.                          |
 
 ### `HotkeysContext`
 
