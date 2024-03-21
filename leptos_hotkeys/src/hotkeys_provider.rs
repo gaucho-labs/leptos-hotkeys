@@ -1,14 +1,16 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
 use std::collections::HashSet;
+
+use wasm_keys::wasm_key::WasmKey;
+
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
-// Defining a hotkey context structure
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>>,
+    pub(crate) pressed_keys: RwSignal<std::collections::HashMap<WasmKey, web_sys::KeyboardEvent>>,
 
     #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
@@ -39,7 +41,7 @@ where
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>> =
+    let pressed_keys: RwSignal<std::collections::HashMap<WasmKey, web_sys::KeyboardEvent>> =
         RwSignal::new(std::collections::HashMap::new());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
@@ -82,7 +84,7 @@ where
 
     #[cfg(all(feature = "debug", not(feature = "ssr")))]
     create_effect(move |_| {
-        let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+        let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<WasmKey>>();
         logging::log!("keys pressed: {:?}", pressed_keys_list());
     });
 
@@ -98,13 +100,13 @@ where
         let keydown_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.insert(event.key().to_lowercase(), event);
+                    keys.insert(WasmKey::from(event.key()), event);
                 });
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.remove(&event.key().to_lowercase());
+                    keys.remove(&WasmKey::from(event.key()));
                 });
             }) as Box<dyn Fn(_)>);
 
