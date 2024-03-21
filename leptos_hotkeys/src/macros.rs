@@ -35,7 +35,7 @@ macro_rules! scopes {
 macro_rules! use_hotkeys {
     (($key_combo:literal) => $($code:tt)*) => {
         {
-            use_hotkeys_scoped(
+            $crate::use_hotkeys_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*
@@ -59,7 +59,7 @@ macro_rules! use_hotkeys {
 
     (($key_combo:expr $(, $scopes:literal)*) => $($code:tt)*) => {
         {
-            use_hotkeys_scoped(
+            $crate::use_hotkeys_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*
@@ -71,7 +71,7 @@ macro_rules! use_hotkeys {
 
     (($key_combo:literal $(, $scopes:literal)*) => $($code:tt)*) => {
         {
-            use_hotkeys_scoped(
+            $crate::use_hotkeys_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*
@@ -83,7 +83,7 @@ macro_rules! use_hotkeys {
 
     (($key_combo:literal $(, $scopes:expr)*) => $($code:tt)*) => {
         {
-            use_hotkeys_scoped(
+            $crate::use_hotkeys_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*
@@ -95,7 +95,7 @@ macro_rules! use_hotkeys {
 
     (($key_combo:expr $(, $scopes:expr)*) => $($code:tt)*) => {
         {
-            use_hotkeys_scoped(
+            $crate::use_hotkeys_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*
@@ -110,7 +110,7 @@ macro_rules! use_hotkeys {
 macro_rules! use_hotkeys_ref {
     (($node_ref:expr, $key_combo:literal) => $($code:tt)*) => {
         {
-            use_hotkeys_ref_scoped(
+            $crate::use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
@@ -123,7 +123,7 @@ macro_rules! use_hotkeys_ref {
 
     (($node_ref:expr, $key_combo:expr) => $($code:tt)*) => {
         {
-            use_hotkeys_ref_scoped(
+            $crate::use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
@@ -136,7 +136,7 @@ macro_rules! use_hotkeys_ref {
 
     (($node_ref:expr, $key_combo:expr $(, $scopes:literal)*) => $($code:tt)*) => {
         {
-            use_hotkeys_ref_scoped(
+            $crate::use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
@@ -149,7 +149,7 @@ macro_rules! use_hotkeys_ref {
 
     (($node_ref:expr, $key_combo:literal $(, $scopes:literal)*) => $($code:tt)*) => {
         {
-            use_hotkeys_ref_scoped(
+            $crate::use_hotkeys_ref_scoped(
                 $node_ref,
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
@@ -162,7 +162,7 @@ macro_rules! use_hotkeys_ref {
 
     (($key_combo:literal $(, $scopes:expr)*) => $($code:tt)*) => {
         {
-            use_hotkeys_ref_scoped(
+            $crate::use_hotkeys_ref_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*
@@ -174,7 +174,7 @@ macro_rules! use_hotkeys_ref {
 
     (($key_combo:expr $(, $scopes:expr)*) => $($code:tt)*) => {
         {
-            use_hotkeys_ref_scoped(
+            $crate::use_hotkeys_ref_scoped(
                 $key_combo.to_string(),
                 ::leptos::Callback::new(
                     $($code)*

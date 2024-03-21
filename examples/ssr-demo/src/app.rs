@@ -1,6 +1,8 @@
 use crate::error_template::{AppError, ErrorTemplate};
 use leptos::*;
-use leptos_hotkeys::prelude::*;
+use leptos_hotkeys::{
+    provide_hotkeys_context, scopes, use_hotkeys, use_hotkeys_ref, HotkeysContext,
+};
 use leptos_meta::*;
 use leptos_router::*;
 
