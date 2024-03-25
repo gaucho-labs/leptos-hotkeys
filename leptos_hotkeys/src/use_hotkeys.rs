@@ -1,4 +1,4 @@
-use crate::types::Hotkey;
+use crate::Hotkey;
 
 use leptos::{html::ElementDescriptor, *};
 
@@ -48,7 +48,7 @@ pub fn use_hotkeys_scoped(
 ) {
     #[cfg(not(feature = "ssr"))]
     {
-        use crate::hotkeys_provider::use_hotkeys_context;
+        use crate::use_hotkeys_context;
         use std::collections::HashSet;
 
         let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
@@ -90,7 +90,7 @@ pub fn use_hotkeys_ref_scoped<T>(
 {
     #[cfg(not(feature = "ssr"))]
     create_effect(move |_| {
-        use crate::hotkeys_provider::use_hotkeys_context;
+        use crate::use_hotkeys_context;
         use leptos::ev::DOMEventResponder;
         use std::collections::HashSet;
 
