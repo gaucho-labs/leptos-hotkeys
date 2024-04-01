@@ -121,7 +121,7 @@ pub fn use_hotkeys_ref_scoped<T>(
             };
 
             // needs `leptos::ev::DOMEventResponder`
-            let _ = element.add(ev::keypress, keydown_closure);
+            let _ = element.add(ev::keydown, keydown_closure);
         }
     });
 }
