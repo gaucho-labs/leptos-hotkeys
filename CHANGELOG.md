@@ -6,6 +6,7 @@
 
 - Remove `prelude` module.
 - Internal modules are no longer public.
+- Make ref nodes listen to `keydown` Keyboard events.
 
 ## _March 21th, 2024_ - 0.2.0-alpha.1
 
@@ -19,6 +20,15 @@
 - Do not depend on `log` if `debug` feature is not enabled.
 - Relax dependency versions.
 - Add compatibility with Leptos stable.
+
+
+
+## _February 27th, 2024_ - 0.1.5
+- Clean up macros
+
+## _February 23th, 2024_ - 0.1.4
+- Update README
+- Add `debug` feature, which produces logs in your browser console upon hotkey fires and scope triggers. 
 
 ## _February 12th, 2024_ - 0.1.3
 
