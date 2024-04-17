@@ -1,17 +1,12 @@
 # Changelog
 
-## Unreleased - 0.2.0-alpha.2
+## _April 18th, 2024_ - 0.2.0
 
 ### Breaking changes
 
-- Remove `prelude` module.
 - Internal modules are no longer public.
+- Remove `prelude` module.
 - Make ref nodes listen to `keydown` Keyboard events.
-
-## _March 21th, 2024_ - 0.2.0-alpha.1
-
-### Breaking changes
-
 - Remove uneeded features `csr` and `hydrate`.
 
 ### Enhancements
@@ -21,14 +16,14 @@
 - Relax dependency versions.
 - Add compatibility with Leptos stable.
 
+## _February 27th, 2024_- 0.1.5
 
-
-## _February 27th, 2024_ - 0.1.5
 - Clean up macros
 
 ## _February 23th, 2024_ - 0.1.4
+
 - Update README
-- Add `debug` feature, which produces logs in your browser console upon hotkey fires and scope triggers. 
+- Add `debug` feature, which produces logs in your browser console upon hotkey fires and scope triggers.
 
 ## _February 12th, 2024_ - 0.1.3
 

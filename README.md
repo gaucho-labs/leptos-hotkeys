@@ -152,19 +152,19 @@ cargo add leptos_hotkeys
 For client side rendered:
 
 ```toml
-leptos_hotkeys = "0.2.0-alpha.1"
+leptos_hotkeys = "0.2.0"
 ```
 
 For server side rendered:
 
 ```toml
-leptos_hotkeys = { version = "0.2.0-alpha.1", features = ["ssr"] }
+leptos_hotkeys = { version = "0.2.0", features = ["ssr"] }
 ```
 
 For client side and server side rendered:
 
 ```toml
-leptos_hotkeys = "0.2.0-alpha.1"
+leptos_hotkeys = "0.2.0"
 
 [features]
 ssr = ["leptos_hotkeys/ssr"]
@@ -319,7 +319,7 @@ We want to improve developer experience by introducing the `debug` flag which ad
 Just simply:
 
 ```toml
-leptos_hotkeys = { path = "0.2.0-alpha.1", features = ["debug"] }
+leptos_hotkeys = { path = "0.2.0", features = ["debug"] }
 ```
 
 ## API
