@@ -12,4 +12,4 @@ leptos_meta = "0.6"
 leptos_router = { version = "0.6", features = ["csr"] }
 log = "0.4"
 leptos_theme = "0.1"
-leptos_hotkeys = { path = "../../leptos_hotkeys" }
+leptos_hotkeys = { path = "../../leptos_hotkeys", features = ["debug"] }

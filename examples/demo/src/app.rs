@@ -57,7 +57,7 @@ fn HomePage() -> impl IntoView {
     let HotkeysContext { toggle_scope, .. } = use_hotkeys_context();
 
     // global hotkeys
-    use_hotkeys!(("s") => move |_| {
+    use_hotkeys!(("KEYs") => move |_| {
         toggle_scope("scope_a".to_string());
         toggle_scope("scope_b".to_string());
 
@@ -92,7 +92,7 @@ fn HomePage() -> impl IntoView {
     });
 
     // scope_b related hotkeys
-    use_hotkeys!(("t", "scope_b") => move |_| {
+    use_hotkeys!(("keyT", "scope_b") => move |_| {
         if current_theme.get() == Theme::Light {
             current_theme.set(Theme::Dark)
         } else {
@@ -101,7 +101,7 @@ fn HomePage() -> impl IntoView {
     });
 
     let a_ref = create_node_ref::<html::Div>();
-    use_hotkeys_ref!((a_ref, "6", "scope_a") => move |_| {
+    use_hotkeys_ref!((a_ref, "digit6", "scope_a") => move |_| {
         if is_green.get() {
             is_green.set(false)
         } else {
@@ -109,17 +109,10 @@ fn HomePage() -> impl IntoView {
         }
     });
 
-    const GORILLAS: &str = "https://www.youtube.com/watch?v=qavePUOut_c";
-    const DOGLICKEDTHEOLE: &str = "https://www.youtube.com/watch?v=4arBraMyp0Q";
-    const ALASKA: &str = "https://www.youtube.com/watch?v=qRODjitiKP8";
-    const TAINAN: &str = "https://www.youtube.com/watch?v=pWOFFlPmVdk";
-    const NORM: &str = "https://www.youtube.com/watch?v=ELoXiuDA_sQ";
+    const BANANA: &str = "https://www.youtube.com/watch?v=N982sQcjsZI";
 
-    go_to_link("G", GORILLAS.to_string(), "scope_b");
-    go_to_link("D", DOGLICKEDTHEOLE.to_string(), "scope_b");
-    go_to_link("A", ALASKA.to_string(), "scope_b");
-    go_to_link("arrowUp", TAINAN.to_string(), "scope_b");
-    go_to_link("meta+k", NORM.to_string(), "scope_b");
+    go_to_link("keyB+metaleft", BANANA.to_string(), "scope_b");
+
     view! {
         <div class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
 
@@ -176,15 +169,7 @@ fn HomePage() -> impl IntoView {
                                 <p>scope_b</p>
                                 <div class="space-y-2">
                                     <p>press 'T' to switch themes</p>
-                                    <p>press 'G' to see gorillas avoiding the rain</p>
-                                    <p>
-                                        "press 'cmd/super/windows + k' to hear Norm tell a story about his friend Drake"
-                                    </p>
-                                    <p>"press 'D' to hear a southern man talk without an accent"</p>
-                                    <p>
-                                        "press 'A' to watch a man brave the Alaskan winter without a tent"
-                                    </p>
-                                    <p>"press 'Arrow Up' for a nice gator roll"</p>
+                                    <p>press "Cmd/Super/Win" + 'B'</p>
                                 </div>
 
                             </div>

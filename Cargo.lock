@@ -1068,9 +1068,9 @@ dependencies = [
 
 [[package]]
 name = "leptos-use"
-version = "0.10.4"
+version = "0.10.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bf01f0fa065f39b536cfe25c1b19d856aeb3f0b40dfa629b824f68e88c7f094a"
+checksum = "142106b99697d98577933e2ed97d1a6fece64a0c58c9314ae56bdf9ad0dcbb2c"
 dependencies = [
  "async-trait",
  "cfg-if",
