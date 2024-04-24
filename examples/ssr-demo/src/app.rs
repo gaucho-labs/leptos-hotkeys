@@ -54,6 +54,10 @@ fn HomePage() -> impl IntoView {
         set_count.update(|c| *c -= 1);
     });
 
+    use_hotkeys!(("space") => move |_| {
+            logging::log!("hola")
+    });
+
     let div_ref = create_node_ref::<html::Div>();
 
     use_hotkeys_ref!((div_ref, "5") => move |_| {
