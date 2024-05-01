@@ -53,13 +53,13 @@ pub fn SomeComponent() -> impl IntoView {
     let (count, set_count) = create_signal(0);
 
     // creating a global scope for the W key
-    use_hotkeys!(("w") => move |_| {
+    use_hotkeys!(("keyw") => move |_| {
         logging::log!("w has been pressed");
         set_count.update(|c| *c += 1);
     });
 
     // this is also a global scope for the S key!
-    use_hotkeys!(("s", "*") => move |_| {
+    use_hotkeys!(("keys", "*") => move |_| {
         logging::log!("s has been pressed");
         set_count.update(|c| *c -= 1);
     });
@@ -89,13 +89,13 @@ pub fn SomeComponent() -> impl IntoView {
     let HotkeysContext { enable_scope, disable_scope, .. } = use_hotkeys_context();
 
     // switch into the inner scope
-    use_hotkeys!(("i", "outer") => move |_| {
+    use_hotkeys!(("keyi", "outer") => move |_| {
         disable_scope("outer");
         enable_scope("inner");
     });
 
     // switch into the outer scope
-    use_hotkeys!(("o", "inner") => move |_| {
+    use_hotkeys!(("keyo", "inner") => move |_| {
         disable_scope("inner");
         enable_scope("outer");
     });
@@ -123,7 +123,7 @@ use leptos_hotkeys::use_hotkeys_ref;
 #[component]
 pub fn SomeComponent() -> impl IntoView {
 
-    let p_ref = use_hotkeys_ref!(("K", "*") => move |_| {
+    let p_ref = use_hotkeys_ref!(("keyk", "*") => move |_| {
         // some logic
     });
 
@@ -260,7 +260,7 @@ use_hotkeys!(("keys", "scope") => move |_| {
 For global hotkeys, you can omit the second parameter as it will implicitly add the global scope.
 
 ```rust
-use_hotkeys!(("key") => move |_| {
+use_hotkeys!(("keys") => move |_| {
     // callback logic here
 });
 ```
@@ -274,7 +274,7 @@ use leptos_hotkeys::use_hotkeys_ref;
 
 #[component]
 pub fn SomeComponent() -> impl IntoView {
-    let some_ref = use_hotkeys_ref!(("key", "scope") => move |_| {
+    let some_ref = use_hotkeys_ref!(("keys", "scope") => move |_| {
         // callback logic here
     });
 
@@ -369,7 +369,7 @@ fn Component() -> impl IntoView {
     let (count, set_count) = create_signal(0);
 
     use_hotkeys_scoped(
-        "F", // the F key
+        "keyf", // the F key
         Callback::new(move |_| {
             set_count.update(|count| { *count += 1 })
         }),
@@ -449,7 +449,7 @@ use leptos_hotkeys::use_hotkeys_ref;
 
 #[component]
 fn Component() -> impl IntoView {
-    let node_ref = use_hotkeys_ref("l", Callback::new(move |_| {
+    let node_ref = use_hotkeys_ref("keyl", Callback::new(move |_| {
         // some logic here
     }));
 

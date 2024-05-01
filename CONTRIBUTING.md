@@ -27,4 +27,5 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-> [!NOTE] Change `v0.1.0` to the new version number.
+> [!NOTE]
+> Change `v0.1.0` to the new version number.

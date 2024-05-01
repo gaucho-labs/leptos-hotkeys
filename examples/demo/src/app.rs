@@ -69,7 +69,7 @@ fn HomePage() -> impl IntoView {
     });
 
     go_to_link(
-        "control+R",
+        "controlleft+keyR,controlright+keyR",
         "https://github.com/gaucho-labs/leptos_hotkeys".to_string(),
         "*",
     );
@@ -118,7 +118,7 @@ fn HomePage() -> impl IntoView {
 
             <div class="w-10/12 h-full flex flex-col space-y-20">
                 <div class="space-y-2 text-lg">
-                    <div class="flex space-x-8 flex items-end">
+                    <div class="flex space-x-8 items-end">
                         <Button href="https://github.com/gaucho-labs/leptos-hotkeys">
                             <p class="text-2xl">leptos_hotkeys</p>
                         </Button>
@@ -201,7 +201,8 @@ fn ErrorPage() -> impl IntoView {
     let unknown = p_unknown();
 
     view! {
-        <div class="h-screen w-full flex flex-col items-center justify-center font-robotomono".to_string()>
+        <div class="h-screen w-full flex flex-col items-center justify-center font-robotomono"
+            .to_string()>
             <p class="">Unknown command: {unknown}</p>
         </div>
     }
