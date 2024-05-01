@@ -7,6 +7,15 @@
   "commitType": "docs",
   "commitConvention": "angular",
   "contributors": [
+  {
+      "login": "friendlymatthew",
+      "name": "Matthew Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/38759997?v=4",
+      "profile": "http://friendlymatthew.github.io",
+      "contributions": [
+        "code"
+      ]
+    },
     {
       "login": "mondeja",
       "name": "Álvaro Mondéjar",
@@ -50,15 +59,6 @@
       "profile": "https://github.com/phillipbaird",
       "contributions": [
         "bug"
-      ]
-    },
-    {
-      "login": "friendlymatthew",
-      "name": "Matthew Kim",
-      "avatar_url": "https://avatars.githubusercontent.com/u/38759997?v=4",
-      "profile": "http://friendlymatthew.github.io",
-      "contributions": [
-        "code"
       ]
     }
   ],
