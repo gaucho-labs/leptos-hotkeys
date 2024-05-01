@@ -15,6 +15,7 @@
 - Do not depend on `log` if `debug` feature is not enabled.
 - Relax dependency versions.
 - Add compatibility with Leptos stable.
+- Use `code` instead of `key` property for `KeyboardEvent`.
 
 ## _February 27th, 2024_- 0.1.5
 
