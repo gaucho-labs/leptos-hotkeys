@@ -24,7 +24,7 @@ cargo make format
 
 ```sh
 git tag v0.1.0
-git push origin v0.1.0
+git push upstream v0.1.0
 ```
 
 > [!NOTE]
