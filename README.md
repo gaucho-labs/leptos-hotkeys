@@ -470,12 +470,12 @@ fn Component() -> impl IntoView {
 <table>
   <tbody>
     <tr>
+      <td align="center" valign="top" width="14.28%"><a href="http://friendlymatthew.github.io"><img src="https://avatars.githubusercontent.com/u/38759997?v=4?s=100" width="100px;" alt="Matthew Kim"/><br /><sub><b>Matthew Kim</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=friendlymatthew" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/mondeja"><img src="https://avatars.githubusercontent.com/u/23049315?v=4?s=100" width="100px;" alt="Álvaro Mondéjar"/><br /><sub><b>Álvaro Mondéjar</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=mondeja" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JustBobinAround"><img src="https://avatars.githubusercontent.com/u/67753581?v=4?s=100" width="100px;" alt="Robert Junkins"/><br /><sub><b>Robert Junkins</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=JustBobinAround" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeoniePhiline"><img src="https://avatars.githubusercontent.com/u/22329650?v=4?s=100" width="100px;" alt="LeoniePhiline"/><br /><sub><b>LeoniePhiline</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=LeoniePhiline" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://szabgab.com/"><img src="https://avatars.githubusercontent.com/u/48833?v=4?s=100" width="100px;" alt="Gábor Szabó"/><br /><sub><b>Gábor Szabó</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=szabgab" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/phillipbaird"><img src="https://avatars.githubusercontent.com/u/4003333?v=4?s=100" width="100px;" alt="Phillip Baird"/><br /><sub><b>Phillip Baird</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Aphillipbaird" title="Bug reports">🐛</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="http://friendlymatthew.github.io"><img src="https://avatars.githubusercontent.com/u/38759997?v=4?s=100" width="100px;" alt="Matthew Kim"/><br /><sub><b>Matthew Kim</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=friendlymatthew" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
