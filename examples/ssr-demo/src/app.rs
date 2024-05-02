@@ -1,7 +1,7 @@
 use crate::error_template::{AppError, ErrorTemplate};
 use leptos::*;
 use leptos_hotkeys::{
-    provide_hotkeys_context, scopes, use_hotkeys, use_hotkeys_ref, HotkeysContext,
+    provide_hotkeys_context, use_hotkeys, use_hotkeys_ref, HotkeysContext,
 };
 use leptos_meta::*;
 use leptos_router::*;
@@ -13,7 +13,7 @@ pub fn App() -> impl IntoView {
 
     let main_ref = create_node_ref::<leptos::html::Main>();
 
-    let HotkeysContext { .. } = provide_hotkeys_context(main_ref, false, scopes!());
+    let HotkeysContext { .. } = provide_hotkeys_context(main_ref);
 
     view! {
         <Stylesheet id="leptos" href="/pkg/ssr-demo.css"/>
