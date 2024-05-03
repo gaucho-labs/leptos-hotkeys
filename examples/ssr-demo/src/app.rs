@@ -42,10 +42,6 @@ fn HomePage() -> impl IntoView {
     // Creates a reactive value to update the button
     let (count, set_count) = create_signal(0);
 
-    use_hotkeys!(("meta+alt+t") => move |_| {
-        set_count.update(|c| *c += 1);
-    });
-
     use_hotkeys!(("arrowup") => move |_| {
         set_count.update(|c| *c += 1);
     });
@@ -55,7 +51,7 @@ fn HomePage() -> impl IntoView {
     });
 
     use_hotkeys!(("space") => move |_| {
-            logging::log!("hola")
+        logging::log!("hola")
     });
 
     let div_ref = create_node_ref::<html::Div>();
@@ -67,6 +63,8 @@ fn HomePage() -> impl IntoView {
     view! {
         <h1>"Welcome to Leptos!"</h1>
         <div>"Press arrow up and arrow down: " {count}</div>
-        <div tabIndex=-1 _ref=div_ref>howdy</div>
+        <div tabIndex=-1 _ref=div_ref>
+            howdy
+        </div>
     }
 }
