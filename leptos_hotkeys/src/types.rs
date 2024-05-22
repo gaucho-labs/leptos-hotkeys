@@ -68,18 +68,26 @@ impl Hotkey {
 
         for part in parts {
             match part.to_lowercase().as_str() {
-                "control" => modifiers.ctrl = true,
+                "controlleft" => modifiers.ctrl = true,
+                "controlright" => modifiers.ctrl = true,
                 "ctrl" => modifiers.ctrl = true,
+                "control" => modifiers.ctrl = true,
 
                 "alt" => modifiers.alt = true,
+                "altleft" => modifiers.alt = true,
+                "altright" => modifiers.alt = true,
                 "option" => modifiers.alt = true, // macos variant
 
+                "metaleft" => modifiers.meta = true,
+                "metaright" => modifiers.meta = true,
                 "meta" => modifiers.meta = true,
                 "command" => modifiers.meta = true, // macos variant
                 "cmd" => modifiers.meta = true,     // macos variant
                 "super" => modifiers.meta = true,   // linux variant
                 "win" => modifiers.meta = true,     // windows variant
 
+                "shiftleft" => modifiers.shift = true,
+                "shiftright" => modifiers.shift = true,
                 "shift" => modifiers.shift = true,
 
                 key => keys.push(key.to_lowercase().to_string()),
@@ -97,6 +105,18 @@ mod tests {
     #[test]
     fn builds_hotkeys_correctly() {
         let test_cases = vec![
+            (
+                "shiftleft+r+metaright".to_string(),
+                Hotkey {
+                    modifiers: KeyboardModifiers {
+                        shift: true,
+                        ctrl: false,
+                        alt: false,
+                        meta: true,
+                    },
+                    keys: vec!["r".into()],
+                },
+            ),
             (
                 "shift+r+meta".to_string(),
                 Hotkey {
