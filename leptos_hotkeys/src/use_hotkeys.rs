@@ -10,19 +10,23 @@ fn is_hotkey_match(
     let mut modifiers_match = true;
 
     if hotkey.modifiers.ctrl {
-        modifiers_match &= pressed_keyset.contains_key("control");
+        modifiers_match &= pressed_keyset.contains_key("controlleft")
+            || pressed_keyset.contains_key("controlright");
     }
 
     if hotkey.modifiers.shift {
-        modifiers_match &= pressed_keyset.contains_key("shift");
+        modifiers_match &=
+            pressed_keyset.contains_key("shiftleft") || pressed_keyset.contains_key("shiftright");
     }
 
     if hotkey.modifiers.meta {
-        modifiers_match &= pressed_keyset.contains_key("meta");
+        modifiers_match &=
+            pressed_keyset.contains_key("metaleft") || pressed_keyset.contains_key("metaright");
     }
 
     if hotkey.modifiers.alt {
-        modifiers_match &= pressed_keyset.contains_key("alt");
+        modifiers_match &=
+            pressed_keyset.contains_key("altleft") || pressed_keyset.contains_key("altright");
     }
 
     if modifiers_match {
