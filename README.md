@@ -228,12 +228,12 @@ pub fn App() -> impl IntoView {
 
 ### Keybinding Grammar
 
-`leptos_hotkeys` matches key values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) `key` property. For reference, here's a list of [all key values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values).
+`leptos_hotkeys` matches code values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) `code` property. For reference, here's a list of [all code values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values).
 
 You can bind multiple hotkeys to a callback. For example:
 
 ```txt
-"G+R,meta+O,control+k"
+"KeyG+KeyR,MetaLeft+KeyO,ControlLeft+keyK"
 ```
 
 The above example creates three hotkeys: <kbd>G</kbd>+<kbd>R</kbd>, <kbd>[Meta](https://www.basketball-reference.com/players/a/artesro01.html)</kbd>+<kbd>O</kbd>, and <kbd>Ctrl</kbd>+<kbd>K</kbd>. The `+` symbol is used to create a combo hotkey. A combo hotkey is a keybinding requiring more than one key press.
