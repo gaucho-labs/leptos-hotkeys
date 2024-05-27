@@ -18,8 +18,6 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 </a>
 <!-- markdownlint-restore -->
 
-# leptos-hotkeys
-
 Leptos-hotkeys creates and manages keyboard shortcuts. It provides macros and functions that simplify the definition of
 keybindings, since the management of event lifecycle associated with keyboard interactions has been done for you!
 
@@ -27,10 +25,10 @@ keybindings, since the management of event lifecycle associated with keyboard in
 
 Curious to see how it works? [See the demo](https://leptos-hotkeys.vercel.app).
 
-
 To get started, follow the [Quick Start](#quick-start) section.
 
 ## Features
+
 > [!NOTE]
 > This crate has three types of hotkeys: global, scoped, and focus-trapped.
 
@@ -40,6 +38,7 @@ To get started, follow the [Quick Start](#quick-start) section.
 Use this macro to declare global and scoped hotkeys. This macro has js idioms while preserving Leptos standards. [More about the macro.](](#macro-api).)
 
 ### Global Hotkeys
+
 This example creates two global hotkeys: `W` and `F`.
 
 ```rust
@@ -111,7 +110,6 @@ pub fn SomeComponent() -> impl IntoView {
 
 > [!NOTE]
 > Scopes are case-insensitive. That means `my_scope` and `mY_sCoPe` are considered the same scope.
-
 
 ### Focus trapped Hotkeys (the `use_hotkeys_ref!` macro)
 
@@ -188,7 +186,6 @@ You can bind multiple hotkeys to a callback. For example:
 "KeyG+KeyR,MetaLeft+KeyO,ControlLeft+keyK"
 ```
 
-
 Keys are case-agnostic and whitspace-agnostic. For a hotkey with multiple keys, use the `,` as a delimiter in a sequence of keys.
 
 ### `scopes!()`
@@ -217,14 +214,14 @@ pub fn App() -> impl IntoView {
 ```
 
 ## The `debug` feature flag
+
 Improve developer experience by introducing the `debug` flag which adds logging to your console in CSR. It logs the current pressed key `code` values, hotkeys fires, and scopes toggling.
 
 Just simply:
 
 ```toml
-leptos_hotkeys = { path = "0.2.0", features = ["debug"] }
+leptos_hotkeys = { path = "0.2.1", features = ["debug"] }
 ```
-
 
 ## Contributors
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
