@@ -1,5 +1,6 @@
 use crate::types::Keys;
 use crate::KeyboardModifiers;
+use core::str::FromStr;
 use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq, Hash, Eq)]
@@ -26,6 +27,14 @@ impl Display for Hotkey {
 
 impl Hotkey {
     pub fn new(key_combination: &str) -> Self {
+        key_combination.parse().unwrap()
+    }
+}
+
+impl FromStr for Hotkey {
+    type Err = ();
+
+    fn from_str(key_combination: &str) -> Result<Self, Self::Err> {
         let parts = key_combination
             .split('+')
             .map(str::trim)
@@ -62,7 +71,7 @@ impl Hotkey {
             }
         }
 
-        Hotkey { modifiers, keys }
+        Ok(Hotkey { modifiers, keys })
     }
 }
 
@@ -109,9 +118,8 @@ pub(crate) fn is_hotkey_match(
 mod tests {
     use super::*;
 
-    #[test]
-    fn builds_hotkeys_correctly() {
-        let test_cases = vec![
+    fn from_string_test_cases() -> Vec<(String, Hotkey)> {
+        vec![
             (
                 "shift+r+meta".to_string(),
                 Hotkey {
@@ -184,10 +192,24 @@ mod tests {
                     keys: vec!["k".into()],
                 },
             ),
-        ];
+        ]
+    }
 
-        for (input, expected) in test_cases {
+    #[test]
+    fn hotkey_constructor() {
+        for (input, expected) in from_string_test_cases() {
             let hotkey = Hotkey::new(&input);
+            assert_eq!(hotkey, expected);
+
+            let hotkey: Hotkey = input.parse().unwrap();
+            assert_eq!(hotkey, expected);
+        }
+    }
+
+    #[test]
+    fn hotkey_from_string() {
+        for (input, expected) in from_string_test_cases() {
+            let hotkey: Hotkey = input.parse().unwrap();
             assert_eq!(hotkey, expected);
         }
     }

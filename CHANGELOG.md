@@ -1,5 +1,15 @@
 # Changelog
 
+## Unreleased - [0.2.1]
+
+### Bug fixes
+
+- Fix right/left modifiers not being recognized.
+
+### Enhancements
+
+- Add `FromStr` implementation for `Hotkey` struct.
+
 ## _April 18th, 2024_ - [0.2.0]
 
 ### Breaking changes
@@ -36,4 +46,5 @@
 - Elevate `leptos` to v0.6.5
 - Added `event.preventDefault()`.
 
+[0.2.1]: https://github.com/gaucho-labs/leptos-hotkeys/compare/v0.2.0...main
 [0.2.0]: https://github.com/gaucho-labs/leptos-hotkeys/compare/b83afc96...v0.2.0
