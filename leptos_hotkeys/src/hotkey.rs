@@ -59,7 +59,7 @@ impl Hotkey {
 }
 
 #[cfg_attr(feature = "ssr", allow(dead_code))]
-pub fn is_hotkey_match(
+pub(crate) fn is_hotkey_match(
     hotkey: &Hotkey,
     pressed_keyset: &mut std::collections::HashMap<String, web_sys::KeyboardEvent>,
 ) -> bool {
