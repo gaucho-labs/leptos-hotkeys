@@ -4,7 +4,6 @@ use std::collections::HashSet;
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
-// Defining a hotkey context structure
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]

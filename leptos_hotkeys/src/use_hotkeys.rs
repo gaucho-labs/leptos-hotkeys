@@ -1,49 +1,4 @@
-use crate::Hotkey;
-
 use leptos::{html::ElementDescriptor, *};
-
-#[cfg_attr(feature = "ssr", allow(dead_code))]
-fn is_hotkey_match(
-    hotkey: &Hotkey,
-    pressed_keyset: &mut std::collections::HashMap<String, web_sys::KeyboardEvent>,
-) -> bool {
-    let mut modifiers_match = true;
-
-    if hotkey.modifiers.ctrl {
-        modifiers_match &= pressed_keyset.contains_key("controlleft")
-            || pressed_keyset.contains_key("controlright");
-    }
-
-    if hotkey.modifiers.shift {
-        modifiers_match &=
-            pressed_keyset.contains_key("shiftleft") || pressed_keyset.contains_key("shiftright");
-    }
-
-    if hotkey.modifiers.meta {
-        modifiers_match &=
-            pressed_keyset.contains_key("metaleft") || pressed_keyset.contains_key("metaright");
-    }
-
-    if hotkey.modifiers.alt {
-        modifiers_match &=
-            pressed_keyset.contains_key("altleft") || pressed_keyset.contains_key("altright");
-    }
-
-    if modifiers_match {
-        let keys_match = hotkey.keys.iter().all(|key| {
-            if let Some(event) = pressed_keyset.get_mut(key) {
-                event.prevent_default();
-                true
-            } else {
-                false
-            }
-        });
-
-        modifiers_match && keys_match
-    } else {
-        false
-    }
-}
 
 pub fn use_hotkeys_scoped(
     #[cfg_attr(feature = "ssr", allow(unused_variables))] key_combination: String,
@@ -52,7 +7,8 @@ pub fn use_hotkeys_scoped(
 ) {
     #[cfg(not(feature = "ssr"))]
     {
-        use crate::use_hotkeys_context;
+        use crate::hotkey::is_hotkey_match;
+        use crate::{use_hotkeys_context, Hotkey};
         use std::collections::HashSet;
 
         let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
@@ -84,7 +40,7 @@ pub fn use_hotkeys_scoped(
     }
 }
 
-pub fn use_hotkeys_ref_scoped<T>(
+pub fn use_hotkeys_ref<T>(
     #[cfg_attr(feature = "ssr", allow(unused_variables))] node_ref: NodeRef<T>,
     #[cfg_attr(feature = "ssr", allow(unused_variables))] key_combination: String,
     #[cfg_attr(feature = "ssr", allow(unused_variables))] on_triggered: Callback<()>,
@@ -94,7 +50,8 @@ pub fn use_hotkeys_ref_scoped<T>(
 {
     #[cfg(not(feature = "ssr"))]
     create_effect(move |_| {
-        use crate::use_hotkeys_context;
+        use crate::hotkey::is_hotkey_match;
+        use crate::{use_hotkeys_context, Hotkey};
         use leptos::ev::DOMEventResponder;
         use std::collections::HashSet;
 
