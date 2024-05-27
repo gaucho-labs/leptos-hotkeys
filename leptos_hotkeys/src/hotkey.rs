@@ -1,7 +1,7 @@
 use crate::types::Keys;
 use crate::KeyboardModifiers;
-use std::fmt::{Display, Formatter};
 use core::str::FromStr;
+use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq, Hash, Eq)]
 pub struct Hotkey {
@@ -118,7 +118,7 @@ pub(crate) fn is_hotkey_match(
 mod tests {
     use super::*;
 
-    fn from_string_test_cases() -> Vec<(String, Hotkey)>{
+    fn from_string_test_cases() -> Vec<(String, Hotkey)> {
         vec![
             (
                 "shift+r+meta".to_string(),
@@ -194,7 +194,6 @@ mod tests {
             ),
         ]
     }
-
 
     #[test]
     fn hotkey_constructor() {
