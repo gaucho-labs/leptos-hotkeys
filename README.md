@@ -1,10 +1,14 @@
-<p align="left">
-  <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-  <a href="#contributors-"><img src="https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square" alt="All Contributors"></a>
-  <!-- ALL-CONTRIBUTORS-BADGE:END -->
-  <a href="https://crates.io/crates/leptos_hotkeys"><img src="https://img.shields.io/crates/v/leptos_hotkeys" alt="Crates.io"></a>
-  <a href="https://discord.gg/XhVbKk38ux"><img src="https://img.shields.io/badge/Join-Discord-%235865F2.svg" alt="discord"></a>
-</p>
+# [_leptos-hotkeys_](https://github.com/gaucho-labs/leptos-hotkeys)
+<!-- markdownlint-disable -->
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+<!-- markdownlint-restore -->
+
+Declaratively create and pair keybindings with callbacks for Leptos applications.
+
+[![Crates.io](https://img.shields.io/crates/v/leptos_hotkeys)](https://crates.io/crates/leptos_hotkeys)
+[![discord](https://img.shields.io/badge/Join-Discord-%235865F2.svg)](https://discord.gg/XhVbKk38ux)
 
 <!-- markdownlint-disable -->
 <a href="https://github.com/gaucho-labs/leptos-hotkeys">
@@ -176,12 +180,13 @@ pub fn App() -> impl IntoView {
 
 ### Keybinding Grammar
 
-`leptos_hotkeys` matches key values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values) `code` property. For reference, here's a list of [all key values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values).
+`leptos_hotkeys` matches code values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) `code` property. For reference, here's a list of [all code values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values).
 
 You can bind multiple hotkeys to a callback. For example:
 
-> [!TIP]
-> Instead of looking up via this table, use the `debug` feature flag to display key presses in the browser console! See [debug flag.](#The-debug-feature-flag)
+```txt
+"KeyG+KeyR,MetaLeft+KeyO,ControlLeft+keyK"
+```
 
 
 Keys are case-agnostic and whitspace-agnostic. For a hotkey with multiple keys, use the `,` as a delimiter in a sequence of keys.
@@ -233,6 +238,7 @@ leptos_hotkeys = { path = "0.2.0", features = ["debug"] }
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeoniePhiline"><img src="https://avatars.githubusercontent.com/u/22329650?v=4?s=100" width="100px;" alt="LeoniePhiline"/><br /><sub><b>LeoniePhiline</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=LeoniePhiline" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://szabgab.com/"><img src="https://avatars.githubusercontent.com/u/48833?v=4?s=100" width="100px;" alt="Gábor Szabó"/><br /><sub><b>Gábor Szabó</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=szabgab" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/phillipbaird"><img src="https://avatars.githubusercontent.com/u/4003333?v=4?s=100" width="100px;" alt="Phillip Baird"/><br /><sub><b>Phillip Baird</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Aphillipbaird" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/zakstucke"><img src="https://avatars.githubusercontent.com/u/44890343?v=4?s=100" width="100px;" alt="zakstucke"/><br /><sub><b>zakstucke</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Azakstucke" title="Bug reports">🐛</a> <a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=zakstucke" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
