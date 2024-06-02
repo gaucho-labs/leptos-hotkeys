@@ -1,7 +1,7 @@
 # [_leptos-hotkeys_](https://github.com/gaucho-labs/leptos-hotkeys)
 <!-- markdownlint-disable -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-5-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-6-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- markdownlint-restore -->
 
@@ -18,32 +18,28 @@ Declaratively create and pair keybindings with callbacks for Leptos applications
 </a>
 <!-- markdownlint-restore -->
 
-> [!NOTE]
-> This library is ready for use. If you're curious about updates read the [CHANGELOG](https://github.com/gaucho-labs/leptos-hotkeys/blob/main/CHANGELOG.md).
+Leptos-hotkeys creates and manages keyboard shortcuts. It provides macros and functions that simplify the definition of
+keybindings, since the management of event lifecycle associated with keyboard interactions has been done for you!
 
 ## Live example
 
-Curious to see how it works? [See the demo](https://leptos-hotkeys.vercel.app) and its [source code](https://github.com/gaucho-labs/leptos-hotkeys/tree/main/examples/demo)!
+Curious to see how it works? [See the demo](https://leptos-hotkeys.vercel.app).
 
-To get started, follow the [Quick Start](#quick-start) section. It's worth the read!
+To get started, follow the [Quick Start](#quick-start) section.
 
 ## Features
 
-### `use_hotkeys!` Macro
+> [!NOTE]
+> This crate has three types of hotkeys: global, scoped, and focus-trapped.
 
-For simplicity and ease, use the `use_hotkeys!` macro to declare global and scoped hotkeys. We brought some js idioms while maintaining the leptos look. [Learn more about the macro](#macro-api).
 
-If you prefer writing out your callbacks the leptos way, we also have non-macro hotkeys. [Learn more about trad hotkeys](#trad-hotkeys).
+### The `use_hotkeys!` Macro
+
+Use this macro to declare global and scoped hotkeys. This macro has js idioms while preserving Leptos standards. [More about the macro.](](#macro-api).)
 
 ### Global Hotkeys
 
-This example creates two global hotkeys: `W` and `S`.
-
-> [!TIP]
-> For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
-
-> [!NOTE]
-> The `*` symbol is reserved for the global scope_
+This example creates two global hotkeys: `W` and `F`.
 
 ```rust
 use leptos_hotkeys::use_hotkeys;
@@ -58,27 +54,28 @@ pub fn SomeComponent() -> impl IntoView {
         set_count.update(|c| *c += 1);
     });
 
-    // this is also a global scope for the S key!
-    use_hotkeys!(("keys", "*") => move |_| {
-        logging::log!("s has been pressed");
+    // this is also a global scope for the F key!
+    use_hotkeys!(("keyf", "*") => move |_| {
+        logging::log!("f has been pressed");
         set_count.update(|c| *c -= 1);
     });
 
-    view! {
-        <p>Current count: {count}</p>
-    }
+    view! { <p>Num Respects: {count}</p> }
 }
 ```
 
-### Scoped Hotkeys
-
-This example shows an inner and outer scope and hotkeys that switch between the scopes.
-
 > [!TIP]
-> Assign hotkeys specific to individual sections without collisions using scopes. Use functions in `HotkeysContext` for scope management. For more information about how to write your keybindings, check out [Key Grammar](#keybinding-grammar).
+> How do I write certain keys? See [Key Grammar](#keybinding-grammar).
 
 > [!NOTE]
-> Scopes are case-insensitive. That means `my_scope` and `mY_sCoPe` are considered the same scope.
+> The `*` symbol is reserved for the global scope_.
+>
+> The `W` hotkey omitted the scope parameter, implicitly making it global.
+
+### Scoped Hotkeys
+Scopes provide context behind hotkeys. This context can be chained to a component, a state, or logic.
+
+This example shows an inner and outer scope and hotkeys that toggle scopes.
 
 ```rust
 use leptos_hotkeys::{use_hotkeys, use_hotkeys_context, HotkeysContext};
@@ -102,20 +99,21 @@ pub fn SomeComponent() -> impl IntoView {
 
     view! {
         <div id="outer">
-            //...some outer scope html...
+            // outer logic residing...
             <div id="inner">
-            //...some inner scope html...
+            // inner logic
             </div>
-            //...some outer scope html....
         </div>
     }
 }
 ```
 
-### Focus trapped Hotkeys
+> [!NOTE]
+> Scopes are case-insensitive. That means `my_scope` and `mY_sCoPe` are considered the same scope.
 
-> [!TIP]
-> Embed a hotkey with an html element and the hotkey will only fire if the element is focused and the scope is enabled.
+### Focus trapped Hotkeys (the `use_hotkeys_ref!` macro)
+
+This example embeds a hotkey to a `<p>` tag. This hotkey will fire iff the element is focused and the scope is correct.
 
 ```rust
 use leptos_hotkeys::use_hotkeys_ref;
@@ -128,10 +126,7 @@ pub fn SomeComponent() -> impl IntoView {
     });
 
     view! {
-        <p
-            tabIndex=-1
-            _ref=p_ref
-        >
+        <p tabIndex=-1 _ref=p_ref>
             p tag with node ref
         </p>
     }
@@ -146,48 +141,22 @@ pub fn SomeComponent() -> impl IntoView {
 cargo add leptos_hotkeys
 ```
 
-> [!NOTE]
-> `leptos-hotkeys` supports both client-side rendered and server-side rendered applications.
-
-For client side rendered:
-
-```toml
-leptos_hotkeys = "0.2.0"
-```
-
-For server side rendered:
-
-```toml
-leptos_hotkeys = { version = "0.2.0", features = ["ssr"] }
-```
-
-For client side and server side rendered:
-
-```toml
-leptos_hotkeys = "0.2.0"
-
-[features]
-ssr = ["leptos_hotkeys/ssr"]
-```
-
 We also offer other feature flags that enhance developer experience, see [features](#features).
 
 ### `provide_hotkeys_context()`
 
 Call `provide_hotkeys_context()` in the `App()` component. This will provide the `HotkeysContext` for the current reactive node and all of its descendents. This function takes three parameters, the `node_ref`, a flag to disable blur events and a list of `initially_active_scopes`.
-
-> [!NOTE]
-> `provide_hotkeys_context()` returns a `HotkeysContext`. See [HotkeysContext](#hotkeyscontext).
+`provide_hotkeys_context()` returns a `HotkeyContext`. To manage hotkeys, you can pull necessary signals out of `HotkeysContext`.
 
 ```rust
-use leptos_hotkeys::{provide_hotkeys_context, scopes};
+use leptos_hotkeys::{provide_hotkeys_context, HotkeysContext, scopes};
 
 #[component]
 pub fn App() -> impl IntoView {
     provide_meta_context();
 
     let main_ref = create_node_ref::<html::Main>();
-    provide_hotkeys_context(main_ref, false, scopes!());
+    let HotkeysContext { .. } = provide_hotkeys_context(main_ref, false, scopes!());
 
     view! {
         <Router>
@@ -202,88 +171,22 @@ pub fn App() -> impl IntoView {
 }
 ```
 
-### Initialize scopes
+> [!NOTE]
+> If you're using [scopes](#scoped-hotkeys), you can initialize with a specific scope.
 
-If you're using [scopes](#scoped-hotkeys), you can initialize with a specific scope.
-
-```rust
-use leptos_hotkeys::{provide_hotkeys_context, scopes};
-
-#[component]
-pub fn App() -> impl IntoView {
-    let main_ref = create_node_ref::<html::Main>();
-    provide_hotkeys_context(main_ref, false, scopes!("some_scope_id"));
-
-    view! {
-        <Router>
-            <main _ref=main_ref>
-                <Routes>
-                    // ... routes
-                </Routes>
-            </main>
-        </Router>
-    }
-}
-```
+## That's it! [You can create global, scoped, and focus-trapped hotkeys!](#features)
 
 ### Keybinding Grammar
 
-`leptos_hotkeys` matches key values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key) `key` property. For reference, here's a list of [all key values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values).
+`leptos_hotkeys` matches code values from [KeyboardEvent's](https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code) `code` property. For reference, here's a list of [all code values for keyboard events](https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_code_values).
 
 You can bind multiple hotkeys to a callback. For example:
 
 ```txt
-"G+R,meta+O,control+k"
+"KeyG+KeyR,MetaLeft+KeyO,ControlLeft+keyK"
 ```
 
-The above example creates three hotkeys: <kbd>G</kbd>+<kbd>R</kbd>, <kbd>[Meta](https://www.basketball-reference.com/players/a/artesro01.html)</kbd>+<kbd>O</kbd>, and <kbd>Ctrl</kbd>+<kbd>K</kbd>. The `+` symbol is used to create a combo hotkey. A combo hotkey is a keybinding requiring more than one key press.
-
-> [!NOTE]
-> Keys are case-agnostic and whitespace-agnostic. You use the `,` as a delimiter in a sequence of multiple hotkeys.
-
-## Macro API
-
-We wanted to strip the verbosity that comes with `str` and `String` type handling. We kept leptos best practices in mind, keeping the `move |_|` idiom in our macro.
-
-### `use_hotkeys!()`
-
-Here is a general look at the macro:
-
-```rust
-use leptos_hotkeys::use_hotkeys;
-
-use_hotkeys!(("keys", "scope") => move |_| {
-    // callback logic here
-});
-```
-
-For global hotkeys, you can omit the second parameter as it will implicitly add the global scope.
-
-```rust
-use_hotkeys!(("keys") => move |_| {
-    // callback logic here
-});
-```
-
-### `use_hotkeys_ref!()`
-
-This macro is used when you want to focus trap with a specific html element.
-
-```rust
-use leptos_hotkeys::use_hotkeys_ref;
-
-#[component]
-pub fn SomeComponent() -> impl IntoView {
-    let some_ref = use_hotkeys_ref!(("keys", "scope") => move |_| {
-        // callback logic here
-    });
-
-    view! {
-        <div tabIndex=-1 _ref=some_ref>
-        </div>
-    }
-}
-```
+Keys are case-agnostic and whitspace-agnostic. For a hotkey with multiple keys, use the `,` as a delimiter in a sequence of keys.
 
 ### `scopes!()`
 
@@ -310,157 +213,14 @@ pub fn App() -> impl IntoView {
 }
 ```
 
-## Feature Flags
+## The `debug` feature flag
 
-### `debug`
-
-We want to improve developer experience by introducing the `debug` flag which adds logging to your console in CSR. It logs the current pressed key values, hotkeys fires, and scopes toggling.
+Improve developer experience by introducing the `debug` flag which adds logging to your console in CSR. It logs the current pressed key `code` values, hotkeys fires, and scopes toggling.
 
 Just simply:
 
 ```toml
-leptos_hotkeys = { path = "0.2.0", features = ["debug"] }
-```
-
-## API
-
-### `HotkeysContext`
-
-| Field Name          | Type                            | Description                                                                                           |
-| ------------------- | ------------------------------- | ----------------------------------------------------------------------------------------------------- |
-| `pressed_keys`      | `RwSignal<HashSet<String>>`     | A reactive signal tracking the set of keys currently pressed by the user.                             |
-| `active_ref_target` | `RwSignal<Option<EventTarget>>` | A reactive signal holding the currently active event target, useful for focusing events.              |
-| `set_ref_target`    | `Callback<Option<EventTarget>>` | A method to update the currently active event target.                                                 |
-| `active_scopes`     | `RwSignal<HashSet<String>>`     | A reactive signal tracking the set of currently active scopes, allowing for scoped hotkey management. |
-| `enable_scope`      | `Callback<String>`              | A method to activate a given hotkey scope.                                                            |
-| `disable_scope`     | `Callback<String>`              | A method to deactivate a given hotkey scope.                                                          |
-| `toggle_scope`      | `Callback<String>`              | A method to toggle the activation state of a given hotkey scope.                                      |
-
-### Basic Types
-
-#### Keyboard Modifiers
-
-| Field Name | Type   | Description                                                                                                                                                                     |
-| ---------- | ------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `alt`      | `bool` | Indicates if the Alt key modifier is active (true) or not (false).                                                                                                              |
-| `ctrl`     | `bool` | Indicates if the Control (Ctrl) key modifier is active (true) or not (false).                                                                                                   |
-| `meta`     | `bool` | Indicates if the [Meta](https://www.basketball-reference.com/players/a/artesro01.html) (Command on macOS, Windows key on Windows) key modifier is active (true) or not (false). |
-| `shift`    | `bool` | Indicates if the Shift key modifier is active (true) or not (false).                                                                                                            |
-
-#### Hotkey
-
-| Field Name    | Type                | Description                                                                                                                                    |
-| ------------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| `modifiers`   | `KeyboardModifiers` | The set of key modifiers (Alt, Ctrl, [Meta](https://www.basketball-reference.com/players/a/artesro01.html), Shift) associated with the hotkey. |
-| `keys`        | `Vec<String>`       | The list of keys that, along with any modifiers, define the hotkey.                                                                            |
-| `description` | `String`            | A human-readable description of what the hotkey does. Intended for future use with scopes.                                                     |
-
-## Trad Hotkeys
-
-If the macro isn't to your liking, we offer three hotkeys: global, scoped, and focus trapped.
-
-### Global: `use_hotkeys_scoped()` where scope = `*`
-
-```rust
-use leptos_hotkeys::{use_hotkeys_scoped};
-
-#[component]
-fn Component() -> impl IntoView {
-    let (count, set_count) = create_signal(0);
-
-    use_hotkeys_scoped(
-        "keyf", // the F key
-        Callback::new(move |_| {
-            set_count.update(|count| { *count += 1 })
-        }),
-        vec!["*"]
-    );
-
-    view! {
-        <p>
-        Press 'F' to pay respect.
-        {count} times
-        </p>
-    }
-}
-```
-
-### Scoped - `use_hotkeys_scoped`
-
-```rust
-use leptos_hotkeys::{
-    use_hotkeys_scoped, use_hotkeys_context, HotkeysContext
-};
-
-#[component]
-fn Component() -> impl IntoView {
-    let hotkeys_context: HotkeysContext = use_hotkeys_context();
-
-    let toggle = hotkeys_context.toggle_scope;
-    let enable = hotkeys_context.enable_scope;
-    let disable = hotkeys_context.disable_scope;
-
-    use_hotkeys_scoped(
-        "arrowup",
-        Callback::new(move |_| {
-            // move character up
-        }),
-        vec!["game_scope"]
-    );
-
-    use_hotkeys_scoped(
-        "arrowdown",
-        Callback::new(move |_| {
-            // move character down
-        }),
-        vec!["game_scope"]
-    );
-
-    view! {
-        <button
-        // activates the 'game_scope' scope
-        on:click=move |_| enable("game_scope")
-        >
-            Start game
-        </button>
-
-        <button
-        // toggles the 'game_scope' from enabled to disabled
-        on:click=move |_| toggle("game_scope")
-        >
-            Pause game
-        </button>
-
-
-        <button
-            // disables the 'game_scope' scope
-            on:click=move |_| disable("game_scope")
-        >
-            End game
-        </button>
-    }
-}
-```
-
-### Focus trapped - `use_hotkeys_ref()`
-
-```rust
-use leptos_hotkeys::use_hotkeys_ref;
-
-#[component]
-fn Component() -> impl IntoView {
-    let node_ref = use_hotkeys_ref("keyl", Callback::new(move |_| {
-        // some logic here
-    }));
-
-    view! {
-        <body>
-            <div _ref=node_ref>
-            // when this div is focused, the "l" hotkey will fire
-            </div>
-        </body>
-    }
-}
+leptos_hotkeys = { path = "0.2.1", features = ["debug"] }
 ```
 
 ## Contributors
@@ -475,6 +235,7 @@ fn Component() -> impl IntoView {
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeoniePhiline"><img src="https://avatars.githubusercontent.com/u/22329650?v=4?s=100" width="100px;" alt="LeoniePhiline"/><br /><sub><b>LeoniePhiline</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=LeoniePhiline" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://szabgab.com/"><img src="https://avatars.githubusercontent.com/u/48833?v=4?s=100" width="100px;" alt="Gábor Szabó"/><br /><sub><b>Gábor Szabó</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=szabgab" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/phillipbaird"><img src="https://avatars.githubusercontent.com/u/4003333?v=4?s=100" width="100px;" alt="Phillip Baird"/><br /><sub><b>Phillip Baird</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Aphillipbaird" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/zakstucke"><img src="https://avatars.githubusercontent.com/u/44890343?v=4?s=100" width="100px;" alt="zakstucke"/><br /><sub><b>zakstucke</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Azakstucke" title="Bug reports">🐛</a> <a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=zakstucke" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>

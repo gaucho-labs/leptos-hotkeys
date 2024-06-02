@@ -60,6 +60,10 @@ fn HomePage() -> impl IntoView {
         logging::log!("howdy")
     });
 
+    use_hotkeys!(("controlleft") => move |_| {
+        logging::log!("works either using control left or control right!")
+    });
+
     view! {
         <h1>"Welcome to Leptos!"</h1>
         <div>"Press arrow up and arrow down: " {count}</div>
