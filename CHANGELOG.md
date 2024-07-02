@@ -1,8 +1,11 @@
 # Changelog
 
-## _May 27th, 2024_ - [0.2.1]
+## _July 2nd, 2024_ - [0.2.2]
+- Fix bugs related to keycode management
 
-### Bug fixes
+## _May 27th, 2024_ - [0.2.1]
+- Code movement, change to using keycodes
+
 
 - Fix right/left modifiers not being recognized.
 
