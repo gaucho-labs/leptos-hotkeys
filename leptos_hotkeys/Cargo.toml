@@ -1,12 +1,12 @@
 [package]
 name = "leptos_hotkeys"
-version = "0.2.1"
+version = "0.2.2"
 edition = "2021"
 description = "A library that declaratively pairs keybindings with callbacks for Leptos applications."
 license = "MIT"
 repository = "https://github.com/gaucho-labs/leptos-hotkeys"
 readme = "../README.md"
-authors = ["Matthew Kim", "Álvaro Mondéjar Rubio", "Robert Junkins"]
+authors = ["Matthew Kim", "Álvaro Mondéjar Rubio", "Robert Junkins", "Zak Stucke"]
 keywords = ["leptos", "hotkeys", "wasm"]
 
 [dependencies]
