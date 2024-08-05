@@ -1,6 +1,7 @@
-use crate::types::Keys;
 use crate::KeyboardModifiers;
+use crate::{context::KeyPresses, types::Keys};
 use core::str::FromStr;
+use std::collections::HashSet;
 use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq, Hash, Eq)]
@@ -72,6 +73,21 @@ impl FromStr for Hotkey {
         }
 
         Ok(Hotkey { modifiers, keys })
+    }
+}
+
+fn includes_key(hotkey: &Hotkey, key: &String) -> bool {
+    hotkey.keys.iter().any(|k| k == key)
+}
+
+#[cfg_attr(feature = "ssr", allow(dead_code))]
+pub(crate) fn is_last_key_match(pressed_keys: &KeyPresses, parsed_keys: &HashSet<Hotkey>) -> bool {
+    if let Some(ref last_key) = pressed_keys.last_key {
+        parsed_keys
+            .iter()
+            .any(|hotkey| includes_key(hotkey, last_key))
+    } else {
+        false
     }
 }
 

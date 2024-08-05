@@ -7,7 +7,7 @@ use wasm_bindgen::JsCast;
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>>,
+    pub(crate) pressed_keys: RwSignal<KeyPresses>,
 
     #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
@@ -19,6 +19,12 @@ pub struct HotkeysContext {
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
     pub toggle_scope: Callback<String>,
+}
+#[derive(Debug, Default, Clone)]
+#[cfg_attr(feature = "ssr", allow(dead_code))]
+pub struct KeyPresses {
+    pub keys: std::collections::HashMap<String, web_sys::KeyboardEvent>,
+    pub last_key: Option<String>,
 }
 
 pub fn provide_hotkeys_context<T>(
@@ -38,8 +44,7 @@ where
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>> =
-        RwSignal::new(std::collections::HashMap::new());
+    let pressed_keys: RwSignal<KeyPresses> = RwSignal::new(KeyPresses::default());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -81,7 +86,14 @@ where
 
     #[cfg(all(feature = "debug", not(feature = "ssr")))]
     create_effect(move |_| {
-        let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
+        let pressed_keys_list = move || {
+            pressed_keys
+                .get()
+                .keys
+                .keys()
+                .cloned()
+                .collect::<Vec<String>>()
+        };
         logging::log!("keys pressed: {:?}", pressed_keys_list());
     });
 
@@ -91,19 +103,21 @@ where
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
-            pressed_keys.set_untracked(std::collections::HashMap::new());
+            pressed_keys.set_untracked(KeyPresses::default());
         }) as Box<dyn Fn()>);
 
         let keydown_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.insert(event.code().to_lowercase(), event);
+                    let code = event.code().to_lowercase();
+                    keys.keys.insert(code.clone(), event);
+                    keys.last_key = Some(code);
                 });
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.remove(&event.code().to_lowercase());
+                    keys.keys.remove(&event.code().to_lowercase());
                 });
             }) as Box<dyn Fn(_)>);
 
