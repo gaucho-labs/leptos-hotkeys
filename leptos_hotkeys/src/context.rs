@@ -1,6 +1,6 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
-use std::collections::HashSet;
+use std::collections::{HashMap, HashSet};
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
@@ -23,7 +23,7 @@ pub struct HotkeysContext {
 #[derive(Debug, Default, Clone)]
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 pub struct KeyPresses {
-    pub keys: std::collections::HashMap<String, web_sys::KeyboardEvent>,
+    pub key_map: HashMap<String, web_sys::KeyboardEvent>,
     pub last_key: Option<String>,
 }
 
@@ -89,7 +89,7 @@ where
         let pressed_keys_list = move || {
             pressed_keys
                 .get()
-                .keys
+                .key_map
                 .keys()
                 .cloned()
                 .collect::<Vec<String>>()
@@ -110,14 +110,15 @@ where
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
                     let code = event.code().to_lowercase();
-                    keys.keys.insert(code.clone(), event);
+                    keys.key_map.insert(code.clone(), event);
                     keys.last_key = Some(code);
                 });
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.keys.remove(&event.code().to_lowercase());
+                    keys.key_map.remove(&event.code().to_lowercase());
+                    keys.last_key = None;
                 });
             }) as Box<dyn Fn(_)>);
 

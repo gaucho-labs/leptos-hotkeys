@@ -81,7 +81,7 @@ fn includes_key(hotkey: &Hotkey, key: &String) -> bool {
 }
 
 #[cfg_attr(feature = "ssr", allow(dead_code))]
-pub(crate) fn is_last_key_match(pressed_keys: &KeyPresses, parsed_keys: &HashSet<Hotkey>) -> bool {
+pub(crate) fn is_last_key_match(parsed_keys: &HashSet<Hotkey>, pressed_keys: &KeyPresses) -> bool {
     if let Some(ref last_key) = pressed_keys.last_key {
         parsed_keys
             .iter()

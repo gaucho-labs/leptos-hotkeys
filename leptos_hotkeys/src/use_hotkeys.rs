@@ -25,13 +25,13 @@ pub fn use_hotkeys_scoped(
             }
 
             let mut pressed_keyset = pressed_keys.get();
-            if !is_last_key_match(&pressed_keyset, &parsed_keys) {
+            if !is_last_key_match(&parsed_keys, &pressed_keyset) {
                 return;
             }
 
             if let Some(matching_hotkey) = parsed_keys
                 .iter()
-                .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset.keys))
+                .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset.key_map))
             {
                 if cfg!(feature = "debug") {
                     let message = format!("%cfiring hotkey: {}", &matching_hotkey);
@@ -74,13 +74,13 @@ pub fn use_hotkeys_ref<T>(
                     return;
                 }
 
-                if !is_last_key_match(&pressed_keys, &parsed_keys) {
+                if !is_last_key_match(&parsed_keys, &pressed_keys) {
                     return;
                 }
 
                 if let Some(matching_hotkey) = parsed_keys
                     .iter()
-                    .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keys.keys))
+                    .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keys.key_map))
                 {
                     if cfg!(feature = "debug") {
                         let message = format!("%cfiring hotkey: {}", &matching_hotkey);
