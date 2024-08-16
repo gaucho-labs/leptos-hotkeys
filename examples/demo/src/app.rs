@@ -87,7 +87,6 @@ fn HomePage() -> impl IntoView {
         set_count.set(0);
     });
 
-
     let a_ref = create_node_ref::<html::Div>();
     use_hotkeys_ref!((a_ref, "digit6", "scope_a") => move |_| {
         if is_green.get() {
