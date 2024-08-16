@@ -1,6 +1,6 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
-use std::collections::HashSet;
+use std::collections::{BTreeSet};
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
@@ -15,7 +15,7 @@ pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
     pub set_ref_target: Callback<Option<web_sys::EventTarget>>,
 
-    pub active_scopes: RwSignal<HashSet<String>>,
+    pub active_scopes: RwSignal<BTreeSet<String>>,
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
     pub toggle_scope: Callback<String>,
@@ -24,7 +24,7 @@ pub struct HotkeysContext {
 pub fn provide_hotkeys_context<T>(
     #[cfg_attr(feature = "ssr", allow(unused_variables))] node_ref: NodeRef<T>,
     #[cfg_attr(feature = "ssr", allow(unused_variables))] allow_blur_event: bool,
-    initially_active_scopes: HashSet<String>,
+    initially_active_scopes: BTreeSet<String>,
 ) -> HotkeysContext
 where
     T: ElementDescriptor + 'static + Clone,
@@ -41,7 +41,7 @@ where
     let pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>> =
         RwSignal::new(std::collections::HashMap::new());
 
-    let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
+    let active_scopes: RwSignal<BTreeSet<String>> = RwSignal::new(initially_active_scopes);
 
     let enable_scope = Callback::new(move |scope: String| {
         active_scopes.update(|scopes| {
