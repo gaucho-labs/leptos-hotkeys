@@ -5,7 +5,6 @@ use leptos_hotkeys::{
 };
 use leptos_meta::*;
 use leptos_router::*;
-use leptos_theme::{use_theme, Theme, ThemeProvider};
 
 #[component]
 pub fn Button(href: &'static str, children: Children) -> impl IntoView {
@@ -25,14 +24,12 @@ pub fn App() -> impl IntoView {
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css"/>
         <main _ref=main_ref>
-            <ThemeProvider>
                 <Router>
                     <Routes>
                         <Route path="/" view=HomePage/>
                         <Route path="/:else" view=ErrorPage/>
                     </Routes>
                 </Router>
-            </ThemeProvider>
         </main>
     }
 }
@@ -43,7 +40,6 @@ fn HomePage() -> impl IntoView {
         "border border-1 border-[#1a1a1a] dark:border-[#fdfdfd] p-8 space-y-20 h-full";
     let current_scope = create_rw_signal("scope_a");
     let is_green = create_rw_signal(true);
-    let current_theme = use_theme();
 
     // leptos_hotkey specific logic
     fn go_to_link(key: &'static str, link: String, scope: &'static str) {
@@ -89,15 +85,6 @@ fn HomePage() -> impl IntoView {
 
     use_hotkeys!(("escape", "scope_a") => move |_| {
         set_count.set(0);
-    });
-
-    // scope_b related hotkeys
-    use_hotkeys!(("keyT", "scope_b") => move |_| {
-        if current_theme.get() == Theme::Light {
-            current_theme.set(Theme::Dark)
-        } else {
-            current_theme.set(Theme::Light)
-        }
     });
 
     let a_ref = create_node_ref::<html::Div>();
