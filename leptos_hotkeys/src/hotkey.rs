@@ -37,7 +37,7 @@ impl FromStr for Hotkey {
     fn from_str(key_combination: &str) -> Result<Self, Self::Err> {
         let parts = key_combination
             .split('+')
-            .map(|v| if v == " " {v} else {v.trim()})
+            .map(|v| if v == " " { v } else { v.trim() })
             .collect::<Vec<&str>>();
 
         let mut modifiers = KeyboardModifiers::default();
