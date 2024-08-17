@@ -109,15 +109,16 @@ where
         let keydown_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    let code = event.code().to_lowercase();
-                    keys.key_map.insert(code.clone(), event);
-                    keys.last_key = Some(code);
+                    let key = clean_key(&event);
+                    keys.key_map.insert(key.clone(), event);
+                    keys.last_key = Some(key);
                 });
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.key_map.remove(&event.code().to_lowercase());
+                    let key = clean_key(&event);
+                    keys.key_map.remove(&key);
                     keys.last_key = None;
                 });
             }) as Box<dyn Fn(_)>);
@@ -185,4 +186,11 @@ where
 
 pub fn use_hotkeys_context() -> HotkeysContext {
     use_context::<HotkeysContext>().expect("expected hotkeys context")
+}
+
+fn clean_key(event: &web_sys::KeyboardEvent) -> String {
+    match event.key().as_str() {
+        " " => "spacebar".to_string(),
+        _ => event.key().to_lowercase(),
+    }
 }
