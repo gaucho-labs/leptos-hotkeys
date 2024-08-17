@@ -14,7 +14,7 @@ pub fn use_hotkeys_scoped(
         let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
 
         let hotkeys_context = use_hotkeys_context();
-        let pressed_keys = hotkeys_context.pressed_keys;
+        let pressed_keys = hotkeys_context.keys_pressed;
 
         create_effect(move |_| {
             let active_scopes = hotkeys_context.active_scopes.get();
@@ -67,7 +67,7 @@ pub fn use_hotkeys_ref<T>(
             let keydown_closure = move |_event: web_sys::KeyboardEvent| {
                 let hotkeys_context = use_hotkeys_context();
                 let active_scopes = hotkeys_context.active_scopes.get();
-                let mut pressed_keys = hotkeys_context.pressed_keys.get();
+                let mut pressed_keys = hotkeys_context.keys_pressed.get();
                 let within_scope = scopes.iter().any(|scope| active_scopes.contains(scope));
 
                 if !within_scope {

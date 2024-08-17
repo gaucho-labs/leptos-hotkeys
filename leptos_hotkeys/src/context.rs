@@ -1,13 +1,13 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
-use std::collections::{HashMap, HashSet};
+use std::collections::{BTreeMap, HashSet};
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<KeyPresses>,
+    pub(crate) keys_pressed: RwSignal<KeyPresses>,
 
     #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
@@ -23,7 +23,7 @@ pub struct HotkeysContext {
 #[derive(Debug, Default, Clone)]
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 pub struct KeyPresses {
-    pub key_map: HashMap<String, web_sys::KeyboardEvent>,
+    pub key_map: BTreeMap<String, web_sys::KeyboardEvent>,
     pub last_key: Option<String>,
 }
 
@@ -165,7 +165,7 @@ where
 
     let hotkeys_context = HotkeysContext {
         #[cfg(not(feature = "ssr"))]
-        pressed_keys,
+        keys_pressed: pressed_keys,
 
         #[cfg(not(feature = "ssr"))]
         active_ref_target,

@@ -30,6 +30,10 @@ impl Hotkey {
     pub fn new(key_combination: &str) -> Self {
         key_combination.parse().unwrap()
     }
+
+    fn includes_key(&self, key: &String) -> bool {
+        self.keys.iter().any(|k| k == key)
+    }
 }
 
 impl FromStr for Hotkey {
@@ -76,16 +80,12 @@ impl FromStr for Hotkey {
     }
 }
 
-fn includes_key(hotkey: &Hotkey, key: &String) -> bool {
-    hotkey.keys.iter().any(|k| k == key)
-}
-
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 pub(crate) fn is_last_key_match(parsed_keys: &HashSet<Hotkey>, pressed_keys: &KeyPresses) -> bool {
     if let Some(ref last_key) = pressed_keys.last_key {
         parsed_keys
             .iter()
-            .any(|hotkey| includes_key(hotkey, last_key))
+            .any(|hotkey| hotkey.includes_key(last_key))
     } else {
         false
     }
@@ -94,7 +94,7 @@ pub(crate) fn is_last_key_match(parsed_keys: &HashSet<Hotkey>, pressed_keys: &Ke
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 pub(crate) fn is_hotkey_match(
     hotkey: &Hotkey,
-    pressed_keyset: &mut std::collections::HashMap<String, web_sys::KeyboardEvent>,
+    pressed_keyset: &mut std::collections::BTreeMap<String, web_sys::KeyboardEvent>,
 ) -> bool {
     let mut modifiers_match = true;
 
