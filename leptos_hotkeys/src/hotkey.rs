@@ -37,7 +37,7 @@ impl FromStr for Hotkey {
     fn from_str(key_combination: &str) -> Result<Self, Self::Err> {
         let parts = key_combination
             .split('+')
-            .map(str::trim)
+            .map(|v| if v == " " { v } else { v.trim() })
             .collect::<Vec<&str>>();
 
         let mut modifiers = KeyboardModifiers::default();
@@ -84,22 +84,30 @@ pub(crate) fn is_hotkey_match(
 
     if hotkey.modifiers.ctrl {
         modifiers_match &= pressed_keyset.contains_key("controlleft")
-            || pressed_keyset.contains_key("controlright");
+            || pressed_keyset.contains_key("controlright")
+            || pressed_keyset.contains_key("control");
     }
 
     if hotkey.modifiers.shift {
-        modifiers_match &=
-            pressed_keyset.contains_key("shiftleft") || pressed_keyset.contains_key("shiftright");
+        modifiers_match &= pressed_keyset.contains_key("shiftleft")
+            || pressed_keyset.contains_key("shiftright")
+            || pressed_keyset.contains_key("shift");
     }
 
     if hotkey.modifiers.meta {
-        modifiers_match &=
-            pressed_keyset.contains_key("metaleft") || pressed_keyset.contains_key("metaright");
+        modifiers_match &= pressed_keyset.contains_key("metaleft")
+            || pressed_keyset.contains_key("metaright")
+            || pressed_keyset.contains_key("meta")
+            || pressed_keyset.contains_key("command")
+            || pressed_keyset.contains_key("cmd")
+            || pressed_keyset.contains_key("super")
+            || pressed_keyset.contains_key("win");
     }
 
     if hotkey.modifiers.alt {
-        modifiers_match &=
-            pressed_keyset.contains_key("altleft") || pressed_keyset.contains_key("altright");
+        modifiers_match &= pressed_keyset.contains_key("altleft")
+            || pressed_keyset.contains_key("altright")
+            || pressed_keyset.contains_key("alt");
     }
 
     if modifiers_match {
