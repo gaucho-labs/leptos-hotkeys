@@ -97,13 +97,13 @@ where
         let keydown_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.insert(event.code().to_lowercase(), event);
+                    keys.insert(event.key().to_lowercase(), event);
                 });
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
                 pressed_keys.update(|keys| {
-                    keys.remove(&event.code().to_lowercase());
+                    keys.remove(&event.key().to_lowercase());
                 });
             }) as Box<dyn Fn(_)>);
 
