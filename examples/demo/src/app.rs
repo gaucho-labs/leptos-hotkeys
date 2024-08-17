@@ -22,14 +22,14 @@ pub fn App() -> impl IntoView {
     provide_hotkeys_context(main_ref, false, scopes!("scope_a"));
 
     view! {
-        <Stylesheet id="leptos" href="/pkg/demo.css"/>
+        <Stylesheet id="leptos" href="/pkg/demo.css" />
         <main _ref=main_ref>
-                <Router>
-                    <Routes>
-                        <Route path="/" view=HomePage/>
-                        <Route path="/:else" view=ErrorPage/>
-                    </Routes>
-                </Router>
+            <Router>
+                <Routes>
+                    <Route path="/" view=HomePage />
+                    <Route path="/:else" view=ErrorPage />
+                </Routes>
+            </Router>
         </main>
     }
 }
@@ -156,7 +156,7 @@ fn HomePage() -> impl IntoView {
                                 <p>scope_b</p>
                                 <div class="space-y-2">
                                     <p>press 'T' to switch themes</p>
-                                    <p>press "Cmd/Super/Win" + 'B'</p>
+                                    <p>press "Cmd/Super/Win"+ 'B'</p>
                                 </div>
 
                             </div>
