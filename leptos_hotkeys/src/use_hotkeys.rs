@@ -25,6 +25,18 @@ pub fn use_hotkeys_scoped(
             }
 
             let mut pressed_keyset = pressed_keys.get();
+            if cfg!(feature = "debug") {
+                let message = format!("%cpressed keys: {:?}", &pressed_keyset);
+                web_sys::console::log_2(
+                    &wasm_bindgen::JsValue::from_str(&message),
+                    &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
+                );
+                let message = format!("%cparsed keys: {:?}", &parsed_keys);
+                web_sys::console::log_2(
+                    &wasm_bindgen::JsValue::from_str(&message),
+                    &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
+                );
+            }
             if !is_last_key_match(&parsed_keys, &pressed_keyset) {
                 return;
             }
