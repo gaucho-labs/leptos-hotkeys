@@ -28,6 +28,13 @@ pub fn use_hotkeys_scoped(
             if !is_last_key_match(&parsed_keys, &pressed_keyset) {
                 return;
             }
+            if cfg!(feature = "debug") {
+                let message = "%cfound last key match".to_string();
+                web_sys::console::log_2(
+                    &wasm_bindgen::JsValue::from_str(&message),
+                    &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
+                );
+            }
 
             if let Some(matching_hotkey) = parsed_keys
                 .iter()
