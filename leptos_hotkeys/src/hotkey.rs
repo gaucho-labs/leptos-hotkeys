@@ -84,13 +84,11 @@ impl FromStr for Hotkey {
 
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 pub(crate) fn is_last_key_match(parsed_keys: &HashSet<Hotkey>, pressed_keys: &KeyPresses) -> bool {
-    if let Some(ref last_key) = pressed_keys.last_key {
+    pressed_keys.last_key.as_ref().is_some_and(|last_key| {
         parsed_keys
             .iter()
             .any(|hotkey| hotkey.includes_key(last_key))
-    } else {
-        false
-    }
+    })
 }
 
 #[cfg_attr(feature = "ssr", allow(dead_code))]

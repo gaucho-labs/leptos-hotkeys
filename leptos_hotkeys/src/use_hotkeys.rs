@@ -14,7 +14,6 @@ pub fn use_hotkeys_scoped(
         let parsed_keys: HashSet<Hotkey> = key_combination.split(',').map(Hotkey::new).collect();
 
         let hotkeys_context = use_hotkeys_context();
-        let pressed_keys = hotkeys_context.keys_pressed;
 
         create_effect(move |_| {
             let active_scopes = hotkeys_context.active_scopes.get();
@@ -24,33 +23,14 @@ pub fn use_hotkeys_scoped(
                 return;
             }
 
-            let mut pressed_keyset = pressed_keys.get();
-            if cfg!(feature = "debug") {
-                let message = format!("%cpressed keys: {:?}", &pressed_keyset);
-                web_sys::console::log_2(
-                    &wasm_bindgen::JsValue::from_str(&message),
-                    &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
-                );
-                let message = format!("%cparsed keys: {:?}", &parsed_keys);
-                web_sys::console::log_2(
-                    &wasm_bindgen::JsValue::from_str(&message),
-                    &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
-                );
-            }
-            if !is_last_key_match(&parsed_keys, &pressed_keyset) {
+            let mut keys_pressed = hotkeys_context.keys_pressed.get();
+            if !is_last_key_match(&parsed_keys, &keys_pressed) {
                 return;
-            }
-            if cfg!(feature = "debug") {
-                let message = "%cfound last key match".to_string();
-                web_sys::console::log_2(
-                    &wasm_bindgen::JsValue::from_str(&message),
-                    &wasm_bindgen::JsValue::from_str("color: #39FF14;"),
-                );
             }
 
             if let Some(matching_hotkey) = parsed_keys
                 .iter()
-                .find(|hotkey| is_hotkey_match(hotkey, &mut pressed_keyset.key_map))
+                .find(|hotkey| is_hotkey_match(hotkey, &mut keys_pressed.key_map))
             {
                 if cfg!(feature = "debug") {
                     let message = format!("%cfiring hotkey: {}", &matching_hotkey);

@@ -44,7 +44,7 @@ where
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<KeyPresses> = RwSignal::new(KeyPresses::default());
+    let keys_pressed: RwSignal<KeyPresses> = RwSignal::new(KeyPresses::default());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -86,15 +86,15 @@ where
 
     #[cfg(all(feature = "debug", not(feature = "ssr")))]
     create_effect(move |_| {
-        let pressed_keys_list = move || {
-            pressed_keys
+        let keys_pressed_list = move || {
+            keys_pressed
                 .get()
                 .key_map
                 .keys()
                 .cloned()
                 .collect::<Vec<String>>()
         };
-        logging::log!("keys pressed: {:?}", pressed_keys_list());
+        logging::log!("keys pressed: {:?}", keys_pressed_list());
     });
 
     #[cfg(not(feature = "ssr"))]
@@ -103,12 +103,12 @@ where
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
-            pressed_keys.set_untracked(KeyPresses::default());
+            keys_pressed.set_untracked(KeyPresses::default());
         }) as Box<dyn Fn()>);
 
         let keydown_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-                pressed_keys.update(|keys| {
+                keys_pressed.update(|keys| {
                     let key = clean_key(&event);
                     keys.key_map.insert(key.clone(), event);
                     keys.last_key = Some(key);
@@ -116,7 +116,7 @@ where
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-                pressed_keys.update(|keys| {
+                keys_pressed.update(|keys| {
                     let key = clean_key(&event);
                     keys.key_map.remove(&key);
                     keys.last_key = None;
@@ -166,7 +166,7 @@ where
 
     let hotkeys_context = HotkeysContext {
         #[cfg(not(feature = "ssr"))]
-        keys_pressed: pressed_keys,
+        keys_pressed,
 
         #[cfg(not(feature = "ssr"))]
         active_ref_target,
@@ -188,6 +188,7 @@ pub fn use_hotkeys_context() -> HotkeysContext {
     use_context::<HotkeysContext>().expect("expected hotkeys context")
 }
 
+#[cfg(not(feature = "ssr"))]
 fn clean_key(event: &web_sys::KeyboardEvent) -> String {
     match event.key().as_str() {
         " " => "spacebar".to_string(),
