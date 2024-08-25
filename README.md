@@ -223,6 +223,26 @@ Just simply:
 leptos_hotkeys = { path = "0.2.1", features = ["debug"] }
 ```
 
+## The `event_key` feature flag
+
+For improved accessibility options, this crate supports using either the event code or the event key for triggering events. This should improve compatibility with e.g. Dvorak keyboard layout. Note that this currently requires slight modification of hotkey definitions for alphanumeric keys. 
+
+```rust
+// with event code (without event_key feature flag)
+use_hotkeys!(("keyw") => move |_| logging::log!("w has been pressed"));
+use_hotkeys!(("digit1") => move |_| logging::log!("1 has been pressed"));
+
+// with event_key feature flag
+use_hotkeys!(("w") => move |_| logging::log!("w has been pressed"));
+use_hotkeys!(("1") => move |_| logging::log!("1 has been pressed"));
+```
+
+To use event key as the identifier instead of event code, use:
+
+```toml
+leptos_hotkeys = { path = "0.2.1", features = ["event_key"] }
+```
+
 ## Contributors
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
 <!-- prettier-ignore-start -->
