@@ -87,14 +87,14 @@ pub fn SomeComponent() -> impl IntoView {
 
     // switch into the inner scope
     use_hotkeys!(("keyi", "outer") => move |_| {
-        disable_scope("outer");
-        enable_scope("inner");
+        disable_scope.call("outer".to_string());
+        enable_scope.call("inner".to_string());
     });
 
     // switch into the outer scope
     use_hotkeys!(("keyo", "inner") => move |_| {
-        disable_scope("inner");
-        enable_scope("outer");
+        disable_scope.call("inner".to_string());
+        enable_scope.call("outer".to_string());
     });
 
     view! {
