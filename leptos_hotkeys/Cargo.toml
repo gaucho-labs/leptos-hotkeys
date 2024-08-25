@@ -6,7 +6,12 @@ description = "A library that declaratively pairs keybindings with callbacks for
 license = "MIT"
 repository = "https://github.com/gaucho-labs/leptos-hotkeys"
 readme = "../README.md"
-authors = ["Matthew Kim", "Álvaro Mondéjar Rubio", "Robert Junkins", "Zak Stucke"]
+authors = [
+    "Matthew Kim",
+    "Álvaro Mondéjar Rubio",
+    "Robert Junkins",
+    "Zak Stucke",
+]
 keywords = ["leptos", "hotkeys", "wasm"]
 
 [dependencies]
@@ -18,3 +23,4 @@ web-sys.workspace = true
 [features]
 debug = ["dep:log"]
 ssr = []
+event_key = []

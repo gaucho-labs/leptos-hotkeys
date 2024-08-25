@@ -190,8 +190,14 @@ pub fn use_hotkeys_context() -> HotkeysContext {
 
 #[cfg(not(feature = "ssr"))]
 fn clean_key(event: &web_sys::KeyboardEvent) -> String {
-    match event.key().as_str() {
+    let key = if cfg!(feature = "event_key") {
+        event.key()
+    } else {
+        event.code()
+    };
+
+    match key.as_str() {
         " " => "spacebar".to_string(),
-        _ => event.key().to_lowercase(),
+        key => key.to_lowercase(),
     }
 }
