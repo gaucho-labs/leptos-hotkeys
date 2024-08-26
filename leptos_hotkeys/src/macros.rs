@@ -2,7 +2,7 @@
 macro_rules! scopes {
     () => {
         {
-            let mut set = std::collections::HashSet::<String>::new();
+            let mut set = std::collections::BTreeSet::<String>::new();
             set.insert("*".to_string());
             set
         }
@@ -10,7 +10,7 @@ macro_rules! scopes {
 
     ($($lit:literal),+ $(,)?) => {
         {
-            let mut temp_set = std::collections::HashSet::<String>::new();
+            let mut temp_set = std::collections::BTreeSet::<String>::new();
             temp_set.insert("*".to_string());
             $(
                 temp_set.insert($lit.to_string());
@@ -21,7 +21,7 @@ macro_rules! scopes {
 
     ($($expr:expr),+ $(,)?) => {
         {
-            let mut temp_set = std::collections::HashSet::<String>::new();
+            let mut temp_set = std::collections::BTreeSet::<String>::new();
             temp_set.insert("*".to_string());
             $(
                 temp_set.insert($expr);
