@@ -37,7 +37,7 @@ impl FromStr for Hotkey {
     fn from_str(key_combination: &str) -> Result<Self, Self::Err> {
         let parts = key_combination
             .split('+')
-            .map(|v| if v == " " { v } else { v.trim() })
+            .map(|v| if v == " " { "spacebar" } else { v.trim() })
             .collect::<Vec<&str>>();
 
         let mut modifiers = KeyboardModifiers::default();
@@ -66,6 +66,8 @@ impl FromStr for Hotkey {
                 "shiftleft" => modifiers.shift = true,
                 "shiftright" => modifiers.shift = true,
                 "shift" => modifiers.shift = true,
+
+                "spacebar" | "space" | " " => keys.push("spacebar".to_string()), // spacebar key is " "
 
                 key => keys.push(key.to_lowercase().to_string()),
             }

@@ -22,14 +22,14 @@ pub fn App() -> impl IntoView {
     provide_hotkeys_context(main_ref, false, scopes!("scope_a"));
 
     view! {
-        <Stylesheet id="leptos" href="/pkg/demo.css"/>
+        <Stylesheet id="leptos" href="/pkg/demo.css" />
         <main _ref=main_ref>
-                <Router>
-                    <Routes>
-                        <Route path="/" view=HomePage/>
-                        <Route path="/:else" view=ErrorPage/>
-                    </Routes>
-                </Router>
+            <Router>
+                <Routes>
+                    <Route path="/" view=HomePage />
+                    <Route path="/:else" view=ErrorPage />
+                </Routes>
+            </Router>
         </main>
     }
 }
@@ -53,7 +53,7 @@ fn HomePage() -> impl IntoView {
     let HotkeysContext { toggle_scope, .. } = use_hotkeys_context();
 
     // global hotkeys
-    use_hotkeys!(("KEYs") => move |_| {
+    use_hotkeys!(("s") => move |_| {
         toggle_scope("scope_a".to_string());
         toggle_scope("scope_b".to_string());
 
@@ -65,7 +65,7 @@ fn HomePage() -> impl IntoView {
     });
 
     go_to_link(
-        "controlleft+keyR,controlright+keyR",
+        "controlleft+r,controlright+r",
         "https://github.com/gaucho-labs/leptos_hotkeys".to_string(),
         "*",
     );
@@ -88,7 +88,7 @@ fn HomePage() -> impl IntoView {
     });
 
     let a_ref = create_node_ref::<html::Div>();
-    use_hotkeys_ref!((a_ref, "digit6", "scope_a") => move |_| {
+    use_hotkeys_ref!((a_ref, "6", "scope_a") => move |_| {
         if is_green.get() {
             is_green.set(false)
         } else {
@@ -98,7 +98,7 @@ fn HomePage() -> impl IntoView {
 
     const BANANA: &str = "https://www.youtube.com/watch?v=N982sQcjsZI";
 
-    go_to_link("keyB+metaleft", BANANA.to_string(), "scope_b");
+    go_to_link("b+meta", BANANA.to_string(), "scope_b");
 
     view! {
         <div class="dark:bg-[#1a1a1a] bg-[#fdfdfd] dark:text-white flex justify-center h-screen py-20 w-full font-robotomono absolute">
@@ -156,7 +156,7 @@ fn HomePage() -> impl IntoView {
                                 <p>scope_b</p>
                                 <div class="space-y-2">
                                     <p>press 'T' to switch themes</p>
-                                    <p>press "Cmd/Super/Win" + 'B'</p>
+                                    <p>press "Cmd/Super/Win"+ 'B'</p>
                                 </div>
 
                             </div>
