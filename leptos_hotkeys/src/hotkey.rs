@@ -1,6 +1,7 @@
-use crate::types::Keys;
 use crate::KeyboardModifiers;
+use crate::{context::KeyPresses, types::Keys};
 use core::str::FromStr;
+use std::collections::HashSet;
 use std::fmt::{Display, Formatter};
 
 #[derive(Debug, PartialEq, Hash, Eq)]
@@ -28,6 +29,10 @@ impl Display for Hotkey {
 impl Hotkey {
     pub fn new(key_combination: &str) -> Self {
         key_combination.parse().unwrap()
+    }
+
+    fn includes_key(&self, key: &String) -> bool {
+        self.keys.iter().any(|k| k == key)
     }
 }
 
@@ -78,9 +83,18 @@ impl FromStr for Hotkey {
 }
 
 #[cfg_attr(feature = "ssr", allow(dead_code))]
+pub(crate) fn is_last_key_match(parsed_keys: &HashSet<Hotkey>, pressed_keys: &KeyPresses) -> bool {
+    pressed_keys.last_key.as_ref().is_some_and(|last_key| {
+        parsed_keys
+            .iter()
+            .any(|hotkey| hotkey.includes_key(last_key))
+    })
+}
+
+#[cfg_attr(feature = "ssr", allow(dead_code))]
 pub(crate) fn is_hotkey_match(
     hotkey: &Hotkey,
-    pressed_keyset: &mut std::collections::HashMap<String, web_sys::KeyboardEvent>,
+    pressed_keyset: &mut std::collections::BTreeMap<String, web_sys::KeyboardEvent>,
 ) -> bool {
     let mut modifiers_match = true;
 
