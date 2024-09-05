@@ -1,13 +1,13 @@
 use leptos::html::ElementDescriptor;
 use leptos::*;
-use std::collections::HashSet;
+use std::collections::{BTreeMap, HashSet};
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
 
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
     #[cfg(not(feature = "ssr"))]
-    pub(crate) pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>>,
+    pub(crate) keys_pressed: RwSignal<KeyPresses>,
 
     #[cfg(not(feature = "ssr"))]
     pub active_ref_target: RwSignal<Option<web_sys::EventTarget>>,
@@ -19,6 +19,12 @@ pub struct HotkeysContext {
     pub enable_scope: Callback<String>,
     pub disable_scope: Callback<String>,
     pub toggle_scope: Callback<String>,
+}
+#[derive(Debug, Default, Clone)]
+#[cfg_attr(feature = "ssr", allow(dead_code))]
+pub struct KeyPresses {
+    pub key_map: BTreeMap<String, web_sys::KeyboardEvent>,
+    pub last_key: Option<String>,
 }
 
 pub fn provide_hotkeys_context<T>(
@@ -38,8 +44,7 @@ where
     });
 
     #[cfg(not(feature = "ssr"))]
-    let pressed_keys: RwSignal<std::collections::HashMap<String, web_sys::KeyboardEvent>> =
-        RwSignal::new(std::collections::HashMap::new());
+    let keys_pressed: RwSignal<KeyPresses> = RwSignal::new(KeyPresses::default());
 
     let active_scopes: RwSignal<HashSet<String>> = RwSignal::new(initially_active_scopes);
 
@@ -81,8 +86,15 @@ where
 
     #[cfg(all(feature = "debug", not(feature = "ssr")))]
     create_effect(move |_| {
-        let pressed_keys_list = move || pressed_keys.get().keys().cloned().collect::<Vec<String>>();
-        logging::log!("keys pressed: {:?}", pressed_keys_list());
+        let keys_pressed_list = move || {
+            keys_pressed
+                .get()
+                .key_map
+                .keys()
+                .cloned()
+                .collect::<Vec<String>>()
+        };
+        logging::log!("keys pressed: {:?}", keys_pressed_list());
     });
 
     #[cfg(not(feature = "ssr"))]
@@ -91,25 +103,23 @@ where
             if cfg!(feature = "debug") {
                 logging::log!("Window lost focus");
             }
-            pressed_keys.set_untracked(std::collections::HashMap::new());
+            keys_pressed.set_untracked(KeyPresses::default());
         }) as Box<dyn Fn()>);
 
         let keydown_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-                pressed_keys.update(|keys| {
-                    match &event.key().eq_ignore_ascii_case(" ") {
-                        true => keys.insert("spacebar".to_string(), event),
-                        false => keys.insert(event.key().to_lowercase(), event),
-                    };
+                keys_pressed.update(|keys| {
+                    let key = clean_key(&event);
+                    keys.key_map.insert(key.clone(), event);
+                    keys.last_key = Some(key);
                 });
             }) as Box<dyn Fn(_)>);
         let keyup_listener =
             wasm_bindgen::closure::Closure::wrap(Box::new(move |event: web_sys::KeyboardEvent| {
-                pressed_keys.update(|keys| {
-                    match &event.key().eq_ignore_ascii_case(" ") {
-                        true => keys.remove(&"spacebar".to_string()),
-                        false => keys.remove(&event.key().to_lowercase()),
-                    };
+                keys_pressed.update(|keys| {
+                    let key = clean_key(&event);
+                    keys.key_map.remove(&key);
+                    keys.last_key = None;
                 });
             }) as Box<dyn Fn(_)>);
 
@@ -156,7 +166,7 @@ where
 
     let hotkeys_context = HotkeysContext {
         #[cfg(not(feature = "ssr"))]
-        pressed_keys,
+        keys_pressed,
 
         #[cfg(not(feature = "ssr"))]
         active_ref_target,
@@ -176,4 +186,16 @@ where
 
 pub fn use_hotkeys_context() -> HotkeysContext {
     use_context::<HotkeysContext>().expect("expected hotkeys context")
+}
+
+#[cfg(not(feature = "ssr"))]
+fn clean_key(event: &web_sys::KeyboardEvent) -> String {
+    if cfg!(feature = "use_key") {
+        match event.key().as_str() {
+            " " => "spacebar".to_string(),
+            key => key.to_lowercase(),
+        }
+    } else {
+        event.code().to_lowercase()
+    }
 }

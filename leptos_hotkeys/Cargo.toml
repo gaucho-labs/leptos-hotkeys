@@ -18,3 +18,4 @@ web-sys.workspace = true
 [features]
 debug = ["dep:log"]
 ssr = []
+use_key = []
