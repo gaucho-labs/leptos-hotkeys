@@ -29,7 +29,7 @@ pub struct KeyPresses {
 
 pub fn provide_hotkeys_context<T>(
     #[cfg_attr(feature = "ssr", allow(unused_variables))] node_ref: NodeRef<T>,
-    #[cfg_attr(feature = "ssr", allow(unused_variables))] allow_blur_event: bool,
+    #[cfg_attr(feature = "ssr", allow(unused_variables))] reset_pressed_keys_on_blur: bool,
     initially_active_scopes: HashSet<String>,
 ) -> HotkeysContext
 where
@@ -123,7 +123,7 @@ where
                 });
             }) as Box<dyn Fn(_)>);
 
-        if !allow_blur_event {
+        if reset_pressed_keys_on_blur {
             window()
                 .add_event_listener_with_callback("blur", blur_listener.as_ref().unchecked_ref())
                 .expect("Failed to add blur event listener");
@@ -137,7 +137,7 @@ where
             .expect("Failed to add keyup event listener");
 
         on_cleanup(move || {
-            if !allow_blur_event {
+            if reset_pressed_keys_on_blur {
                 window()
                     .remove_event_listener_with_callback(
                         "blur",
