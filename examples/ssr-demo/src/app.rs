@@ -16,20 +16,20 @@ pub fn App() -> impl IntoView {
     let HotkeysContext { .. } = provide_hotkeys_context(main_ref, false, scopes!());
 
     view! {
-        <Stylesheet id="leptos" href="/pkg/ssr-demo.css"/>
+        <Stylesheet id="leptos" href="/pkg/ssr-demo.css" />
 
         // sets the document title
-        <Title text="Welcome to Leptos"/>
+        <Title text="Welcome to Leptos" />
 
         // content for this welcome page
         <Router fallback=|| {
             let mut outside_errors = Errors::default();
             outside_errors.insert_with_default_key(AppError::NotFound);
-            view! { <ErrorTemplate outside_errors/> }.into_view()
+            view! { <ErrorTemplate outside_errors /> }.into_view()
         }>
             <main _ref=main_ref>
                 <Routes>
-                    <Route path="" view=HomePage/>
+                    <Route path="" view=HomePage />
                 </Routes>
             </main>
         </Router>
@@ -42,10 +42,6 @@ fn HomePage() -> impl IntoView {
     // Creates a reactive value to update the button
     let (count, set_count) = create_signal(0);
 
-    use_hotkeys!(("meta+alt+t") => move |_| {
-        set_count.update(|c| *c += 1);
-    });
-
     use_hotkeys!(("arrowup") => move |_| {
         set_count.update(|c| *c += 1);
     });
@@ -55,7 +51,7 @@ fn HomePage() -> impl IntoView {
     });
 
     use_hotkeys!(("space") => move |_| {
-            logging::log!("hola")
+        logging::log!("hola")
     });
 
     let div_ref = create_node_ref::<html::Div>();
@@ -64,9 +60,23 @@ fn HomePage() -> impl IntoView {
         logging::log!("howdy")
     });
 
+    use_hotkeys!(("controlleft") => move |_| {
+        logging::log!("works either using control left or control right!")
+    });
+
+    let giraffe_signal = create_rw_signal(false);
+
+    use_hotkeys!(("space + l") => move |_| {
+        giraffe_signal.set(!giraffe_signal.get());
+        logging::log!("i'm a giraffe");
+    });
+
     view! {
         <h1>"Welcome to Leptos!"</h1>
         <div>"Press arrow up and arrow down: " {count}</div>
-        <div tabIndex=-1 _ref=div_ref>howdy</div>
+        <div tabIndex=-1 _ref=div_ref>
+            howdy
+        </div>
+        <Show when=move || giraffe_signal.get()>"I'm a giraffe!"</Show>
     }
 }

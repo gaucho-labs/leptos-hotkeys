@@ -52,6 +52,34 @@
         "bug",
         "code"
       ]
+    },
+    {
+      "login": "zakstucke",
+      "name": "zakstucke",
+      "avatar_url": "https://avatars.githubusercontent.com/u/44890343?v=4",
+      "profile": "https://github.com/zakstucke",
+      "contributions": [
+        "bug",
+        "code"
+      ]
+    },
+    {
+      "login": "rkimoakbioinformatics",
+      "name": "Ryangguk Kim",
+      "avatar_url": "https://avatars.githubusercontent.com/u/13386712?v=4",
+      "profile": "http://www.linkedin.com/in/ryangguk-kim",
+      "contributions": [
+        "code"
+      ]
+    },
+    {
+      "login": "maxbergmark",
+      "name": "Max Bergmark",
+      "avatar_url": "https://avatars.githubusercontent.com/u/1706486?v=4",
+      "profile": "https://github.com/maxbergmark",
+      "contributions": [
+        "code"
+      ]
     }
   ],
   "contributorsPerLine": 7,
