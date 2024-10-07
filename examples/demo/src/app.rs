@@ -155,7 +155,6 @@ fn HomePage() -> impl IntoView {
                             <div class=format!("{}", SCOPE_BORDER)>
                                 <p>scope_b</p>
                                 <div class="space-y-2">
-                                    <p>press 'T' to switch themes</p>
                                     <p>press "Cmd/Super/Win"+ 'B'</p>
                                 </div>
 

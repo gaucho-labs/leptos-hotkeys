@@ -20,7 +20,10 @@ wasm-bindgen.workspace = true
 thiserror = "1"
 tracing = { version = "0.1", optional = true }
 http = "1"
-leptos_hotkeys = { path = "../../leptos_hotkeys", features = ["debug"] }
+leptos_hotkeys = { path = "../../leptos_hotkeys", features = [
+    "debug",
+    "use_key",
+] }
 
 [features]
 hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
