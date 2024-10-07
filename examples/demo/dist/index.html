@@ -1,21 +1,28 @@
-<!DOCTYPE html><html lang="en"><head>
+<!DOCTYPE html>
+<html lang="en">
+<head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>demo</title>
     
-<script type="module">
-import init, * as bindings from '/demo-70c70068c796604e.js';
-init('/demo-70c70068c796604e_bg.wasm');
+<script type="module" nonce="QaXwoXNpSrdzaJlv8N90HA==">
+import init, * as bindings from '/demo-d350a89f5c90eea4.js';
+const wasm = await init('/demo-d350a89f5c90eea4_bg.wasm');
+
+
 window.wasmBindings = bindings;
+
+
+dispatchEvent(new CustomEvent("TrunkApplicationStarted", {detail: {wasm}}));
 
 </script>
 
     
-    <link rel="stylesheet" href="/output-ca0a674fcde1a78.css" integrity="sha384-5Ymgq67aUN-XPLK1NH6mEOc10StgoFWaECPHODUgNiAjH4cfYFp1MvrZRM2xIKXS">
+    <link rel="stylesheet" href="/output-ca0a674fcde1a78.css" integrity="sha384&#x2D;5Ymgq67aUN&#x2B;XPLK1NH6mEOc10StgoFWaECPHODUgNiAjH4cfYFp1MvrZRM2xIKXS"/>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&amp;display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" rel="stylesheet">
 
     <style>
         .green, .yellow {
@@ -62,11 +69,9 @@ window.wasmBindings = bindings;
         }
     </style>
         
-<link rel="preload" href="/demo-70c70068c796604e_bg.wasm" crossorigin="anonymous" integrity="sha384-CT7Lwo6ZaOOFUoBte4hqE-1Vweog7WHsrNlFaHm4gAMEKNXNXO7nN6ECLSjSwHMx" as="fetch" type="application/wasm">
-<link rel="modulepreload" href="/demo-70c70068c796604e.js" crossorigin="anonymous" integrity="sha384-NFnpROS4_A8NJQKg0Mnhy8DGgWvvIRpvzDALhoN11ThPOqB67QuaZDAQGWGJm38h"></head>
+<link rel="modulepreload" href="/demo-d350a89f5c90eea4.js" crossorigin=anonymous integrity="sha384-zNHFp26fZmjzgMz0p6GTravWwTs+0QU998zKr1FUMc3owrqSaaJAFmbGwfdI3xGJ">
+<link rel="preload" href="/demo-d350a89f5c90eea4_bg.wasm" crossorigin=anonymous integrity="sha384-K+WMVq9IRYI2jalWgkRtDxhKUpRU2cTYeUUNO8ZJwVFlPl0AVJ4IGo+4MecESZSu" as="fetch" type="application/wasm"></head>
 <body>
-
-
 <script>"use strict";
 
 (function () {
@@ -196,4 +201,6 @@ window.wasmBindings = bindings;
     new Client(url).start();
 
 })()
-</script></body></html>
+</script></body>
+
+</html>
