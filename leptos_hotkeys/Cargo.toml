@@ -1,6 +1,6 @@
 [package]
 name = "leptos_hotkeys"
-version = "0.2.2"
+version = "0.2.21"
 edition = "2021"
 description = "A library that declaratively pairs keybindings with callbacks for Leptos applications."
 license = "MIT"
