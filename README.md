@@ -1,7 +1,9 @@
 # [_leptos-hotkeys_](https://github.com/gaucho-labs/leptos-hotkeys)
 <!-- markdownlint-disable -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+
 [![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
+
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- markdownlint-restore -->
 
@@ -234,7 +236,7 @@ leptos_hotkeys = { path = "0.2.1", features = ["debug"] }
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/JustBobinAround"><img src="https://avatars.githubusercontent.com/u/67753581?v=4?s=100" width="100px;" alt="Robert Junkins"/><br /><sub><b>Robert Junkins</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=JustBobinAround" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/LeoniePhiline"><img src="https://avatars.githubusercontent.com/u/22329650?v=4?s=100" width="100px;" alt="LeoniePhiline"/><br /><sub><b>LeoniePhiline</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=LeoniePhiline" title="Documentation">📖</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://szabgab.com/"><img src="https://avatars.githubusercontent.com/u/48833?v=4?s=100" width="100px;" alt="Gábor Szabó"/><br /><sub><b>Gábor Szabó</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=szabgab" title="Documentation">📖</a></td>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/phillipbaird"><img src="https://avatars.githubusercontent.com/u/4003333?v=4?s=100" width="100px;" alt="Phillip Baird"/><br /><sub><b>Phillip Baird</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Aphillipbaird" title="Bug reports">🐛</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/phillipbaird"><img src="https://avatars.githubusercontent.com/u/4003333?v=4?s=100" width="100px;" alt="Phillip Baird"/><br /><sub><b>Phillip Baird</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Aphillipbaird" title="Bug reports">🐛</a> <a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=phillipbaird" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/zakstucke"><img src="https://avatars.githubusercontent.com/u/44890343?v=4?s=100" width="100px;" alt="zakstucke"/><br /><sub><b>zakstucke</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/issues?q=author%3Azakstucke" title="Bug reports">🐛</a> <a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=zakstucke" title="Code">💻</a></td>
       <td align="center" valign="top" width="14.28%"><a href="http://www.linkedin.com/in/ryangguk-kim"><img src="https://avatars.githubusercontent.com/u/13386712?v=4?s=100" width="100px;" alt="Ryangguk Kim"/><br /><sub><b>Ryangguk Kim</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=rkimoakbioinformatics" title="Code">💻</a></td>
     </tr>
