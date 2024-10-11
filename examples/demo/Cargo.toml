@@ -4,12 +4,16 @@ version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-leptos = { version = "0.6", features = ["csr", "nightly"] }
+leptos = { git = "https://github.com/leptos-rs/leptos", features = [
+    "csr",
+    "nightly",
+] }
 console_error_panic_hook = "0.1"
 console_log = "1"
 copy_dir = "0.1"
-leptos_meta = "0.6"
-leptos_router = { version = "0.6", features = ["csr"] }
+leptos_meta = { git = "https://github.com/leptos-rs/leptos" }
+leptos_router = { git = "https://github.com/leptos-rs/leptos" }
+leptos_router_macro = { git = "https://github.com/leptos-rs/leptos" }
 log = "0.4"
 leptos_hotkeys = { path = "../../leptos_hotkeys", features = [
     "debug",

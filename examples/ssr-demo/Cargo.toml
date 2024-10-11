@@ -9,10 +9,13 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 axum = { version = "0.7", optional = true }
 console_error_panic_hook = "0.1"
-leptos = { version = "0.6", features = ["nightly"] }
-leptos_axum = { version = "0.6", optional = true }
-leptos_meta = { version = "0.6", features = ["nightly"] }
-leptos_router = { version = "0.6", features = ["nightly"] }
+leptos = { git = "https://github.com/leptos-rs/leptos", features = ["nightly"] }
+leptos_axum = { git = "https://github.com/leptos-rs/leptos", optional = true }
+leptos_meta = { git = "https://github.com/leptos-rs/leptos" }
+leptos_router = { git = "https://github.com/leptos-rs/leptos", features = [
+    "nightly",
+] }
+leptos_router_macro = { git = "https://github.com/leptos-rs/leptos" }
 tokio = { version = "1", features = ["rt-multi-thread"], optional = true }
 tower = { version = "0.4", optional = true }
 tower-http = { version = "0.5", features = ["fs"], optional = true }
@@ -26,7 +29,7 @@ leptos_hotkeys = { path = "../../leptos_hotkeys", features = [
 ] }
 
 [features]
-hydrate = ["leptos/hydrate", "leptos_meta/hydrate", "leptos_router/hydrate"]
+hydrate = ["leptos/hydrate"]
 ssr = [
     "dep:axum",
     "dep:tokio",
@@ -34,8 +37,6 @@ ssr = [
     "dep:tower-http",
     "dep:leptos_axum",
     "leptos/ssr",
-    "leptos_meta/ssr",
-    "leptos_router/ssr",
     "dep:tracing",
 ]
 
