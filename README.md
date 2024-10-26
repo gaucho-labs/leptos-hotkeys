@@ -1,9 +1,7 @@
 # [_leptos-hotkeys_](https://github.com/gaucho-labs/leptos-hotkeys)
 <!-- markdownlint-disable -->
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-
-[![All Contributors](https://img.shields.io/badge/all_contributors-8-orange.svg?style=flat-square)](#contributors-)
-
+[![All Contributors](https://img.shields.io/badge/all_contributors-9-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 <!-- markdownlint-restore -->
 
@@ -242,6 +240,7 @@ leptos_hotkeys = { path = "0.2.1", features = ["debug"] }
     </tr>
     <tr>
       <td align="center" valign="top" width="14.28%"><a href="https://github.com/maxbergmark"><img src="https://avatars.githubusercontent.com/u/1706486?v=4?s=100" width="100px;" alt="Max Bergmark"/><br /><sub><b>Max Bergmark</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=maxbergmark" title="Code">💻</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://tbt.qkation.com/"><img src="https://avatars.githubusercontent.com/u/43034350?v=4?s=100" width="100px;" alt="Pavlo Myroniuk"/><br /><sub><b>Pavlo Myroniuk</b></sub></a><br /><a href="https://github.com/gaucho-labs/leptos-hotkeys/commits?author=TheBestTvarynka" title="Code">💻</a></td>
     </tr>
   </tbody>
 </table>
