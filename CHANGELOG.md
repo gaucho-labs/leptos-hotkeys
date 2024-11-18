@@ -1,5 +1,9 @@
 # Changelog
 
+## _Aug 16, 2024_ - [0.2.21]
+- Upgraded wasm_bindgen to 0.2.93
+
+
 ## _July 2nd, 2024_ - [0.2.2]
 - Fix bugs related to keycode management
 
