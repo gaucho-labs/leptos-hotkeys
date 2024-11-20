@@ -3,6 +3,7 @@ use leptos::*;
 use std::collections::{BTreeMap, HashSet};
 #[cfg(not(feature = "ssr"))]
 use wasm_bindgen::JsCast;
+use crate::scopes;
 
 #[derive(Clone, Copy)]
 pub struct HotkeysContext {
@@ -27,7 +28,17 @@ pub struct KeyPresses {
     pub last_key: Option<String>,
 }
 
+
 pub fn provide_hotkeys_context<T>(
+    #[cfg_attr(feature = "ssr", allow(unused_variables))] node_ref: NodeRef<T>
+) -> HotkeysContext
+where
+T: ElementDescriptor + 'static + Clone,
+{
+    provide_hotkeys_context_option(node_ref, false, scopes!())
+}
+
+fn provide_hotkeys_context_option<T>(
     #[cfg_attr(feature = "ssr", allow(unused_variables))] node_ref: NodeRef<T>,
     #[cfg_attr(feature = "ssr", allow(unused_variables))] allow_blur_event: bool,
     initially_active_scopes: HashSet<String>,

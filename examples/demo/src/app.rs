@@ -19,7 +19,7 @@ pub fn Button(href: &'static str, children: Children) -> impl IntoView {
 pub fn App() -> impl IntoView {
     provide_meta_context();
     let main_ref = create_node_ref::<html::Main>();
-    provide_hotkeys_context(main_ref, false, scopes!("scope_a"));
+    provide_hotkeys_context(main_ref);
 
     view! {
         <Stylesheet id="leptos" href="/pkg/demo.css" />
