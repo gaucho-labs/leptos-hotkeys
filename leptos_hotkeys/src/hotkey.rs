@@ -94,7 +94,7 @@ pub(crate) fn is_last_key_match(parsed_keys: &HashSet<Hotkey>, pressed_keys: &Ke
 #[cfg_attr(feature = "ssr", allow(dead_code))]
 pub(crate) fn is_hotkey_match(
     hotkey: &Hotkey,
-    pressed_keyset: &mut std::collections::BTreeMap<String, web_sys::KeyboardEvent>,
+    pressed_keyset: &std::collections::BTreeMap<String, web_sys::KeyboardEvent>,
 ) -> bool {
     let mut modifiers_match = true;
 
@@ -128,7 +128,7 @@ pub(crate) fn is_hotkey_match(
 
     if modifiers_match {
         let keys_match = hotkey.keys.iter().all(|key| {
-            if let Some(event) = pressed_keyset.get_mut(key) {
+            if let Some(event) = pressed_keyset.get(key) {
                 event.prevent_default();
                 true
             } else {
