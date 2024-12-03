@@ -11,6 +11,7 @@ authors = [
   "Álvaro Mondéjar Rubio",
   "Robert Junkins",
   "Zak Stucke",
+  "Phillip Baird",
 ]
 keywords = ["leptos", "hotkeys", "wasm"]
 
