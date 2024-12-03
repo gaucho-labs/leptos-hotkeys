@@ -7,15 +7,15 @@ license = "MIT"
 repository = "https://github.com/gaucho-labs/leptos-hotkeys"
 readme = "../README.md"
 authors = [
-    "Matthew Kim",
-    "Álvaro Mondéjar Rubio",
-    "Robert Junkins",
-    "Zak Stucke",
+  "Matthew Kim",
+  "Álvaro Mondéjar Rubio",
+  "Robert Junkins",
+  "Zak Stucke",
 ]
 keywords = ["leptos", "hotkeys", "wasm"]
 
 [dependencies]
-leptos = { git = "https://github.com/leptos-rs/leptos" }
+leptos = { version = "0.7" }
 log = { version = "0.4", optional = true }
 send_wrapper = "0.6"
 wasm-bindgen.workspace = true
